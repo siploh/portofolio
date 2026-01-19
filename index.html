@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="id">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bawah Tangga Production</title>
+
+<!-- Favicon -->
+<link rel="icon" href="img/logo.png" type="image/x-icon">
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+<link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet">
+
+<style>
+  :root {
+    --primary: #2563eb;
+    --bg: #f1f5f9;
+    --card: #ffffff;
+    --text: #1e293b;
+    --muted: #64748b;
+  }
+
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: Poppins, Arial, sans-serif;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+  }
+
+  /* HERO SECTION WITH MOTHERBOARD IMAGE */
+  .hero {
+    background: url('img/atas.jpeg') no-repeat center center/cover;
+    color: #fff;
+    padding: 90px 20px;
+    text-align: center;
+    position: relative;
+  }
+
+  .hero::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+    z-index: 1;
+  }
+
+  .hero h1,
+  .hero p {
+    position: relative;
+    z-index: 2;
+  }
+
+  .hero h1 {
+    font-size: 38px;
+  }
+
+  .hero p {
+    max-width: 600px;
+    margin: 10px auto 0;
+    opacity: 0.9;
+  }
+
+  /* CONTACT CTA */
+  .contact-cta {
+    background: linear-gradient(135deg, var(--primary), #1e40af);
+    color: #fff;
+    border-radius: 20px;
+    padding: 50px 30px;
+    text-align: center;
+  }
+
+  .contact-cta h2 {
+    font-size: 30px;
+    margin-bottom: 10px;
+  }
+
+  .contact-cta p {
+    opacity: 0.9;
+    margin-bottom: 25px;
+  }
+
+  .contact-box {
+    background: #fff;
+    border-radius: 20px;
+    padding: 40px;
+    max-width: 600px;
+    margin: 40px auto 0;
+    text-align: center;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+  }
+
+  .contact-box p {
+    margin-bottom: 12px;
+    color: var(--muted);
+    font-size: 15px;
+  }
+
+  /* WhatsApp Button */
+  .btn-wa {
+    display: inline-block;
+    margin-top: 20px;
+    background: #22c55e;
+    color: #fff;
+    padding: 14px 30px;
+    border-radius: 30px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: .3s;
+  }
+
+  .btn-wa:hover {
+    background: #16a34a;
+    transform: translateY(-3px);
+  }
+
+  /* CONTAINER */
+  .container {
+    max-width: 1100px;
+    margin: auto;
+    padding: 70px 20px;
+  }
+
+  .section-title {
+    text-align: center;
+    margin-bottom: 40px;
+  }
+
+  .section-title h2 {
+    font-size: 28px;
+  }
+
+  .section-title p {
+    color: var(--muted);
+    font-size: 14px;
+  }
+
+  /* ABOUT */
+  .about {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    align-items: center;
+  }
+
+  .about img {
+    width: 100%;
+    border-radius: 20px;
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+  }
+
+  .about p {
+    line-height: 1.8;
+    color: var(--muted);
+  }
+
+  @media(max-width:768px) {
+    .about {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  /* PORTFOLIO */
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 25px;
+  }
+
+  .card {
+    background: var(--card);
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+    transition: .3s;
+  }
+
+  .card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
+  }
+
+  .card img {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+    cursor: pointer;
+  }
+
+  .card-body {
+    padding: 20px;
+  }
+
+  .card-body h3 {
+    margin-bottom: 8px;
+  }
+
+  .card-body p {
+    font-size: 14px;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+
+  /* BUTTONS */
+  .actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 15px;
+  }
+
+  .btn {
+    flex: 1;
+    text-align: center;
+    padding: 10px;
+    border-radius: 10px;
+    font-size: 14px;
+    text-decoration: none;
+    transition: .3s;
+  }
+
+  .btn-demo {
+    background: var(--primary);
+    color: #fff;
+  }
+
+  .btn-download {
+    border: 1px solid var(--primary);
+    color: var(--primary);
+  }
+
+  .btn-download:hover {
+    background: var(--primary);
+    color: #fff;
+  }
+
+  /* FOOTER */
+  footer {
+    text-align: center;
+    padding: 30px;
+    color: var(--muted);
+    font-size: 14px;
+  }
+
+  /* GALLERY MODAL */
+  .gallery-modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.8);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 999;
+  }
+
+  .gallery-modal.active {
+    display: flex;
+  }
+
+  .gallery-content {
+    position: relative;
+    max-width: 900px;
+    width: 90%;
+  }
+
+  .gallery-content img {
+    width: 100%;
+    border-radius: 16px;
+  }
+
+  .gallery-close {
+    position: absolute;
+    top: -15px;
+    right: -15px;
+    background: #dc2626;
+    color: #fff;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 20px;
+  }
+
+  .gallery-nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(0, 0, 0, .6);
+    color: #fff;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 20px;
+  }
+
+  .gallery-prev {
+    left: -20px;
+  }
+
+  .gallery-next {
+    right: -20px;
+  }
+
+  @media(max-width:600px) {
+    .gallery-prev {
+      left: 10px;
+    }
+    .gallery-next {
+      right: 10px;
+    }
+  }
+</style>
+</head>
+
+<body>
+
+  <!-- HERO -->
+  <section class="hero" data-aos="fade-down">
+    <h1>Bawah Tangga Production</h1>
+    <p>Aplikasi web modern dengan desain rapi dan sistem yang stabil</p>
+  </section>
+
+  <!-- ABOUT -->
+  <section class="container">
+    <div class="section-title" data-aos="fade-up">
+      <h2>Tentang Kami</h2>
+      <p>Selamat datang di Bawah Tangga Production, sebuah perusahaan yang berfokus pada pengembangan aplikasi mobile,
+        website, dan solusi digital lainnya. Kami percaya bahwa teknologi dapat membantu meningkatkan kualitas hidup dan
+        membuka peluang baru bagi individu dan bisnis. </p>
+    </div>
+
+    <div class="about">
+      <div data-aos="fade-right">
+        <img src="img/bawahtangga.jpeg">
+      </div>
+      <div data-aos="fade-left">
+        <h2>Misi Kami</h2>
+        <p>Misi kami adalah untuk menciptakan solusi digital yang inovatif dan berkualitas tinggi, serta memberikan
+          pelayanan yang terbaik kepada klien kami. Kami berkomitmen untuk membantu klien kami mencapai tujuan mereka
+          dengan menggunakan teknologi yang tepat dan efektif.</p>
+
+        <h2>Visi Kami</h2>
+        <p>Visi kami adalah menjadi perusahaan teknologi terkemuka di Indonesia, yang dikenal karena kualitas dan
+          inovasi dalam pengembangan aplikasi mobile, website, dan solusi digital lainnya. Kami ingin menjadi mitra yang
+          dapat diandalkan bagi klien kami, serta menjadi tempat yang nyaman dan inspiratif bagi tim kami.</p>
+
+        <h2>Mengapa memilih kami ?</h2>
+        <p>- Kami memiliki tim yang berpengalaman dan berdedikasi dalam pengembangan aplikasi mobile, website, dan
+          solusi digital lainnya.</p>
+        <p>- Kami menggunakan teknologi terbaru dan terbaik untuk menciptakan solusi yang inovatif dan efektif.</p>
+        <p>- Kami berkomitmen untuk memberikan pelayanan yang terbaik dan responsif kepada klien kami.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- PORTFOLIO Aplikasi -->
+<section class="container">
+  <div class="section-title" data-aos="fade-up">
+    <h2>Aplikasi Kami</h2>
+    <p>Klik gambar untuk melihat preview aplikasi</p>
+  </div>
+
+  <div class="grid">
+
+    <!-- CARWASH -->
+    <div class="card" data-aos="zoom-in">
+      <img src="img/carwash1.png" class="open-gallery"
+        data-images="img/carwash1.png,img/carwash2.png,img/carwash3.png,img/carwash4.png,img/carwash5.png,img/carwash6.png,img/carwash7.png"
+        alt="Carwash App">
+      <div class="card-body">
+        <h3>Carwash</h3>
+        <p>Paket lengkap Booking, kasir, dan dashboard admin</p>
+        <div class="actions">
+          <a href="https://siploh.github.io/cuci_mobil/admin" class="btn btn-demo">Demo</a>
+          <a href="#" class="btn btn-download">Download</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- HOMESTAY -->
+    <div class="card" data-aos="zoom-in">
+      <img src="img/homestay/1.png" class="open-gallery"
+        data-images="img/homestay/1.png,img/homestay/2.png,img/homestay/3.png,img/homestay/4.png,img/homestay/5.png"
+        alt="Homestay App">
+      <div class="card-body">
+        <h3>Homestay</h3>
+        <p>Paket lengkap Booking, Resepsionis, dan dashboard admin</p>
+        <div class="actions">
+          <a href="https://siploh.github.io/homestay/login" class="btn btn-demo">Demo</a>
+          <a href="#" class="btn btn-download">Download</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mini Soccer -->
+    <div class="card" data-aos="zoom-in">
+      <img src="img/minisoccer/1.png" class="open-gallery"
+        data-images="img/minisoccer/1.png,img/minisoccer/2.png,img/minisoccer/3.png"
+        alt="Sales Order App">
+      <div class="card-body">
+        <h3>Mini Soccer</h3>
+        <p>Paket lengkap Boooking dan dashboard admin</p>
+        <div class="actions">
+          <a href="https://siploh.github.io/minisocer/login" class="btn btn-demo">Demo</a>
+          <a href="#" class="btn btn-download">Download</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DAFTAR ISI FORTFOLIO -->
+  <div class="portfolio-list" data-aos="fade-up">
+    <h3>Daftar Aplikasi Lainya</h3>
+    <ul>
+      <li><a href="#" class="portfolio-link" data-images="img/appabsensi/0.jpeg, img/appabsensi/1.jpeg, img/appabsensi/2.jpeg, img/appabsensi/3.jpeg, img/appabsensi/4.jpeg, img/appabsensi/5.jpeg, img/appabsensi/6.jpeg">App Absensi</a></li>
+      <li><a href="#" class="portfolio-link" data-images="img/apphomestay/1.jpeg, img/apphomestay/2.jpeg">App Homestay</a></li>
+      <li><a href="#" class="portfolio-link" data-images="img/appybci/1.jpeg, img/appybci/2.jpeg">App YBCI</a></li>
+      <li><a href="#" class="portfolio-link" data-images="img/keuangan/2.png, img/keuangan/1.png">Laporan Keuangan Pribadi</a></li>
+    </ul>
+  </div>
+</section>
+
+<!-- POPUP MODAL -->
+<div id="portfolioModal" class="modal">
+  <span class="close">&times;</span>
+  <div class="modal-content" id="modalImages"></div>
+</div>
+
+<style>
+/* Style daftar isi */
+.portfolio-list { margin-top: 50px; }
+.portfolio-list ul { list-style: none; padding: 0; }
+.portfolio-list li { margin-bottom: 10px; }
+.portfolio-list a { text-decoration: none; color: #007BFF; cursor: pointer; font-weight: 500; }
+.portfolio-list a:hover { text-decoration: underline; }
+
+/* Modal popup */
+.modal { display: none; position: fixed; z-index: 999; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background: rgba(0,0,0,0.8); }
+.modal-content { margin: 5% auto; padding: 10px; width: 90%; max-width: 800px; display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; }
+.modal-content img { max-width: 100%; max-height: 400px; border-radius: 5px; }
+.close { position: absolute; top: 20px; right: 30px; color: #fff; font-size: 40px; font-weight: bold; cursor: pointer; }
+</style>
+
+<script>
+// Fungsi membuka popup
+document.querySelectorAll('.portfolio-link').forEach(link => {
+  link.addEventListener('click', function(e) {
+    e.preventDefault();
+    const images = this.dataset.images.split(',');
+    const modal = document.getElementById('portfolioModal');
+    const modalContent = document.getElementById('modalImages');
+    modalContent.innerHTML = images.map(src => `<img src="${src}">`).join('');
+    modal.style.display = 'block';
+  });
+});
+
+// Tutup modal
+document.querySelector('.close').addEventListener('click', () => {
+  document.getElementById('portfolioModal').style.display = 'none';
+});
+
+// Tutup jika klik di luar konten
+window.onclick = function(event) {
+  const modal = document.getElementById('portfolioModal');
+  if (event.target == modal) {
+    modal.style.display = "none";
+  }
+};
+</script>
+   <!-- PORTFOLIO Aplikasi -->
+  <section class="container">
+    <div class="section-title" data-aos="fade-up">
+      <h2>Website Kami</h2>
+      <p>Klik gambar untuk melihat preview Website</p>
+    </div>
+
+    <div class="grid">
+
+      <!-- YBCI -->
+      <div class="card" data-aos="zoom-in">
+        <img src="img/ybci/1.png" class="open-gallery"
+          data-images="img/ybci/1.png, img/ybci/2.png, img/ybci/3.png, img/ybci/1.png"
+          alt="Carwash App">
+        <div class="card-body">
+          <h3>Website Komunitas</h3>
+          <p>Website</p>
+          <div class="actions">
+            <a href="https://ybci.org/" class="btn btn-demo">Kunjungi</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- HOMESTAY -->
+      <div class="card" data-aos="zoom-in">
+        <img src="img/homestay/1.png" class="open-gallery"
+          data-images="img/homestay/1.png, img/homestay/2.png, img/homestay/3.png, img/homestay/4.png, img/homestay/5.png"
+          alt="Homestay App">
+        <div class="card-body">
+          <h3>Homestay</h3>
+          <p>Website</p>
+          <div class="actions">
+            <a href="https://siploh.github.io/homestay/" class="btn btn-demo">Kunjungi</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- CARWASH -->
+      <div class="card" data-aos="zoom-in">
+        <img src="img/carwash2.png" class="open-gallery"
+          data-images="img/carwash1.png,img/carwash2.png,img/carwash3.png, img/carwash4.png, img/carwash5.png, img/carwash6.png, img/carwash7.png"
+          alt="Carwash App">
+        <div class="card-body">
+          <h3>Carwash</h3>
+          <p>Website</p>
+          <div class="actions">
+            <a href="https://siploh.github.io/cuci_mobil/" class="btn btn-demo">Kunjungi</a>
+          </div>
+        </div>
+      </div>
+  </section>
+
+
+  <!-- CTA / BOOKING -->
+  <section class="container">
+    <div class="contact-cta" data-aos="flip-up">
+      <h2>🚀 Siap Bangun Aplikasi Anda?</h2>
+      <p>Konsultasi gratis & solusi terbaik untuk bisnis Anda</p>
+      <a href="#kontak" class="btn btn-demo" style="max-width:220px;margin:auto;">
+        Konsultasi Sekarang
+      </a>
+    </div>
+  </section>
+
+  <!-- KONTAK -->
+  <section class="container" id="kontak">
+    <div class="section-title" data-aos="fade-up">
+      <h2>Hubungi Kami</h2>
+      <p>Kami siap membantu kebutuhan digital Anda</p>
+    </div>
+
+    <div class="contact-box" data-aos="zoom-in">
+      <p>📍 <strong>Alamat:</strong> Kota Langsa, Aceh, Indonesia</p>
+      <p>📞 <strong>Telepon:</strong> 0851-8332-9989</p>
+      <p>✉️ <strong>Email:</strong> info@bawahtangga.com</p>
+      <p>⏰ <strong>Jam Kerja:</strong> Senin – Sabtu (08.00 – 18.00)</p>
+
+      <a href="https://wa.me/6285183329989" target="_blank" class="btn-wa">
+        💬 Chat WhatsApp
+      </a>
+    </div>
+  </section>
+
+  <footer data-aos="fade-up">
+    © 2026 • Bawah Tangga Production
+  </footer>
+
+  <!-- GALLERY MODAL -->
+  <div class="gallery-modal" id="galleryModal">
+    <div class="gallery-content">
+      <span class="gallery-close">&times;</span>
+      <span class="gallery-nav gallery-prev">&#10094;</span>
+      <img id="galleryImage">
+      <span class="gallery-nav gallery-next">&#10095;</span>
+    </div>
+  </div>
+
+  <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+  <script>
+    AOS.init({ duration: 900, once: true });
+
+    let images = [];
+    let index = 0;
+
+    const modal = document.getElementById("galleryModal");
+    const modalImg = document.getElementById("galleryImage");
+
+    document.querySelectorAll(".open-gallery").forEach(img => {
+      img.onclick = () => {
+        images = img.dataset.images.split(",");
+        index = 0;
+        modalImg.src = images[index];
+        modal.classList.add("active");
+      }
+    });
+
+    document.querySelector(".gallery-next").onclick = () => {
+      index = (index + 1) % images.length;
+      modalImg.src = images[index];
+    };
+
+    document.querySelector(".gallery-prev").onclick = () => {
+      index = (index - 1 + images.length) % images.length;
+      modalImg.src = images[index];
+    };
+
+    document.querySelector(".gallery-close").onclick = closeGallery;
+    modal.onclick = e => e.target === modal && closeGallery();
+
+    function closeGallery() {
+      modal.classList.remove("active");
+    }
+  </script>
+
+</body>
+</html>
