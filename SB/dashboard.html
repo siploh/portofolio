@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard Transaksi Modern - Premium</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+<!-- SheetJS -->
+<script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
+<style>
+  /* Global */
+  body {
+    font-family: 'Poppins', sans-serif;
+    background: #e6f0ff;
+    padding: 30px;
+    color: #222;
+  }
+
+  h1 {
+    text-align: center;
+    margin-bottom: 30px;
+    font-weight: 700;
+    color: #0d3b66;
+    text-shadow: 1px 1px 3px rgba(0,0,0,0.1);
+  }
+
+  /* Filters */
+  .filters {
+    max-width: 1200px;
+    margin: 0 auto 30px auto;
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .filters .logo {
+    height: 80px;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+    margin-right: 12px;
+    transition: transform 0.3s, box-shadow 0.3s;
+  }
+
+  .filters .logo:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+  }
+
+  .filters select, .filters input {
+    padding: 12px 16px;
+    border-radius: 10px;
+    border: 1px solid #aaa;
+    font-size: 15px;
+    transition: all 0.3s;
+  }
+
+  .filters select:focus, .filters input:focus {
+    outline: none;
+    border-color: #0d3b66;
+    box-shadow: 0 0 8px rgba(13,59,102,0.3);
+  }
+
+  .filters button {
+    padding: 12px 22px;
+    border-radius: 12px;
+    border: none;
+    font-weight: 600;
+    background: linear-gradient(135deg, #0d3b66, #0077ff);
+    color: white;
+    cursor: pointer;
+    transition: all 0.4s;
+  }
+
+  .filters button:hover {
+    background: linear-gradient(135deg, #0077ff, #0d3b66);
+    transform: translateY(-2px) scale(1.03);
+    box-shadow: 0 8px 18px rgba(0,0,0,0.2);
+  }
+
+  /* Stats cards */
+  .stats {
+    max-width: 1200px;
+    margin: 0 auto 30px auto;
+    display: flex;
+    gap: 25px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .stat-card {
+    background: linear-gradient(135deg, #ffffff, #dbeaff);
+    padding: 25px 30px;
+    border-radius: 18px;
+    flex: 1;
+    min-width: 220px;
+    text-align: center;
+    box-shadow: 0 8px 22px rgba(0,0,0,0.12);
+    transition: transform 0.3s, box-shadow 0.3s;
+  }
+
+  .stat-card:hover {
+    transform: translateY(-6px) scale(1.03);
+    box-shadow: 0 14px 28px rgba(0,0,0,0.18);
+  }
+
+  .stat-card h3 {
+    margin: 0;
+    font-weight: 700;
+    color: #0d3b66;
+    font-size: 26px;
+  }
+
+  .stat-card p {
+    margin: 5px 0 0 0;
+    font-size: 15px;
+    color: #333;
+  }
+
+  /* Table container */
+  .table-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    background: #ffffff;
+    border-radius: 18px;
+    padding: 30px;
+    box-shadow: 0 8px 22px rgba(0,0,0,0.12);
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 15px;
+    table-layout: fixed;
+  }
+
+  th, td {
+    padding: 15px 12px;
+    text-align: left;
+    word-wrap: break-word;
+  }
+
+  th {
+    background: linear-gradient(90deg, #0d3b66, #0077ff);
+    color: white;
+    font-weight: 700;
+  }
+
+  tr:nth-child(even) {
+    background-color: #f0f5ff;
+  }
+
+  tr:hover {
+    background-color: #cce0ff;
+    transition: background 0.3s, transform 0.2s;
+    transform: scale(1.01);
+  }
+
+  /* Highlight produk tertentu */
+  .highlight-red {
+    background-color: #ffe5e5 !important;
+    color: #8b0000;
+    font-weight: 600;
+  }
+
+  .highlight-red:hover {
+    background-color: #ffcccc !important;
+  }
+
+  /* Responsive mobile */
+  @media (max-width: 768px) {
+    table, thead, tbody, th, td, tr { display: block; }
+    th { display: none; }
+    td { position: relative; padding-left: 55%; }
+    td::before {
+      position: absolute;
+      left: 15px;
+      width: 45%;
+      white-space: nowrap;
+      font-weight: 600;
+      color: #0d3b66;
+    }
+    td:nth-of-type(1)::before { content: "Tanggal"; }
+    td:nth-of-type(2)::before { content: "Sales"; }
+    td:nth-of-type(3)::before { content: "Nama Toko"; }
+    td:nth-of-type(4)::before { content: "Produk"; }
+    td:nth-of-type(5)::before { content: "Jumlah"; }
+    td:nth-of-type(6)::before { content: "Diskon"; }
+    td:nth-of-type(7)::before { content: "Total Diskon"; }
+  }
+</style>
+</head>
+<body>
+
+<h1>Dashboard Transaksi Modern</h1>
+
+<div class="filters">
+  <img src="https://mms.img.susercontent.com/aef8017268b488873de28eb94db439d3" alt="Logo" class="logo">
+  <select id="filter-sales">
+    <option value="">Filter Sales</option>
+  </select>
+  <select id="filter-toko">
+    <option value="">Filter Toko</option>
+  </select>
+  <select id="filter-produk">
+    <option value="">Filter Produk</option>
+  </select>
+  <input type="text" id="search-box" placeholder="Search...">
+  <button id="download-excel">Download Excel</button>
+</div>
+
+<div class="stats">
+  <div class="stat-card">
+    <h3 id="total-transaksi">0</h3>
+    <p>Total Transaksi</p>
+  </div>
+  <div class="stat-card">
+    <h3 id="total-jumlah">0</h3>
+    <p>Total Jumlah</p>
+  </div>
+  <div class="stat-card">
+    <h3 id="total-diskon">0</h3>
+    <p>Total Diskon</p>
+  </div>
+</div>
+
+<div class="table-container">
+  <table id="transaksi-table">
+    <thead>
+      <tr>
+        <th>Tanggal</th>
+        <th>Sales</th>
+        <th>Nama Toko</th>
+        <th>Produk</th>
+        <th>Jumlah</th>
+        <th>Diskon</th>
+        <th>Total Diskon</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+</div>
+
+<script>
+const apiUrl = "https://script.google.com/macros/s/AKfycbyDJymnBFv6L9HHj-jvfxOc-YziCoVPjZGi9J788EQaS2orhOo_LDywghmGvkRk_-Mu/exec?type=dashboard";
+let transaksiData = [];
+
+fetch(apiUrl)
+  .then(res => res.json())
+  .then(data => {
+    transaksiData = data.map(item => ({...item, tanggal: new Date(item.tanggal)}));
+    populateFilters();
+    renderTable();
+    renderStats();
+  })
+  .catch(err => console.error("Error fetch data:", err));
+
+function populateFilters() {
+  const salesSet = new Set(transaksiData.map(t=>t.sales));
+  const tokoSet = new Set(transaksiData.map(t=>t.toko));
+  const produkSet = new Set(transaksiData.map(t=>t.produk));
+
+  const salesSelect = document.getElementById("filter-sales");
+  const tokoSelect = document.getElementById("filter-toko");
+  const produkSelect = document.getElementById("filter-produk");
+
+  salesSet.forEach(v => salesSelect.innerHTML += `<option value="${v}">${v}</option>`);
+  tokoSet.forEach(v => tokoSelect.innerHTML += `<option value="${v}">${v}</option>`);
+  produkSet.forEach(v => produkSelect.innerHTML += `<option value="${v}">${v}</option>`);
+
+  salesSelect.addEventListener("change", renderTable);
+  tokoSelect.addEventListener("change", renderTable);
+  produkSelect.addEventListener("change", renderTable);
+  document.getElementById("search-box").addEventListener("input", renderTable);
+  document.getElementById("download-excel").addEventListener("click", downloadExcel);
+}
+
+function renderTable() {
+  const tbody = document.querySelector("#transaksi-table tbody");
+  tbody.innerHTML = "";
+
+  const salesFilter = document.getElementById("filter-sales").value.toLowerCase();
+  const tokoFilter = document.getElementById("filter-toko").value.toLowerCase();
+  const produkFilter = document.getElementById("filter-produk").value.toLowerCase();
+  const searchText = document.getElementById("search-box").value.toLowerCase();
+
+  const filtered = transaksiData.filter(t => {
+    return (!salesFilter || t.sales.toLowerCase() === salesFilter)
+        && (!tokoFilter || t.toko.toLowerCase() === tokoFilter)
+        && (!produkFilter || t.produk.toLowerCase() === produkFilter)
+        && (t.sales.toLowerCase().includes(searchText)
+         || t.toko.toLowerCase().includes(searchText)
+         || t.produk.toLowerCase().includes(searchText));
+  });
+
+  filtered.forEach(item => {
+    const tr = document.createElement("tr");
+
+    // Highlight merah untuk produk tertentu
+    if (item.produk.toLowerCase() === "atb marie coconut 24 bks 180 gr".toLowerCase()) {
+      tr.classList.add("highlight-red");
+    }
+
+    const tanggal = item.tanggal.toLocaleString("id-ID", {dateStyle:"short", timeStyle:"short"});
+    tr.innerHTML = `
+      <td>${tanggal}</td>
+      <td>${item.sales}</td>
+      <td>${item.toko}</td>
+      <td>${item.produk}</td>
+      <td>${item.jumlah}</td>
+      <td>${item.diskon}</td>
+      <td>${item.totalDiskon}</td>
+    `;
+    tbody.appendChild(tr);
+  });
+
+  renderStats(filtered);
+}
+
+function renderStats(filteredData = transaksiData) {
+  document.getElementById("total-transaksi").textContent = filteredData.length;
+  document.getElementById("total-jumlah").textContent = filteredData.reduce((sum, t) => sum + Number(t.jumlah || 0), 0);
+  document.getElementById("total-diskon").textContent = filteredData.reduce((sum, t) => sum + Number(t.totalDiskon || 0), 0);
+}
+
+function downloadExcel() {
+  const salesFilter = document.getElementById("filter-sales").value.toLowerCase();
+  const tokoFilter = document.getElementById("filter-toko").value.toLowerCase();
+  const produkFilter = document.getElementById("filter-produk").value.toLowerCase();
+  const searchText = document.getElementById("search-box").value.toLowerCase();
+
+  const filtered = transaksiData.filter(t => {
+    return (!salesFilter || t.sales.toLowerCase() === salesFilter)
+        && (!tokoFilter || t.toko.toLowerCase() === tokoFilter)
+        && (!produkFilter || t.produk.toLowerCase() === produkFilter)
+        && (t.sales.toLowerCase().includes(searchText)
+         || t.toko.toLowerCase().includes(searchText)
+         || t.produk.toLowerCase().includes(searchText));
+  });
+
+  const wsData = [
+    ["Tanggal", "Sales", "Nama Toko", "Produk", "Jumlah", "Diskon", "Total Diskon"],
+    ...filtered.map(t => [
+      t.tanggal.toLocaleString("id-ID", {dateStyle:"short", timeStyle:"short"}),
+      t.sales,
+      t.toko,
+      t.produk,
+      t.jumlah,
+      t.diskon,
+      t.totalDiskon
+    ])
+  ];
+
+  const wb = XLSX.utils.book_new();
+  const ws = XLSX.utils.aoa_to_sheet(wsData);
+  XLSX.utils.book_append_sheet(wb, ws, "Transaksi");
+  XLSX.writeFile(wb, "Transaksi.xlsx");
+}
+</script>
+
+</body>
+</html>
