@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>Presensi Mobile - CV. Seumangat Baroe</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #22c55e;
+            --dark-green: #16a34a;
+            --bg: #f1f5f9;
+            --text: #1e293b;
+            --danger: #ef4444;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Poppins', sans-serif; }
+        
+        body { 
+            background: var(--bg); 
+            color: var(--text); 
+            padding-bottom: 20px;
+        }
+
+        /* Header Mobile Fixed */
+        .app-header {
+            background: var(--primary);
+            color: white;
+            padding: 15px 20px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .app-header h1 { font-size: 18px; font-weight: 700; }
+
+        /* Container Utama */
+        .container { padding: 15px; }
+
+        /* Dashboard Cards */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 12px;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .stat-card span { font-size: 11px; color: #64748b; display: block; margin-bottom: 4px; }
+        .stat-card strong { font-size: 18px; color: var(--text); }
+
+        /* Form Filter Mobile */
+        .filter-box {
+            background: white;
+            padding: 18px;
+            border-radius: 16px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            margin-bottom: 20px;
+        }
+
+        .form-group { margin-bottom: 12px; }
+        .form-group label { font-size: 12px; font-weight: 600; color: #64748b; margin-bottom: 5px; display: block; }
+        
+        input, select {
+            width: 100%;
+            padding: 12px;
+            border-radius: 10px;
+            border: 1.5px solid #e2e8f0;
+            font-size: 14px;
+            background: #f8fafc;
+            color: var(--text);
+        }
+
+        .btn-main {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 10px;
+            background: var(--primary);
+            color: white;
+            font-weight: 700;
+            font-size: 15px;
+            margin-top: 10px;
+            cursor: pointer;
+        }
+
+        .btn-outline {
+            width: 100%;
+            padding: 12px;
+            border: 1.5px solid #cbd5e1;
+            border-radius: 10px;
+            background: white;
+            color: #475569;
+            font-weight: 600;
+            margin-top: 8px;
+        }
+
+        /* Table Area */
+        .table-section { margin-top: 10px; }
+        .table-section h2 { font-size: 16px; margin-bottom: 10px; padding-left: 5px; }
+
+        .scroll-container {
+            background: white;
+            border-radius: 16px;
+            overflow-x: auto;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+
+        table { width: 100%; border-collapse: collapse; min-width: 600px; }
+        th { background: #f8fafc; padding: 12px; font-size: 11px; color: #64748b; text-align: left; border-bottom: 2px solid #f1f5f9; }
+        td { padding: 12px; font-size: 12px; border-bottom: 1px solid #f8fafc; }
+
+        .sticky-col {
+            position: sticky;
+            left: 0;
+            background: white;
+            z-index: 1;
+            font-weight: 600;
+            box-shadow: 2px 0 5px rgba(0,0,0,0.03);
+        }
+
+        /* Indikator Status */
+        .status-badge {
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-weight: 700;
+            font-size: 11px;
+        }
+
+        /* Tab Navigation (Bottom) */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            background: white;
+            display: flex;
+            border-top: 1px solid #e2e8f0;
+            padding: 10px 0;
+            z-index: 100;
+        }
+
+        .nav-item {
+            flex: 1;
+            text-align: center;
+            font-size: 12px;
+            color: #94a3b8;
+            cursor: pointer;
+        }
+
+        .nav-item.active { color: var(--primary); font-weight: 700; }
+
+        #loading {
+            text-align: center;
+            padding: 20px;
+            color: var(--primary);
+            font-weight: 600;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+<div class="app-header">
+    <h1>CV. Seumangat Baroe</h1>
+    <div style="font-size: 12px;">v2.0 Mobile</div>
+</div>
+
+<div class="container">
+    <div id="view-dashboard">
+        <div class="stats-grid">
+            <div class="stat-card"><span>Total</span><strong id="totalKaryawan">0</strong></div>
+            <div class="stat-card"><span>Masuk</span><strong id="totalMasuk">0</strong></div>
+            <div class="stat-card"><span>Pulang</span><strong id="totalPulang">0</strong></div>
+        </div>
+
+        <div class="filter-box">
+            <div class="form-group">
+                <label>Pilih Karyawan</label>
+                <select id="selectKaryawan"><option value="all">Semua Karyawan</option></select>
+            </div>
+            <div style="display: flex; gap: 10px;">
+                <div class="form-group" style="flex: 1;">
+                    <label>Dari Tanggal</label>
+                    <input type="date" id="startDate">
+                </div>
+                <div class="form-group" style="flex: 1;">
+                    <label>Sampai Tanggal</label>
+                    <input type="date" id="endDate">
+                </div>
+            </div>
+            <button class="btn-main" onclick="viewRekap()">LIHAT DATA</button>
+            <button class="btn-outline" onclick="downloadExcel()">Simpan ke Excel</button>
+        </div>
+
+        <div id="loading">Memuat Data...</div>
+
+        <div id="result-area" class="table-section" style="display:none;">
+            <h2>Hasil Laporan</h2>
+            <div class="scroll-container">
+                <table id="previewTable">
+                    <thead></thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div id="view-karyawan" style="display:none;">
+        <div class="table-section">
+            <h2>Daftar Karyawan</h2>
+            <div class="scroll-container">
+                <table id="karyawanTable">
+                    <thead><tr><th>ID</th><th>Nama</th><th>Jabatan</th></tr></thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="bottom-nav">
+    <div class="nav-item active" onclick="switchTab('dashboard', this)">
+        <div>📊</div>Dashboard
+    </div>
+    <div class="nav-item" onclick="switchTab('karyawan', this)">
+        <div>👥</div>Karyawan
+    </div>
+</div>
+
+<script>
+// --- KONFIGURASI & DATA ---
+const fileUrl = "https://siploh.github.io/Presensi/data.dat";
+const karyawan = [
+  {ID:"2",Nama:"EDY AMSAR",JK:"Pria",Jabatan:"ADMIN"},
+  {ID:"3",Nama:"PUTRI NUR FADILA",JK:"Wanita",Jabatan:"ADMIN"},
+  {ID:"4",Nama:"DWI RIZKI ANANDA",JK:"Pria",Jabatan:"ADMIN"},
+  {ID:"5",Nama:"ZULKIFLI",JK:"Pria",Jabatan:"KEPALA GUDANG"},
+  {ID:"6",Nama:"ULUL AMRI",JK:"Pria",Jabatan:"STAF GUDANG"},
+  {ID:"7",Nama:"YURI PANGABEAN",JK:"Pria",Jabatan:"SALESMAN"},
+  {ID:"8",Nama:"WAHYUDI PUTRA AMANDA",JK:"Pria",Jabatan:"SALESMAN"},
+  {ID:"9",Nama:"SYAH ALI SURIOKUSUMO",JK:"Pria",Jabatan:"SALESMAN"},
+  {ID:"10",Nama:"AHMAD YANI",JK:"Pria",Jabatan:"SALESMAN"},
+  {ID:"11",Nama:"NURFACHRIANSYAH",JK:"Pria",Jabatan:"SALESMAN"},
+  {ID:"12",Nama:"REYHAN ZANUAR IMSAN",JK:"Pria",Jabatan:"SALESMAN"},
+  {ID:"13",Nama:"M. FAHMI MURAD",JK:"Pria",Jabatan:"SALESMAN"},
+  {ID:"14",Nama:"FAISAL ROZA",JK:"Pria",Jabatan:"DELEVERYMAN"},
+  {ID:"15",Nama:"SAIFUDIN",JK:"Pria",Jabatan:"DELEVERYMAN"},
+  {ID:"16",Nama:"MUSLIM BAHRI",JK:"Pria",Jabatan:"DELEVERYMAN"},
+  {ID:"17",Nama:"NURHADI",JK:"Pria",Jabatan:"HELPER"},
+  {ID:"18",Nama:"AFIS FUDDINSYAH",JK:"Pria",Jabatan:"HELPER"},
+  {ID:"19",Nama:"MUSLYADI",JK:"Pria",Jabatan:"HELPER"},
+  {ID:"20",Nama:"MYHAMMAD KHADAFI",JK:"Pria",Jabatan:"HELPER"},
+  {ID:"21",Nama:"M RIZKY PRADIKTA",JK:"Pria",Jabatan:"SALESMAN"},
+  {ID:"22",Nama:"EKA WANDANI",JK:"Pria",Jabatan:"ADMIN"},
+  {ID:"23",Nama:"JUNAIDI",JK:"Pria",Jabatan:"SALESMAN"},
+  {ID:"25",Nama:"MARHABAN",JK:"Pria",Jabatan:"SALESMAN"},
+  {ID:"28",Nama:"EDI SWONO",JK:"Pria",Jabatan:"SALESMAN"},
+  {ID:"29",Nama:"RIZKY MAULANA",JK:"Pria",Jabatan:"SALESMAN"}
+];
+
+let filteredDataGlobal = [];
+
+// Populate dropdown & Initial Render
+const selectK = document.getElementById("selectKaryawan");
+karyawan.forEach(k => {
+    let opt = document.createElement("option");
+    opt.value = k.ID;
+    opt.textContent = k.Nama;
+    selectK.appendChild(opt);
+});
+
+function switchTab(view, el) {
+    document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+    el.classList.add('active');
+    
+    document.getElementById('view-dashboard').style.display = (view === 'dashboard') ? 'block' : 'none';
+    document.getElementById('view-karyawan').style.display = (view === 'karyawan') ? 'block' : 'none';
+    
+    if(view === 'karyawan') renderKaryawan();
+}
+
+function renderKaryawan() {
+    const tbody = document.querySelector("#karyawanTable tbody");
+    tbody.innerHTML = karyawan.map(k => `<tr><td>${k.ID}</td><td><b>${k.Nama}</b></td><td>${k.Jabatan}</td></tr>`).join('');
+}
+
+async function viewRekap() {
+    const start = document.getElementById("startDate").value;
+    const end = document.getElementById("endDate").value;
+    const loading = document.getElementById("loading");
+    
+    if(!start || !end) return alert("Pilih tanggal!");
+    
+    loading.style.display = "block";
+    document.getElementById("result-area").style.display = "none";
+
+    try {
+        // Menambahkan timestamp agar browser tidak mengambil dari cache
+const res = await fetch(fileUrl + "?t=" + new Date().getTime(), {
+    cache: "no-store" 
+});
+        const text = await res.text();
+        const lines = text.split(/\r?\n/).filter(l => l.trim() !== "");
+        
+        const rawData = lines.map(line => {
+            const cols = line.split("\t");
+            if(cols.length < 2) return null;
+            const dt = cols[1].split(" ");
+            const jam = dt[1].slice(0,5);
+            const [h,m] = jam.split(":").map(Number);
+            const totalM = h*60+m;
+            let status = "-";
+            if(totalM >= 420 && totalM <= 600) status = "Masuk";
+            else if(totalM >= 900 && totalM <= 1439) status = "Pulang";
+            return { ID: String(cols[0]), Tgl: dt[0], Jam: jam, Status: status };
+        }).filter(d => d && d.Tgl >= start && d.Tgl <= end);
+
+        const selK = selectK.value;
+        filteredDataGlobal = (selK === "all") ? rawData : rawData.filter(d => d.ID === selK);
+
+        // Update Stats
+        document.getElementById("totalKaryawan").textContent = new Set(filteredDataGlobal.map(r=>r.ID)).size;
+        document.getElementById("totalMasuk").textContent = filteredDataGlobal.filter(r=>r.Status==="Masuk").length;
+        document.getElementById("totalPulang").textContent = filteredDataGlobal.filter(r=>r.Status==="Pulang").length;
+
+        renderTableResult(start, end, selK);
+        loading.style.display = "none";
+        document.getElementById("result-area").style.display = "block";
+
+    } catch (err) {
+        alert("Gagal memuat data.");
+        loading.style.display = "none";
+    }
+}
+
+function renderTableResult(start, end, selK) {
+    const tHead = document.querySelector("#previewTable thead");
+    const tBody = document.querySelector("#previewTable tbody");
+    
+    const tglList = [];
+    let curr = new Date(start);
+    while(curr <= new Date(end)) {
+        tglList.push(curr.toISOString().slice(0,10));
+        curr.setDate(curr.getDate()+1);
+    }
+
+    let headHtml = `<tr><th class="sticky-col">NAMA</th>`;
+    tglList.forEach(t => {
+        let label = new Date(t).toLocaleDateString("id-ID",{day:"2-digit",month:"short"});
+        headHtml += `<th>${label} In</th><th>${label} Out</th>`;
+    });
+    headHtml += `</tr>`;
+    tHead.innerHTML = headHtml;
+
+    const listK = (selK === "all") ? karyawan : karyawan.filter(k => k.ID === selK);
+    tBody.innerHTML = listK.map(k => {
+        let row = `<td class="sticky-col">${k.Nama}</td>`;
+        tglList.forEach(t => {
+            const isMinggu = new Date(t).getDay() === 0;
+            const ent = filteredDataGlobal.filter(f => f.ID == k.ID && f.Tgl === t);
+            let inT = "-", outT = "-";
+            
+            ent.forEach(e => { 
+                if(e.Status==="Masuk") inT = e.Jam; 
+                else if(e.Status==="Pulang") outT = e.Jam; 
+            });
+            
+            let styleIn = "";
+
+            // Logika Hari Minggu (Libur - Warna Hijau)
+            if (isMinggu) {
+                const badgeLibur = `<span style="color: var(--primary); font-weight: 600;">Libur</span>`;
+                inT = badgeLibur;
+                outT = badgeLibur;
+            } else {
+                // Logika Warna Merah jika Terlambat (> 08:05)
+                if (inT !== "-") {
+                    const [h, m] = inT.split(":").map(Number);
+                    if (h > 8 || (h === 8 && m > 5)) {
+                        styleIn = "color: var(--danger); font-weight: bold;";
+                    }
+                } else {
+                    // Jika tidak absen di hari kerja, beri warna merah standar
+                    styleIn = "color: var(--danger);";
+                }
+            }
+            
+            row += `<td style="${styleIn}">${inT}</td><td>${outT}</td>`;
+        });
+        return `<tr>${row}</tr>`;
+    }).join('');
+}
+
+function downloadExcel() {
+    if(!filteredDataGlobal.length) return alert("Lihat data terlebih dahulu!");
+    // Logika SheetJS tetap sama seperti kode Anda sebelumnya
+    const wb = XLSX.utils.book_new();
+    const ws_data = [["LAPORAN PRESENSI CV. SEUMANGAT BAROE"], []];
+    
+    // Header
+    const header = ["NAMA", "JABATAN"];
+    const dates = [...new Set(filteredDataGlobal.map(d => d.Tgl))].sort();
+    dates.forEach(d => { header.push(d + " In", d + " Out"); });
+    ws_data.push(header);
+
+    // Rows
+    const selK = selectK.value;
+    const listK = (selK === "all") ? karyawan : karyawan.filter(k => k.ID === selK);
+    listK.forEach(k => {
+        const row = [k.Nama, k.Jabatan];
+        dates.forEach(t => {
+            const ent = filteredDataGlobal.filter(f => f.ID == k.ID && f.Tgl === t);
+            let inT = "-", outT = "-";
+            ent.forEach(e => { if(e.Status==="Masuk") inT = e.Jam; else outT = e.Jam; });
+            row.push(inT, outT);
+        });
+        ws_data.push(row);
+    });
+
+    const ws = XLSX.utils.aoa_to_sheet(ws_data);
+    XLSX.utils.book_append_sheet(wb, ws, "Rekap");
+    XLSX.writeFile(wb, `Presensi_Mobile_${dates[0] || 'export'}.xlsx`);
+}
+</script>
+</body>
+</html>
