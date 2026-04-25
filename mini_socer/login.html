@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<title>Login Admin</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+*{
+  box-sizing:border-box;
+  font-family: "Segoe UI", Arial, sans-serif;
+}
+
+body{
+  margin:0;
+  height:100vh;
+  display:flex;
+}
+
+/* ====== SISI KIRI (FOTO) ====== */
+.left{
+  flex:1;
+  background:url("https://asset.ayo.co.id/image/venue/173850390052117.image_cropper_E89CF576-426C-4242-9548-C358324FE126-51600-0000182F0A34CF07.jpg")
+             center/cover no-repeat;
+}
+
+/* ====== SISI KANAN (LOGIN) ====== */
+.right{
+  flex:1;
+  background:#f0fdf4; /* hijau muda */
+  display:flex;
+  justify-content:center;
+  align-items:center;
+}
+
+.login-box{
+  width:100%;
+  max-width:360px;
+  background:#fff;
+  padding:40px;
+  border-radius:16px;
+  box-shadow:0 20px 40px rgba(0,0,0,0.15);
+}
+
+.login-box h2{
+  margin-bottom:8px;
+  color:#15803d; /* hijau gelap */
+}
+
+.login-box p{
+  margin-bottom:24px;
+  color:#4d7c0f; /* hijau agak gelap */
+}
+
+input{
+  width:100%;
+  padding:14px;
+  margin-bottom:16px;
+  border-radius:10px;
+  border:1px solid #d1fae5; /* hijau terang */
+  font-size:15px;
+}
+
+input:focus{
+  outline:none;
+  border-color:#16a34a; /* hijau fokus */
+}
+
+button{
+  width:100%;
+  padding:14px;
+  background:linear-gradient(135deg,#16a34a,#15803d); /* gradien hijau */
+  color:white;
+  border:none;
+  border-radius:10px;
+  font-size:16px;
+  cursor:pointer;
+  transition:0.3s;
+}
+
+button:hover{
+  opacity:0.9;
+  transform:translateY(-1px);
+}
+
+/* ====== RESPONSIVE ====== */
+@media(max-width:768px){
+  .left{
+    display:none;
+  }
+  .right{
+    flex:1;
+  }
+}
+</style>
+</head>
+<body>
+
+<!-- FOTO KIRI -->
+<div class="left"></div>
+
+<!-- LOGIN KANAN -->
+<div class="right">
+  <div class="login-box">
+    <h2>🔐 Login Admin</h2>
+    <p>Silakan masuk ke dashboard admin</p>
+
+    <input id="nama" placeholder="Nama Admin" required>
+    <input id="password" type="password" placeholder="Password">
+
+    <button onclick="login()">Masuk</button>
+  </div>
+</div>
+
+<script>
+function login(){
+  const nama = document.getElementById("nama").value.trim();
+  const password = document.getElementById("password").value.trim();
+
+  if(!nama){
+    alert("Nama admin wajib diisi");
+    return;
+  }
+
+  if(password !== "bawahtangga"){  // password hijau
+    alert("Password salah!");
+    return;
+  }
+
+  // Simpan nama admin
+  localStorage.setItem("admin_name", nama);
+
+  // Pindah ke dashboard
+  window.location.href="admin.html";
+}
+</script>
+
+</body>
+</html>

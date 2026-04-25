@@ -1,0 +1,3 @@
+?page=opname
+?page=admin
+?page=master

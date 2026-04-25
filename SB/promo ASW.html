@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<title>Form Potongan ASW</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<style>
+body{
+  font-family:Poppins,Arial;
+  /* Background Hitam ke Abu Gelap */
+  background:linear-gradient(135deg,#1a1a1a,#333333);
+  min-height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  margin: 0;
+}
+form{
+  background:#fff; /* Putih */
+  padding:25px;
+  width:100%;
+  max-width:650px;
+  border-radius:14px;
+  box-shadow:0 20px 40px rgba(0,0,0,.4);
+  border-top: 5px solid #dc3545; /* Aksen Merah di atas */
+}
+h2{
+  text-align:center;
+  color:#dc3545; /* Merah */
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+label{
+  font-weight:600;
+  margin-top:15px;
+  display:block;
+  color: #333; /* Hitam */
+}
+input,select,button{
+  width:100%;
+  padding:12px;
+  margin-top:5px;
+  border-radius:8px;
+  border:1.5px solid #ddd;
+  box-sizing: border-box;
+}
+input:focus, select:focus {
+  border-color: #dc3545;
+  outline: none;
+}
+.item{
+  display:grid;
+  grid-template-columns:3fr 1.5fr 1.5fr 1fr;
+  gap:8px;
+  margin-top:10px;
+}
+.item input{margin:0}
+
+/* Button Simpan (Hitam/Merah) */
+button[type="submit"]{
+  background:#1a1a1a; /* Hitam */
+  color:#fff;
+  border:none;
+  cursor:pointer;
+  font-weight: bold;
+  margin-top: 20px;
+  transition: 0.3s;
+}
+button[type="submit"]:hover{
+  background:#000;
+}
+
+/* Button Tambah (Merah) */
+.add{
+  background:#dc3545; /* Merah */
+  color: #fff;
+  border: none;
+  margin-top:15px;
+  font-weight: bold;
+}
+.add:hover{background:#b02a37}
+
+/* Button Hapus (Outline Hitam) */
+.remove{
+  background:#fff;
+  color:#dc3545;
+  border: 1px solid #dc3545;
+  font-weight: bold;
+}
+.remove:hover{
+  background:#dc3545;
+  color:#fff;
+}
+
+/* LOADING */
+.loading-box{
+  display:none;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
+  font-weight:600;
+  color:#dc3545;
+  margin:15px 0;
+}
+.spinner{
+  width:22px;height:22px;
+  border:3px solid #f3f3f3;
+  border-top:3px solid #dc3545;
+  border-radius:50%;
+  animation:spin 1s linear infinite;
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* SUCCESS */
+.success-box{
+  display:none;
+  text-align:center;
+  padding:15px;
+  background:#dc3545; /* Merah */
+  color:#fff; /* Putih */
+  border-radius:10px;
+  margin-bottom:10px;
+  animation:fade .4s ease;
+  font-weight: bold;
+}
+@keyframes fade{
+  from{opacity:0;transform:scale(.9)}
+  to{opacity:1;transform:scale(1)}
+}
+
+hr {
+  border: 0;
+  border-top: 1px solid #eee;
+  margin: 20px 0;
+}
+</style>
+</head>
+
+<body>
+
+<form id="form">
+<h2>Form Potongan ASW</h2>
+
+<div id="success" class="success-box">✅ Data berhasil disimpan</div>
+
+<div id="loading" class="loading-box">
+  <div class="spinner"></div>
+  <div>Menyimpan data ke server...</div>
+</div>
+
+<label>Nama Sales</label>
+<select id="sales" required></select>
+
+<label>Nama Toko</label>
+<input type="text" id="toko" placeholder="Masukkan nama toko" required>
+
+<hr>
+
+<div id="items"></div>
+
+<button type="button" class="add" onclick="addItem()">+ Tambah Produk</button>
+<button type="submit">SIMPAN DATA</button>
+</form>
+
+<datalist id="listProduk"></datalist>
+
+<script>
+/* KONFIG */
+const apiURL="https://script.google.com/macros/s/AKfycbwJsm2SopLNcBXvCmdYx_ji55mJrpiQP9s-wz5IxpR5MQKxRyemmOQ5oeSD5PMNVVu3/exec";
+const CACHE_KEY="ASW_MASTER_DATA";
+const CACHE_TIME=1000*60*60*24*30;
+
+/* ELEMEN */
+const sales=document.getElementById("sales");
+const toko=document.getElementById("toko");
+const listProduk=document.getElementById("listProduk");
+const itemsDiv=document.getElementById("items");
+const loading=document.getElementById("loading");
+const success=document.getElementById("success");
+
+/* RENDER DATA */
+function renderData(d){
+  sales.innerHTML='<option value="">Pilih Sales</option>';
+  if(d.sales) d.sales.forEach(s=>sales.innerHTML+=`<option>${s}</option>`);
+  if(d.produk) d.produk.forEach(p=>listProduk.innerHTML+=`<option value="${p}">`);
+  addItem();
+}
+
+/* LOAD DATA */
+(async()=>{
+  try {
+    const c=localStorage.getItem(CACHE_KEY);
+    if(c){
+      const j=JSON.parse(c);
+      if(Date.now()-j.time<CACHE_TIME){
+        renderData(j.data);
+        return;
+      }
+    }
+    const r=await fetch(apiURL);
+    const d=await r.json();
+    localStorage.setItem(CACHE_KEY,JSON.stringify({time:Date.now(),data:d}));
+    renderData(d);
+  } catch(e) {
+    console.error("Gagal memuat data:", e);
+    // Tetap panggil addItem jika gagal agar form tidak kosong
+    addItem();
+  }
+})();
+
+/* ITEM */
+function addItem(){
+  const d=document.createElement("div");
+  d.className="item";
+  d.innerHTML=`
+    <input list="listProduk" placeholder="Produk" required>
+    <input type="number" placeholder="Qty" required>
+    <input type="number" placeholder="Disc" required>
+    <button type="button" class="remove" onclick="this.parentElement.remove()">X</button>
+  `;
+  itemsDiv.appendChild(d);
+}
+
+/* RESET */
+function resetForm(){
+  sales.value="";
+  toko.value="";
+  itemsDiv.innerHTML="";
+  addItem();
+}
+
+/* SUBMIT */
+document.getElementById("form").onsubmit=e=>{
+  e.preventDefault();
+  loading.style.display="flex";
+  success.style.display="none";
+
+  const items=[...document.querySelectorAll(".item")]
+    .map(i=>({
+      produk:i.children[0].value,
+      jumlah:i.children[1].value,
+      diskon:i.children[2].value
+    })).filter(i=>i.produk);
+
+  fetch(apiURL,{
+    method:"POST",
+    body:JSON.stringify({
+      nama_sales:sales.value,
+      nama_toko:toko.value,
+      items
+    })
+  }).then(()=>{
+    loading.style.display="none";
+    success.style.display="block";
+    resetForm();
+    setTimeout(()=>success.style.display="none",3000);
+  }).catch(err => {
+    alert("Terjadi kesalahan saat menyimpan.");
+    loading.style.display="none";
+  });
+};
+</script>
+
+</body>
+</html>

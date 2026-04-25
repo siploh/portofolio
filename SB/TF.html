@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YBCI - Laporan Transfer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { background-color: #000; }
+        .card-auth { background: #fff; border-top: 8px solid #ff0000; }
+        input:focus, select:focus { border-color: #ff0000 !important; outline: none; }
+    </style>
+</head>
+<body class="min-h-screen flex items-center justify-center p-4">
+
+    <div class="max-w-md w-full card-auth p-8 rounded-2xl shadow-2xl">
+        <div class="text-center mb-8">
+            <h2 class="text-3xl font-black uppercase tracking-tighter text-black">
+                DATABASE <span class="text-red-600">TRANSFER</span>
+            </h2>
+            <p class="text-[10px] font-bold text-gray-400 uppercase tracking-[0.2em] mt-1">Authorized Access Only</p>
+        </div>
+        
+        <form id="transferForm" class="space-y-4">
+            <div>
+                <label class="block text-[10px] font-bold uppercase text-gray-500 mb-1">Nama Toko</label>
+                <input type="text" id="namaToko" required class="w-full p-3 border-2 border-gray-100 rounded-xl font-bold text-black">
+            </div>
+
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-[10px] font-bold uppercase text-gray-500 mb-1">Total (Rp)</label>
+                    <input type="number" id="total" required class="w-full p-3 border-2 border-gray-100 rounded-xl font-bold text-black">
+                </div>
+                <div>
+                    <label class="block text-[10px] font-bold uppercase text-gray-500 mb-1">Principal</label>
+                    <select id="principal" required class="w-full p-3 border-2 border-gray-100 rounded-xl font-bold text-black bg-white">
+                        <option value="">Memuat...</option>
+                    </select>
+                </div>
+            </div>
+
+            <div>
+                <label class="block text-[10px] font-bold uppercase text-gray-500 mb-1">Bukti Foto</label>
+                <input type="file" id="fotoFile" accept="image/*" required class="w-full text-xs text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-bold file:bg-black file:text-white hover:file:bg-red-600 cursor-pointer transition-all">
+            </div>
+
+            <button type="submit" id="submitBtn" class="w-full bg-black text-white font-black py-4 rounded-xl hover:bg-red-600 active:scale-95 transition-all shadow-lg">
+                SUBMIT DATA
+            </button>
+        </form>
+        <div id="status" class="mt-4 text-center hidden p-3 rounded-lg text-xs font-bold uppercase"></div>
+    </div>
+
+    <script>
+        // GANTI DENGAN URL WEB APP TERBARU ANDA
+        const scriptURL = 'https://script.google.com/macros/s/AKfycbxVPSW7r476CoUA25o1KpE2ZDStV7b1W0laS0ISZAAtbe2d3b0yzfY4vlX8U2q5Anm0/exec';
+
+        const form = document.getElementById('transferForm');
+        const btn = document.getElementById('submitBtn');
+        const statusDiv = document.getElementById('status');
+
+        // Mengambil daftar Principal dari Spreadsheet
+        window.onload = () => {
+            fetch(scriptURL)
+                .then(res => res.json())
+                .then(data => {
+                    const select = document.getElementById('principal');
+                    select.innerHTML = '<option value="">-- Pilih --</option>';
+                    data.forEach(row => {
+                        let opt = document.createElement('option');
+                        opt.value = row[0];
+                        opt.textContent = row[0];
+                        select.appendChild(opt);
+                    });
+                });
+        };
+
+        form.addEventListener('submit', e => {
+            e.preventDefault();
+            btn.disabled = true;
+            btn.innerText = "PROCESSING...";
+            
+            const file = document.getElementById('fotoFile').files[0];
+            const reader = new FileReader();
+
+            reader.onload = function() {
+                const payload = {
+                    namaToko: document.getElementById('namaToko').value,
+                    total: document.getElementById('total').value,
+                    principal: document.getElementById('principal').value,
+                    fotoData: reader.result.split(',')[1],
+                    fotoType: file.type
+                };
+
+                fetch(scriptURL, { method: 'POST', body: JSON.stringify(payload) })
+                .then(res => res.json())
+                .then(res => {
+                    if(res.result === "success") {
+                        statusDiv.innerText = "LAPORAN BERHASIL DISIMPAN";
+                        statusDiv.className = "mt-4 text-center p-3 rounded-lg text-xs font-bold uppercase bg-green-100 text-green-700";
+                        form.reset();
+                    } else {
+                        throw new Error(res.error);
+                    }
+                })
+                .catch(err => {
+                    statusDiv.innerText = "ERROR: " + err.message;
+                    statusDiv.className = "mt-4 text-center p-3 rounded-lg text-xs font-bold uppercase bg-red-100 text-red-700";
+                })
+                .finally(() => {
+                    statusDiv.classList.remove('hidden');
+                    btn.disabled = false;
+                    btn.innerText = "SUBMIT DATA";
+                });
+            };
+            reader.readAsDataURL(file);
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<title>Admin KL Mini Soccer</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
+
+<style>
+/* CSS DASAR */
+*{box-sizing:border-box;font-family:Poppins,Arial}
+body{background:linear-gradient(135deg,#e8f5e9,#f4f6f9);padding:0;margin:0;color:#333;min-height:100vh;}
+
+/* LOGIN PAGE */
+#login-page {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  background: linear-gradient(135deg, #1db954, #0f172a);
+}
+.login-card {
+  background: #fff;
+  padding: 40px;
+  border-radius: 20px;
+  box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+  width: 100%;
+  max-width: 400px;
+  text-align: center;
+}
+.login-card h2 { color: #1db954; margin-bottom: 20px; }
+.login-card input {
+  width: 100%;
+  padding: 12px;
+  margin: 10px 0;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+  outline: none;
+}
+.login-card button {
+  width: 100%;
+  padding: 12px;
+  background: #1db954;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+/* ADMIN PAGE (Hidden by default) */
+#admin-content { display: none; padding: 30px; }
+
+.header{background:linear-gradient(135deg,#1db954,#17a84a);color:#fff;padding:26px;border-radius:18px;box-shadow:0 15px 35px rgba(0,0,0,.18);margin-bottom:22px; display: flex; justify-content: space-between; align-items: center;}
+.header h2{margin:0}
+.logout-btn { background: rgba(255,255,255,0.2); color: white; border: none; padding: 8px 15px; border-radius: 8px; cursor: pointer; }
+
+/* NAVIGASI MENU */
+.nav-tabs { display: flex; gap: 10px; margin-bottom: 20px; }
+.nav-tabs button { padding: 12px 20px; border-radius: 10px; border: none; cursor: pointer; font-weight: 600; background: #ddd; transition: 0.3s; }
+.nav-tabs button.active { background: #1db954; color: white; }
+
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:14px;margin-bottom:20px;}
+.stat{background:#fff;border-radius:14px;padding:16px;box-shadow:0 10px 25px rgba(0,0,0,.08);text-align:center;}
+.stat h3{margin:0;font-size:22px}
+.stat.pending{border-top:4px solid #f0ad4e}
+.stat.approve{border-top:4px solid #1db954}
+.stat.income{border-top:4px solid #3498db}
+
+.card{background:#fff;padding:20px;border-radius:18px;box-shadow:0 10px 30px rgba(0,0,0,.08);margin-bottom:20px;}
+.filter{display:flex;gap:10px;flex-wrap:wrap;align-items: center;}
+.filter input,.filter button{padding:10px 14px;border-radius:10px;border:1px solid #ccc; outline: none;}
+.filter button{background:#1db954;color:#fff;border:none;cursor:pointer;transition: 0.3s;}
+
+.table-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;}
+th{background:#1db954;color:#fff;padding:13px;}
+td{padding:13px;border-bottom:1px solid #eee;text-align:center;}
+
+select.status{padding:7px 14px;border-radius:20px;color:#fff;font-weight:600;border:none;cursor:pointer;}
+select.status.Pending{background:#f0ad4e}
+select.status.Approve{background:#1db954}
+select.status.Cancel{background:#d9534f}
+
+button.save{background:#1db954;color:#fff;border:none;padding:8px 14px;border-radius:10px;cursor:pointer;}
+.btn-pdf { background: #e74c3c !important; color: white; border: none; padding: 10px 20px; border-radius: 10px; cursor: pointer; font-weight: 600; display: flex; align-items: center; gap: 8px; transition: 0.3s; }
+
+.spinner{width:16px;height:16px;border:3px solid rgba(255,255,255,.4);border-top:3px solid #fff;border-radius:50%;animation:spin 1s linear infinite;margin: auto;}
+@keyframes spin{to{transform:rotate(360deg)}}
+.loading{text-align:center;padding:30px;color:#777;}
+
+.page { display: none; }
+.page.active { display: block; }
+</style>
+</head>
+<body>
+
+<div id="login-page">
+  <div class="login-card">
+    <h2>⚽ Admin Login</h2>
+    <p>Masukkan kredensial Spreadsheet Anda</p>
+    <input type="text" id="userInput" placeholder="Username">
+    <input type="password" id="passInput" placeholder="Password">
+    <button id="loginBtn" onclick="handleLogin()">Masuk</button>
+    <p id="loginMsg" style="color: red; font-size: 13px; margin-top: 10px;"></p>
+  </div>
+</div>
+
+<div id="admin-content">
+  <div class="header">
+    <div>
+      <h2>⚽ Admin KL Mini Soccer</h2>
+      <p>Kelola jadwal & pantau pendapatan Anda</p>
+    </div>
+    <button class="logout-btn" onclick="handleLogout()">Keluar</button>
+  </div>
+
+  <div class="nav-tabs">
+    <button id="tab-booking" class="active" onclick="switchPage('booking')">Manajemen Booking</button>
+    <button id="tab-laporan" onclick="switchPage('laporan')">💰 Laporan Pendapatan</button>
+  </div>
+
+  <div class="stats">
+    <div class="stat"><h3 id="total">0</h3><span>Total Booking</span></div>
+    <div class="stat pending"><h3 id="pending">0</h3><span>Pending</span></div>
+    <div class="stat approve"><h3 id="approve">0</h3><span>Approve</span></div>
+    <div class="stat income"><h3 id="income">Rp 0</h3><span>Total Pendapatan</span></div>
+  </div>
+
+  <div class="card filter">
+    <input type="date" id="startDate">
+    <input type="date" id="endDate">
+    <input type="text" id="search" placeholder="Cari tim / WA..." oninput="applyFilter()">
+    <button onclick="applyFilter()">Filter Tanggal</button>
+    <button class="btn-refresh" id="refreshBtn" onclick="manualRefresh()">🔄 Refresh</button>
+    <button onclick="resetFilter()" style="background:#777; color:white; border:none; padding:10px 14px; border-radius:10px; cursor:pointer;">Reset</button>
+  </div>
+
+  <div id="page-booking" class="page active">
+    <div class="card table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Nama Tim</th>
+            <th>WhatsApp</th>
+            <th>Tanggal</th>
+            <th>Jam</th>
+            <th>Durasi</th>
+            <th>Status</th>
+            <th>Aksi</th>
+          </tr>
+        </thead>
+        <tbody id="data-booking">
+          <tr><td colspan="7" class="loading">Memuat data...</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div id="page-laporan" class="page">
+    <div class="card table-wrap">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+          <h3>Detail Pemasukan (Status Approve)</h3>
+          <button class="btn-pdf" onclick="exportPDF()">📄 Unduh PDF</button>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>Tanggal</th>
+            <th>Nama Tim</th>
+            <th>Jam/Sesi</th>
+            <th>Durasi</th>
+            <th>Total Bayar</th>
+          </tr>
+        </thead>
+        <tbody id="data-laporan">
+          <tr><td colspan="5" class="loading">Memuat data laporan...</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<script>
+const API_URL = "https://script.google.com/macros/s/AKfycbxvtqfqtZq7fxPt-I5E_tOwwaVBbxczP0XNV8wss2NQMFCTqeXLjvXA_Cb-xVVf81be/exec";
+
+/* FUNGSI LOGIN */
+function handleLogin() {
+  const user = document.getElementById("userInput").value;
+  const pass = document.getElementById("passInput").value;
+  const btn = document.getElementById("loginBtn");
+  const msg = document.getElementById("loginMsg");
+
+  if(!user || !pass) {
+    msg.textContent = "Isi username dan password!";
+    return;
+  }
+
+  btn.disabled = true;
+  btn.innerHTML = `<div class="spinner"></div>`;
+  msg.textContent = "Memverifikasi...";
+
+  // Memanggil API Apps Script untuk verifikasi login
+  fetch(`${API_URL}?action=login&user=${user}&pass=${pass}`)
+    .then(r => r.json())
+    .then(res => {
+      if(res.status === "success") {
+        sessionStorage.setItem("isLoggedIn", "true");
+        showAdminPage();
+      } else {
+        msg.textContent = "Username atau Password salah!";
+        btn.disabled = false;
+        btn.textContent = "Masuk";
+      }
+    })
+    .catch(() => {
+      msg.textContent = "Gagal terhubung ke server.";
+      btn.disabled = false;
+      btn.textContent = "Masuk";
+    });
+}
+
+function showAdminPage() {
+  document.getElementById("login-page").style.display = "none";
+  document.getElementById("admin-content").style.display = "block";
+  loadData();
+}
+
+function handleLogout() {
+  sessionStorage.removeItem("isLoggedIn");
+  location.reload();
+}
+
+/* CEK LOGIN SAAT REFRESH */
+if(sessionStorage.getItem("isLoggedIn") === "true") {
+  showAdminPage();
+}
+
+/* LOGIKA DASHBOARD (Sama seperti sebelumnya) */
+function hitungHarga(jamSesi, tanggalStr) {
+  const tgl = new Date(tanggalStr);
+  const hari = tgl.getDay(); 
+  const jamMulai = parseInt(jamSesi.split('.')[0]); 
+  if (hari === 0 || hari === 6) return 300000; 
+  if (jamMulai >= 16) return 250000;           
+  return 200000;                               
+}
+
+let allRows = []; 
+let currentFilteredData = [];
+
+function switchPage(pageName) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-tabs button').forEach(b => b.classList.remove('active'));
+  document.getElementById('page-' + pageName).classList.add('active');
+  document.getElementById('tab-' + pageName).classList.add('active');
+}
+
+function formatRupiah(angka) {
+  return "Rp " + angka.toLocaleString('id-ID');
+}
+
+function formatTanggal(t){
+  if(!t) return "-";
+  const d = new Date(t);
+  return isNaN(d) ? t : d.toLocaleDateString("id-ID", {day:'2-digit', month:'2-digit', year:'numeric'});
+}
+
+function updateStats(data){
+  const approvedRows = data.filter(r => String(r[7]).trim().toLowerCase().includes("approve"));
+  document.getElementById("total").textContent = data.length;
+  document.getElementById("pending").textContent = data.filter(r => String(r[7]).trim() == "Pending").length;
+  document.getElementById("approve").textContent = approvedRows.length;
+  
+  let totalIncome = 0;
+  approvedRows.forEach(r => {
+    const durasi = parseInt(r[5]) || 0;
+    const hargaSatuan = hitungHarga(r[4], r[3]); 
+    totalIncome += (durasi * hargaSatuan);
+  });
+  document.getElementById("income").textContent = formatRupiah(totalIncome);
+}
+
+function applyFilter() {
+  const start = document.getElementById("startDate").value;
+  const end = document.getElementById("endDate").value;
+  const keyword = document.getElementById("search").value.toLowerCase();
+  let filtered = allRows;
+  if (start && end) {
+    const sDate = new Date(start).setHours(0,0,0,0);
+    const eDate = new Date(end).setHours(0,0,0,0);
+    filtered = filtered.filter(r => {
+      const rowDate = new Date(r[3]).setHours(0,0,0,0);
+      return rowDate >= sDate && rowDate <= eDate;
+    });
+  }
+  if (keyword) {
+    filtered = filtered.filter(r => 
+      String(r[2]).toLowerCase().includes(keyword) || 
+      String(r[6]).includes(keyword)
+    );
+  }
+  currentFilteredData = filtered;
+  render(filtered);
+}
+
+function render(dataRows){
+  const tbodyBooking = document.getElementById("data-booking");
+  const tbodyLaporan = document.getElementById("data-laporan");
+  if(!dataRows.length){
+    tbodyBooking.innerHTML = `<tr><td colspan="7" class="loading">Data tidak ditemukan</td></tr>`;
+    tbodyLaporan.innerHTML = `<tr><td colspan="5" class="loading">Data tidak ditemukan</td></tr>`;
+    return;
+  }
+  tbodyBooking.innerHTML = dataRows.map((r) => {
+    const realIdx = r[0]; 
+    const currentStatus = String(r[7]).trim();
+    return `<tr>
+      <td><strong>${r[2]}</strong></td>
+      <td>${r[6]}</td>
+      <td>${formatTanggal(r[3])}</td>
+      <td>${r[4]}</td>
+      <td>${r[5]}</td>
+      <td>
+        <select class="status ${currentStatus}" id="sel-${realIdx}" onchange="this.className='status '+this.value">
+          <option value="Pending" ${currentStatus=="Pending"?"selected":""}>Pending</option>
+          <option value="Approve" ${currentStatus.toLowerCase().includes("approve")?"selected":""}>Approve</option>
+          <option value="Cancel" ${currentStatus=="Cancel"?"selected":""}>Cancel</option>
+        </select>
+      </td>
+      <td><button class="save" onclick="updateStatus(this, ${realIdx})">Simpan</button></td>
+    </tr>`
+  }).join("");
+  const approvedData = dataRows.filter(r => String(r[7]).trim().toLowerCase().includes("approve"));
+  tbodyLaporan.innerHTML = approvedData.map(r => {
+    const durasi = parseInt(r[5]) || 0;
+    const hargaSatuan = hitungHarga(r[4], r[3]);
+    return `<tr>
+      <td>${formatTanggal(r[3])}</td>
+      <td>${r[2]}</td>
+      <td>${r[4]}</td>
+      <td>${r[5]}</td>
+      <td><strong>${formatRupiah(durasi * hargaSatuan)}</strong></td>
+    </tr>`
+  }).join("");
+}
+
+function exportPDF() {
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF();
+  const start = document.getElementById("startDate").value || "-";
+  const end = document.getElementById("endDate").value || "-";
+  doc.setFontSize(18);
+  doc.text("Laporan Pendapatan Mini Soccer", 14, 20);
+  const tableData = currentFilteredData.filter(r => String(r[7]).trim().toLowerCase().includes("approve")).map(r => {
+        const durasi = parseInt(r[5]) || 0;
+        return [formatTanggal(r[3]), r[2], r[4], r[5], formatRupiah(durasi * hitungHarga(r[4], r[3]))];
+    });
+  doc.autoTable({ startY: 45, head: [['Tanggal', 'Nama Tim', 'Sesi/Jam', 'Durasi', 'Total Bayar']], body: tableData });
+  doc.save(`Laporan.pdf`);
+}
+
+function loadData() {
+  const tbodyBooking = document.getElementById("data-booking");
+  tbodyBooking.innerHTML = `<tr><td colspan="7" class="loading">Sinkronisasi data...</td></tr>`;
+  
+  fetch(API_URL + "?action=list")
+    .then(r => r.json())
+    .then(res => {
+      // Kita susun ulang data agar urutan kolomnya sesuai dengan tabel di HTML
+      allRows = res.map((r) => [
+        r.index,      // [0] Index asli untuk update
+        r.timestamp,  // [1] Waktu booking
+        r.nama,       // [2] Nama Tim
+        r.tanggal,    // [3] Tanggal
+        r.jam,        // [4] Jam/Sesi
+        r.durasi,     // [5] Durasi
+        r.telp,       // [6] WhatsApp
+        r.status      // [7] Status
+      ]).reverse(); // Agar data terbaru di atas
+
+      updateStats(allRows);
+      currentFilteredData = allRows;
+      render(allRows);
+    })
+    .catch((err) => {
+      console.error(err);
+      tbodyBooking.innerHTML = `<tr><td colspan="7" class="loading">Gagal memuat data.</td></tr>`;
+    });
+}
+
+function manualRefresh() {
+  const btn = document.getElementById("refreshBtn");
+  btn.innerHTML = `<div class="spinner"></div>`;
+  loadData();
+  setTimeout(() => { btn.innerHTML = "🔄 Refresh"; }, 1000);
+}
+
+function resetFilter(){
+  document.getElementById("startDate").value = "";
+  document.getElementById("endDate").value = "";
+  document.getElementById("search").value = "";
+  applyFilter();
+}
+
+function updateStatus(btn, realIndex){
+  const select = document.getElementById(`sel-${realIndex}`);
+  btn.innerHTML = `<div class="spinner"></div>`;
+  const formData = new URLSearchParams();
+  formData.append("action", "update");
+  formData.append("index", realIndex);
+  formData.append("status", select.value);
+  fetch(API_URL, { method: "POST", mode: "no-cors", body: formData })
+  .then(() => { alert("Status diperbarui!"); loadData(); });
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KL Mini Soccer - Booking Lapangan Online</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --primary:#1db954;
+  --dark:#0f172a;
+  --soft:#f4f6f9;
+}
+
+*{margin:0;padding:0;box-sizing:border-box;font-family:Poppins}
+body{background:var(--soft);color:#333; scroll-behavior: smooth; overflow-x: hidden;}
+a{text-decoration:none}
+
+/* ================= HEADER & NAV ================= */
+header{
+  position:sticky;
+  top:0;
+  z-index:1000;
+  background:rgba(15,138,61,0.98);
+  backdrop-filter:blur(10px);
+  color:#fff;
+  padding:15px 5%;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+header h1{font-size:20px;font-weight:700}
+
+/* Menu Desktop */
+nav { display: flex; align-items: center; }
+nav a{color:#fff;margin-left:20px;font-weight:500; font-size: 14px; transition: 0.3s;}
+nav a:hover { color: var(--dark); }
+
+/* Tombol Menu Mobile */
+.menu-toggle {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  cursor: pointer;
+}
+.menu-toggle span {
+  width: 25px;
+  height: 3px;
+  background: #fff;
+  border-radius: 2px;
+}
+
+/* ================= HERO ================= */
+.hero{
+  height:80vh;
+  min-height: 500px;
+  background:
+    linear-gradient(to bottom,rgba(0,0,0,.6),rgba(0,0,0,.8)),
+    url('https://asset.ayo.co.id/image/venue/173850390052117.image_cropper_E89CF576-426C-4242-9548-C358324FE126-51600-0000182F0A34CF07.jpg') center/cover;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding: 0 20px;
+}
+.hero-content{
+  color:#fff;
+  text-align:center;
+  max-width:800px;
+}
+.hero-content h2{font-size: clamp(32px, 8vw, 52px); margin-bottom:15px; line-height: 1.2;}
+.hero-content p{font-size: clamp(14px, 4vw, 18px); margin-bottom:30px; opacity:.9}
+
+.btn{
+  background:var(--primary);
+  color:#fff;
+  padding:14px 32px;
+  border-radius:50px;
+  font-weight:600;
+  display:inline-block;
+  transition:.3s;
+  border:none;
+  cursor:pointer;
+  font-size: 15px;
+}
+.btn:hover{
+  transform:translateY(-3px);
+  box-shadow:0 10px 25px rgba(29,185,84,.45);
+}
+
+/* ================= SECTION GENERAL ================= */
+section{padding:70px 5%}
+.section-title{text-align:center;margin-bottom:40px}
+.section-title h2{font-size: clamp(28px, 5vw, 38px); color:var(--primary); margin-bottom:10px}
+.section-title p{color:#666;font-size:15px}
+
+/* ================= ABOUT ================= */
+.about{ display:grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap:40px; align-items:center; }
+.about p{font-size:16px;line-height:1.8; text-align: justify;}
+.about img{ width:100%; border-radius:20px; box-shadow:0 15px 30px rgba(0,0,0,.1); }
+
+/* ================= FACILITIES ================= */
+.facilities{ display:grid; grid-template-columns:repeat(auto-fit,minmax(140px,1fr)); gap:20px; }
+.facility{ background:#fff; padding:25px 15px; border-radius:15px; text-align:center; font-weight:600; box-shadow:0 5px 15px rgba(0,0,0,.05); font-size: 14px; }
+
+/* ================= PRICING ================= */
+.pricing-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 25px;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+.price-card {
+  background: #fff;
+  padding: 35px 25px;
+  border-radius: 20px;
+  text-align: center;
+  transition: .3s;
+  border: 2px solid transparent;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+}
+.price-card:hover { transform: translateY(-8px); border-color: var(--primary); }
+.price-card h3 { font-size: 20px; margin-bottom: 10px; }
+.price-card .amount { font-size: 30px; font-weight: 700; color: var(--primary); }
+.price-card ul { list-style: none; text-align: left; margin: 20px 0; }
+.price-card ul li { margin-bottom: 10px; font-size: 14px; color: #555; }
+
+/* ================= SCHEDULE & BOOKING ================= */
+.schedule-container {
+  max-width: 950px;
+  margin: 0 auto 30px auto;
+  background: #fff;
+  padding: 20px;
+  border-radius: 20px;
+}
+.table-responsive { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+.schedule-table { width: 100%; border-collapse: collapse; min-width: 450px; }
+.schedule-table th, .schedule-table td { padding: 12px; text-align: left; border-bottom: 1px solid #eee; font-size: 14px; }
+
+.booking{
+  max-width:950px;
+  margin:auto;
+  background:#fff;
+  padding:30px;
+  border-radius:20px;
+  box-shadow:0 10px 30px rgba(0,0,0,.08);
+}
+.booking form{ display:grid; grid-template-columns: 1fr 1fr; gap:15px; }
+.booking input, .booking select{ padding:12px; border-radius:10px; border:1px solid #ddd; width: 100%; font-size: 14px; }
+.booking button{ grid-column: span 2; padding:15px; border-radius:50px; font-size:16px; font-weight: 600; }
+
+/* ================= CONTACT & FOOTER ================= */
+.contact{ background:linear-gradient(135deg,#1db954,#16a34a); color:#fff; text-align:center; padding:60px 20px; }
+.contact h2 { font-size: 28px; }
+footer{ background:var(--dark); color:#fff; text-align:center; padding:20px; font-size: 13px; }
+
+/* ================= ANIMATION ================= */
+.reveal{ opacity:0; transform:translateY(30px); transition:all .8s ease; }
+.reveal.active{ opacity:1; transform:none; }
+
+/* ================= RESPONSIVE MOBILE ================= */
+@media(max-width:768px){
+  header h1 { font-size: 18px; }
+  .menu-toggle { display: flex; }
+  
+  nav {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    background: var(--primary);
+    flex-direction: column;
+    padding: 20px 0;
+    gap: 15px;
+    display: none; /* Hidden by default */
+    box-shadow: 0 5px 10px rgba(0,0,0,0.1);
+  }
+  nav.active { display: flex; }
+  nav a { margin: 0; font-size: 16px; }
+
+  section { padding: 50px 20px; }
+  .about { grid-template-columns: 1fr; gap: 25px; }
+  .booking form { grid-template-columns: 1fr; }
+  .booking button { grid-column: span 1; }
+  
+  .price-card { padding: 25px 20px; }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>KL Mini Soccer</h1>
+  <div class="menu-toggle" onclick="toggleMenu()">
+    <span></span><span></span><span></span>
+  </div>
+  <nav id="nav-menu">
+    <a href="#about" onclick="toggleMenu()">Tentang</a>
+    <a href="#fasilitas" onclick="toggleMenu()">Fasilitas</a>
+    <a href="#pricing" onclick="toggleMenu()">Harga</a>
+    <a href="#booking" onclick="toggleMenu()">Booking</a>
+    <a href="admin.html">Admin</a>
+  </nav>
+</header>
+
+<section class="hero">
+  <div class="hero-content reveal active">
+    <h2>Lapangan Mini Soccer Terbaik</h2>
+    <p>Main nyaman, rumput premium, lokasi strategis.</p>
+    <a href="#booking" class="btn">Booking Sekarang</a>
+  </div>
+</section>
+
+<section id="about">
+  <div class="section-title reveal"><h2>Tentang Kami</h2></div>
+  <div class="about">
+    <p class="reveal">KL Mini Soccer hadir untuk memberikan pengalaman bermain sepak bola yang seru dengan standar lapangan berkualitas. Menggunakan rumput sintetis pilihan yang aman untuk sendi dan pencahayaan LED yang terang untuk main malam hari.</p>
+    <img class="reveal" src="image/KL.jpeg" alt="Logo KL Mini Soccer">
+  </div>
+</section>
+
+<section id="fasilitas">
+  <div class="section-title reveal"><h2>Fasilitas</h2></div>
+  <div class="facilities">
+    <div class="facility reveal">🏟️ Rumput Premium</div>
+    <div class="facility reveal">💡 LED Pro</div>
+    <div class="facility reveal">🚿 Ruang Ganti</div>
+    <div class="facility reveal">🅿️ Parkir Luas</div>
+  </div>
+</section>
+
+<section id="pricing" style="background: #f1f5f9;">
+  <div class="section-title reveal">
+    <h2>Daftar Harga</h2>
+    <p>Tarif per jam main</p>
+  </div>
+  <div class="pricing-container">
+    <div class="price-card reveal">
+      <h3>Sesi Siang</h3>
+      <div class="amount">Rp 200rb</div>
+      <span style="font-size: 12px; color: #888;">Senin - Jumat (08:00 - 15:00)</span>
+      <ul>
+        <li>Free Rompi</li>
+        <li>Akses Air Minum</li>
+      </ul>
+      <a href="#booking" class="btn" style="padding: 10px 20px; font-size: 13px;">Pilih Sesi</a>
+    </div>
+    <div class="price-card reveal" style="background: var(--dark); color: #fff;">
+      <h3 style="color: #fff;">Sesi Malam</h3>
+      <div class="amount">Rp 250rb</div>
+      <span style="font-size: 12px; color: #bbb;">Senin - Jumat (16:00 - 23:00)</span>
+      <ul>
+        <li>Lampu Terang</li>
+        <li>Free Rompi</li>
+      </ul>
+      <a href="#booking" class="btn" style="padding: 10px 20px; font-size: 13px;">Pilih Sesi</a>
+    </div>
+    <div class="price-card reveal">
+      <h3>Weekend</h3>
+      <div class="amount">Rp 300rb</div>
+      <span style="font-size: 12px; color: #888;">Sabtu & Minggu (All Day)</span>
+      <ul>
+        <li>Waktu Primetime</li>
+        <li>Free Rompi</li>
+      </ul>
+      <a href="#booking" class="btn" style="padding: 10px 20px; font-size: 13px;">Pilih Sesi</a>
+    </div>
+  </div>
+</section>
+
+<section id="booking">
+  <div class="section-title reveal"><h2>Jadwal & Booking</h2></div>
+  
+  <div class="schedule-container reveal">
+    <h3 id="label-hari" style="margin-bottom: 15px; font-size: 16px;">📅 Jadwal Hari Ini</h3>
+    <div class="table-responsive">
+      <table class="schedule-table">
+        <thead>
+          <tr>
+            <th>Jam</th>
+            <th>Tim</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody id="today-schedule">
+          <tr><td colspan="3" style="text-align:center;">Memuat data...</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="booking reveal">
+    <form id="formBooking" onsubmit="submitBooking(event)">
+      <input id="nama" placeholder="Nama Tim" required>
+      <input id="telp" type="tel" placeholder="Nomor WA (Contoh: 0812...)" required>
+      <input id="tanggal" type="date" required>
+      <select id="jam" required>
+        <option value="">Pilih Jam...</option>
+        <option>08.00 - 09.00</option>
+        <option>09.00 - 10.00</option>
+        <option>10.00 - 11.00</option>
+        <option>11.00 - 12.00</option>
+        <option>13.00 - 14.00</option>
+        <option>14.00 - 15.00</option>
+        <option>15.00 - 16.00</option>
+        <option>16.00 - 17.00</option>
+        <option>19.00 - 20.00</option>
+        <option>20.00 - 21.00</option>
+        <option>21.00 - 22.00</option>
+        <option>22.00 - 23.00</option>
+      </select>
+      <select id="durasi" required>
+        <option>1 Jam</option>
+        <option>2 Jam</option>
+      </select>
+      <button type="submit" id="btnSubmit" class="btn">Kirim Booking</button>
+    </form>
+  </div>
+</section>
+
+<section class="contact reveal">
+  <h2>Butuh Bantuan?</h2>
+  <p style="margin: 15px 0;">Hubungi Admin kami via WhatsApp</p>
+  <a href="https://wa.me/6285183329989" class="btn" style="background: var(--dark);">Chat WhatsApp</a>
+</section>
+
+<footer>© 2026 KL Mini Soccer</footer>
+
+<script>
+const API_URL="https://script.google.com/macros/s/AKfycbwv8ZerenMzYBor5JoiWQJMJuBAOZ9KpFXb4g2Pp-n3EVPeD9_HAy87GbkT-wAU1z8N/exec";
+const WA_ADMIN="6285183329989";
+
+// Toggle Menu Mobile
+function toggleMenu() {
+    const nav = document.getElementById('nav-menu');
+    if(window.innerWidth <= 768) {
+        nav.classList.toggle('active');
+    }
+}
+
+function getJakartaDate() {
+    return new Intl.DateTimeFormat('en-CA', { 
+        timeZone: 'Asia/Jakarta', year: 'numeric', month: '2-digit', day: '2-digit' 
+    }).format(new Date());
+}
+
+function loadTodaySchedule() {
+    const tbody = document.getElementById("today-schedule");
+    const todayStr = getJakartaDate();
+    document.getElementById("label-hari").innerText = `📅 Jadwal Terisi (${todayStr})`;
+
+    fetch(`${API_URL}?action=getToday&_t=${new Date().getTime()}`)
+    .then(res => res.json())
+    .then(data => {
+        const approvedData = data.filter(item => {
+            const status = item.status ? item.status.toString().trim().toLowerCase() : "";
+            return status.includes("approve"); 
+        });
+
+        if (approvedData.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="3" style="text-align:center; padding: 20px;">Belum ada jadwal hari ini.</td></tr>';
+            return;
+        }
+
+        tbody.innerHTML = "";
+        approvedData.forEach(item => {
+            tbody.innerHTML += `<tr>
+                <td>${item.jam}</td>
+                <td><strong>${item.nama}</strong></td>
+                <td><span style="color:var(--primary); font-weight:600;">✓ Booked</span></td>
+            </tr>`;
+        });
+    }).catch(() => {
+        tbody.innerHTML = '<tr><td colspan="3" style="text-align:center; color:red;">Gagal memuat jadwal.</td></tr>';
+    });
+}
+
+function submitBooking(e){
+    e.preventDefault();
+    const btn = document.getElementById("btnSubmit");
+    const valNama = document.getElementById("nama").value;
+    const valTelp = document.getElementById("telp").value;
+    const valTgl = document.getElementById("tanggal").value;
+    const valJam = document.getElementById("jam").value;
+    const valDur = document.getElementById("durasi").value;
+
+    btn.innerText = "Memproses...";
+    btn.disabled = true;
+
+    const formData = new URLSearchParams();
+    formData.append("nama", valNama);
+    formData.append("telp", valTelp);
+    formData.append("tanggal", valTgl);
+    formData.append("jam", valJam);
+    formData.append("durasi", valDur);
+
+    fetch(API_URL, { method: "POST", body: formData })
+    .then(res => res.text())
+    .then(res => {
+        if (res === "success") {
+            const pesan = `Halo KL Mini Soccer, saya ingin konfirmasi booking:%0ANama Tim: ${valNama}%0ATanggal: ${valTgl}%0AJam: ${valJam}%0ADurasi: ${valDur}`;
+            e.target.reset();
+            document.getElementById('tanggal').value = getJakartaDate();
+            loadTodaySchedule();
+            window.open(`https://wa.me/${WA_ADMIN}?text=${pesan}`);
+            alert("✅ Berhasil! Silakan konfirmasi via WhatsApp.");
+        } else {
+            alert("Gagal: " + res);
+        }
+    })
+    .catch(() => alert("Gagal terhubung ke server."))
+    .finally(() => {
+        btn.innerText = "Kirim Booking";
+        btn.disabled = false;
+    });
+}
+
+window.addEventListener("load", () => {
+    document.getElementById('tanggal').value = getJakartaDate();
+    loadTodaySchedule();
+
+    const reveals = document.querySelectorAll(".reveal");
+    const revealOnScroll = () => {
+        reveals.forEach(el => {
+            if(el.getBoundingClientRect().top < window.innerHeight - 50) el.classList.add("active");
+        });
+    };
+    window.addEventListener("scroll", revealOnScroll);
+    revealOnScroll();
+});
+</script>
+</body>
+</html>

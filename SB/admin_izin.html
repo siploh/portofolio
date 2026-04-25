@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard - Eksternal</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { background: #0f172a; min-height: 100vh; color: white; font-family: 'Inter', sans-serif; }
+    .glass { background: rgba(30, 41, 59, 0.7); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.1); }
+    .table-row:hover { background: rgba(255,255,255,0.05); }
+    ::-webkit-scrollbar { width: 8px; }
+    ::-webkit-scrollbar-thumb { background: #475569; border-radius: 10px; }
+    #photoModal { transition: opacity 0.3s ease; }
+    .modal-content { transform: scale(0.95); transition: transform 0.3s ease; }
+    #photoModal.flex .modal-content { transform: scale(1); }
+  </style>
+</head>
+<body class="p-6">
+
+  <div class="max-w-7xl mx-auto">
+    <div class="flex flex-col md:flex-row justify-between items-center mb-8 gap-4">
+      <div>
+        <h1 class="text-3xl font-bold text-white">Dashboard <span class="text-red-500">Admin</span></h1>
+        <p class="text-slate-400">Monitoring Izin & Absensi (External Access)</p>
+      </div>
+      
+      <div class="flex gap-2">
+        <input type="text" id="searchInput" onkeyup="filterTable()" placeholder="Cari nama..." class="bg-slate-800 border border-slate-700 rounded-lg px-4 py-2 outline-none focus:border-red-500 w-64 text-white">
+        <button onclick="loadData()" class="bg-red-600 hover:bg-red-700 px-4 py-2 rounded-lg font-bold transition">Refresh</button>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+      <div class="glass p-6 rounded-2xl">
+        <p class="text-slate-400 text-sm">Total Pengajuan</p>
+        <h3 id="statTotal" class="text-3xl font-bold">0</h3>
+      </div>
+      <div class="glass p-6 rounded-2xl border-l-4 border-red-500">
+        <p class="text-slate-400 text-sm">Izin Hari Ini</p>
+        <h3 id="statToday" class="text-3xl font-bold">0</h3>
+      </div>
+      <div class="glass p-6 rounded-2xl">
+        <p class="text-slate-400 text-sm">Status Server</p>
+        <h3 id="serverStatus" class="text-3xl font-bold text-yellow-500">Connecting...</h3>
+      </div>
+    </div>
+
+    <div class="glass rounded-2xl overflow-hidden shadow-2xl">
+      <div class="overflow-x-auto">
+        <table class="w-full text-left border-collapse" id="izinTable">
+          <thead>
+            <tr class="bg-slate-800/50 text-slate-300 uppercase text-xs tracking-wider">
+              <th class="p-4 border-b border-slate-700">Timestamp</th>
+              <th class="p-4 border-b border-slate-700">Nama Karyawan</th>
+              <th class="p-4 border-b border-slate-700">Periode</th>
+              <th class="p-4 border-b border-slate-700">Jenis</th>
+              <th class="p-4 border-b border-slate-700">Keterangan</th>
+              <th class="p-4 border-b border-slate-700 text-center">Bukti</th>
+            </tr>
+          </thead>
+          <tbody id="tableBody" class="text-slate-300"></tbody>
+        </table>
+      </div>
+      <div id="loader" class="p-10 text-center text-slate-500 italic">Menghubungkan ke database...</div>
+    </div>
+  </div>
+
+  <div id="photoModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/80 backdrop-blur-sm p-4">
+    <div class="relative max-w-4xl w-full flex flex-col items-center">
+      <button onclick="closeModal()" class="absolute -top-12 right-0 text-white hover:text-red-500 text-4xl font-bold">&times;</button>
+      <div class="modal-content glass p-2 rounded-xl">
+        <img id="modalImg" src="" alt="Bukti Izin" class="max-h-[80vh] rounded-lg shadow-2xl">
+      </div>
+      <p id="modalCaption" class="mt-4 text-slate-300 font-medium text-center"></p>
+    </div>
+  </div>
+
+  <script>
+    // MASUKKAN URL WEB APP GOOGLE SCRIPT ANDA DI SINI
+    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbyMrswtvwMWof-ZIsQHEdk8ckIkP-Q_xNm01L-pEOUUYENncKbCzIEQDeEAs7PH8rzX/exec";
+
+    window.onload = loadData;
+
+    async function loadData() {
+      const tbody = document.getElementById('tableBody');
+      const loader = document.getElementById('loader');
+      const status = document.getElementById('serverStatus');
+      
+      loader.classList.remove('hidden');
+      tbody.innerHTML = '';
+
+      try {
+        const response = await fetch(`${WEB_APP_URL}?action=getIzinData`, { method: 'POST' });
+        const data = await response.json();
+        
+        status.innerText = "Online";
+        status.classList.replace('text-yellow-500', 'text-green-500');
+        showData(data);
+      } catch (err) {
+        status.innerText = "Offline";
+        status.classList.replace('text-yellow-500', 'text-red-500');
+        loader.innerText = "Gagal memuat data. Periksa URL API Anda.";
+      }
+    }
+
+    function showData(data) {
+      const tbody = document.getElementById('tableBody');
+      const loader = document.getElementById('loader');
+      loader.classList.add('hidden');
+      
+      if (!data || data.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="6" class="p-10 text-center">Belum ada data izin.</td></tr>';
+        return;
+      }
+
+      document.getElementById('statTotal').innerText = data.length;
+
+      const today = new Date();
+      today.setHours(0,0,0,0);
+      
+      let countToday = 0;
+      let html = '';
+
+      // Loop data (dibalik agar yang terbaru di atas)
+      [...data].reverse().forEach(row => {
+        const dateStart = parseDate(row[2]);
+        const dateEnd = parseDate(row[3]);
+        const isIzinToday = (today >= dateStart && today <= dateEnd);
+
+        if (isIzinToday) countToday++;
+
+        const fotoLink = (row[6] && row[6] !== "Tanpa Lampiran") 
+          ? `<button onclick="openModal('${row[6]}', '${row[1]}')" class="bg-red-500/20 hover:bg-red-600 text-red-400 hover:text-white px-3 py-1 rounded-md text-xs font-bold transition border border-red-500/50">Lihat Foto</button>` 
+          : '<span class="text-slate-600">-</span>';
+          
+        html += `<tr class="table-row border-b border-slate-800 transition ${isIzinToday ? 'bg-red-500/5' : ''}">
+          <td class="p-4 text-xs text-slate-500">${row[0]}</td>
+          <td class="p-4 font-semibold text-white">${row[1]}</td>
+          <td class="p-4 text-sm">${row[2]} s/d ${row[3]}</td>
+          <td class="p-4">
+            <span class="px-2 py-1 rounded-full text-[10px] font-bold uppercase ${getBadgeColor(row[4])}">
+              ${row[4]}
+            </span>
+          </td>
+          <td class="p-4 text-sm max-w-xs truncate" title="${row[5]}">${row[5]}</td>
+          <td class="p-4 text-center">${fotoLink}</td>
+        </tr>`;
+      });
+
+      document.getElementById('statToday').innerText = countToday;
+      tbody.innerHTML = html;
+    }
+
+    // Helper functions
+    function parseDate(dateStr) {
+      if (!dateStr) return new Date(0);
+      const parts = dateStr.split('/');
+      return new Date(parts[2], parts[1] - 1, parts[0]);
+    }
+
+    function getBadgeColor(type) {
+      if (type.includes('Sakit')) return 'bg-blue-900/30 text-blue-400 border border-blue-800';
+      if (type.includes('Cuti')) return 'bg-purple-900/30 text-purple-400 border border-purple-800';
+      return 'bg-amber-900/30 text-amber-400 border border-amber-800';
+    }
+
+    function openModal(url, name) {
+      const modal = document.getElementById('photoModal');
+      const img = document.getElementById('modalImg');
+      const caption = document.getElementById('modalCaption');
+      
+      let fileId = "";
+      if (url.includes('id=')) fileId = url.split('id=')[1].split('&')[0];
+      else fileId = url.split('/d/')[1].split('/')[0];
+
+      img.src = "https://drive.google.com/thumbnail?sz=w1000&id=" + fileId;
+      caption.innerText = "Bukti Izin: " + name;
+      modal.classList.replace('hidden', 'flex');
+    }
+
+    function closeModal() {
+      document.getElementById('photoModal').classList.replace('flex', 'hidden');
+    }
+
+    function filterTable() {
+      const input = document.getElementById("searchInput").value.toUpperCase();
+      const rows = document.getElementById("tableBody").getElementsByTagName("tr");
+      for (let i = 0; i < rows.length; i++) {
+        const nameCell = rows[i].getElementsByTagName("td")[1];
+        if (nameCell) {
+          const txtValue = nameCell.textContent || nameCell.innerText;
+          rows[i].style.display = txtValue.toUpperCase().indexOf(input) > -1 ? "" : "none";
+        }
+      }
+    }
+
+    window.onclick = (e) => { if (e.target.id === 'photoModal') closeModal(); }
+  </script>
+</body>
+</html>

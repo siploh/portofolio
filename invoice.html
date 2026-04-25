@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<title>Kwitansi Super Premium</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- jsPDF -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<!-- QRCode -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+
+<style>
+*{box-sizing:border-box;font-family:Poppins,Arial}
+body{background:#f0f2f5;margin:0;padding:20px}
+.container{
+  max-width:750px;margin:auto;background:#fff;
+  padding:35px 45px;border-radius:15px;
+  box-shadow:0 18px 40px rgba(0,0,0,.12);
+  border:5px solid #1db954;
+}
+.header{display:flex;justify-content:space-between;border-bottom:2px solid #eee;padding-bottom:12px}
+.header-left{font-weight:700;font-size:20px}
+.header-left .alamat{font-size:13px;color:#555}
+.header-right{font-size:28px;font-weight:700;color:#1db954}
+.row{display:flex;margin-top:15px}
+.label{width:180px;font-weight:600}
+.input,textarea{
+  width:100%;padding:10px;border:1px solid #ccc;border-radius:8px
+}
+textarea{resize:none}
+button{
+  margin-top:25px;width:100%;padding:15px;
+  background:linear-gradient(135deg,#1db954,#1aa34a);
+  color:#fff;border:none;border-radius:10px;
+  font-weight:600;cursor:pointer
+}
+.jumlah{text-align:center;font-size:20px;font-weight:700;color:#1db954}
+.small{text-align:center;font-size:13px;color:#555;font-style:italic}
+.signature-area{display:flex;justify-content:space-between;margin-top:50px}
+.signature{text-align:center}
+</style>
+</head>
+<body>
+
+<div class="container">
+  <div class="header">
+    <div class="header-left">
+      Bawah Tangga Production
+      <div class="alamat">Kota Langsa – Aceh – Indonesia</div>
+    </div>
+    <div class="header-right">KWITANSI</div>
+  </div>
+
+  <div class="row"><div class="label">No Invoice:</div><div id="invoice"></div></div>
+  <div class="row"><div class="label">Tanggal:</div><div id="tanggal"></div></div>
+
+  <label class="label">Telah diterima dari:</label>
+  <input class="input" id="nama">
+
+  <label class="label">Untuk pembayaran:</label>
+  <textarea class="input" id="ket" rows="3"></textarea>
+
+  <label class="label">Jumlah Uang (Rp):</label>
+  <input class="input" id="jumlah" type="number" oninput="updateTerbilang()">
+  <div class="jumlah" id="jumlah-display"></div>
+  <div class="small">Terbilang: <i id="terbilang"></i></div>
+
+  <div class="signature-area">
+    <div class="signature">
+      Penerima
+      <div id="qr-penerima"></div>
+      <div id="nama-penerima" style="font-weight:bold"></div>
+    </div>
+    <div class="signature">
+      Admin
+      <div id="qr-admin"></div>
+      <div style="font-weight:bold">Aurora</div>
+    </div>
+  </div>
+
+  <button onclick="buatPDF()">Download PDF</button>
+</div>
+
+<script>
+const { jsPDF } = window.jspdf;
+
+// ===== AUTO DATA =====
+const tgl=new Date();
+const tanggal=tgl.toLocaleDateString("id-ID",{day:"2-digit",month:"long",year:"numeric"});
+const invoice="INV-"+tgl.getTime();
+tanggalEl.innerText=tanggal;
+invoiceEl.innerText=invoice;
+
+// ===== TERBILANG =====
+function terbilang(n){
+  if(n===0)return"Nol";
+  const s=["","Satu","Dua","Tiga","Empat","Lima","Enam","Tujuh","Delapan","Sembilan","Sepuluh","Sebelas"];
+  if(n<12)return s[n];
+  if(n<20)return terbilang(n-10)+" Belas";
+  if(n<100)return terbilang(Math.floor(n/10))+" Puluh "+terbilang(n%10);
+  if(n<200)return"Seratus "+terbilang(n-100);
+  if(n<1000)return terbilang(Math.floor(n/100))+" Ratus "+terbilang(n%100);
+  if(n<2000)return"Seribu "+terbilang(n-1000);
+  if(n<1e6)return terbilang(Math.floor(n/1000))+" Ribu "+terbilang(n%1000);
+  if(n<1e9)return terbilang(Math.floor(n/1e6))+" Juta "+terbilang(n%1e6);
+  return"";
+}
+
+function updateTerbilang(){
+  const v=+jumlah.value||0;
+  jumlahDisplay.innerText=v?"Rp "+v.toLocaleString("id-ID"):"";
+  terbilangEl.innerText=v?terbilang(v)+" Rupiah":"";
+}
+
+// ===== QR DI HTML =====
+function makeQR(el,text){
+  el.innerHTML="";
+  new QRCode(el,{text,width:90,height:90});
+}
+
+nama.addEventListener("input",()=>{
+  namaPenerima.innerText=nama.value||"(................)";
+  makeQR(qrPenerima,nama.value||"-");
+});
+
+makeQR(qrAdmin,"Aurora - Bawah Tangga Production");
+
+// ===== QR KE DATAURL (UNTUK PDF) =====
+function qrToDataURL(text){
+  return new Promise(resolve=>{
+    const d=document.createElement("div");
+    new QRCode(d,{text,width:120,height:120});
+    setTimeout(()=>{
+      resolve(d.querySelector("canvas").toDataURL("image/png"));
+    },300);
+  });
+}
+
+// ===== BUAT PDF =====
+async function buatPDF(){
+  if(!nama.value||!ket.value||!jumlah.value){
+    alert("Lengkapi semua data!");
+    return;
+  }
+
+  const doc=new jsPDF("p","mm","a4");
+  doc.setDrawColor(29,185,84);
+  doc.rect(10,10,190,277);
+
+  doc.setFontSize(16).text("Bawah Tangga Production",20,25);
+  doc.setFontSize(12).text("Kota Langsa – Aceh – Indonesia",20,32);
+  doc.setFontSize(24).setTextColor(29,185,84)
+     .text("KWITANSI",190,25,{align:"right"});
+
+  doc.setFontSize(11).setTextColor(0);
+  doc.text("No Invoice : "+invoice,190,32,{align:"right"});
+  doc.text("Tanggal : "+tanggal,190,38,{align:"right"});
+  doc.line(15,48,195,48);
+
+  let y=60;
+  doc.text("Telah diterima dari :",20,y);
+  doc.text(nama.value,70,y);
+  y+=10;
+
+  doc.text("Untuk pembayaran :",20,y);
+  doc.text(doc.splitTextToSize(ket.value,120),70,y);
+
+  y+=25;
+  doc.setFontSize(18)
+     .text("Rp "+(+jumlah.value).toLocaleString("id-ID"),105,y,{align:"center"});
+  y+=10;
+  doc.setFontSize(12)
+     .text(terbilang(+jumlah.value)+" Rupiah",105,y,{align:"center"});
+
+  const qrP=await qrToDataURL(nama.value);
+  const qrA=await qrToDataURL("Aurora - Bawah Tangga Production");
+
+  doc.text("Penerima",45,135,{align:"center"});
+  doc.addImage(qrP,"PNG",25,140,40,40);
+
+  doc.text("Admin",155,135,{align:"center"});
+  doc.addImage(qrA,"PNG",135,140,40,40);
+  doc.text("Aurora",155,185,{align:"center"});
+
+  doc.save("kwitansi-"+invoice+".pdf");
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Form Izin Karyawan - Eksternal</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { background: linear-gradient(135deg, #000000 0%, #1a1a1a 100%); min-height: 100vh; color: white; font-family: 'Inter', sans-serif; }
+    .glass { background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.1); }
+    input[type="date"]::-webkit-calendar-picker-indicator { filter: invert(1); cursor: pointer; }
+    .btn-red { background-color: #dc2626; transition: all 0.3s ease; }
+    .btn-red:hover { background-color: #b91c1c; transform: translateY(-1px); }
+    .btn-red:disabled { background-color: #7f1d1d; cursor: not-allowed; opacity: 0.7; }
+  </style>
+</head>
+<body class="p-4 flex items-center justify-center">
+
+  <div class="glass w-full max-w-md p-8 rounded-2xl shadow-2xl">
+    <div class="text-center mb-8">
+      <h2 class="text-2xl font-bold border-b-2 border-red-600 inline-block pb-1">Form Izin</h2>
+      <p class="text-zinc-500 text-sm mt-2">Silakan isi detail pengajuan izin Anda</p>
+    </div>
+    
+    <form id="absensiForm">
+      <div class="mb-4">
+        <label class="block text-sm font-medium mb-1 text-zinc-400">Nama Karyawan</label>
+        <select name="nama" id="namaKaryawan" required class="w-full bg-zinc-900 border border-zinc-700 rounded-lg p-2.5 text-white outline-none focus:ring-2 focus:ring-red-600 appearance-none">
+          <option value="">Memuat Nama...</option>
+        </select>
+      </div>
+
+      <div class="grid grid-cols-2 gap-4 mb-4">
+        <div>
+          <label class="block text-sm font-medium mb-1 text-zinc-400">Mulai</label>
+          <input type="date" name="tgl_mulai" required class="w-full bg-zinc-900 border border-zinc-700 rounded-lg p-2 text-white outline-none focus:ring-2 focus:ring-red-600">
+        </div>
+        <div>
+          <label class="block text-sm font-medium mb-1 text-zinc-400">Selesai</label>
+          <input type="date" name="tgl_selesai" required class="w-full bg-zinc-900 border border-zinc-700 rounded-lg p-2 text-white outline-none focus:ring-2 focus:ring-red-600">
+        </div>
+      </div>
+
+      <div class="mb-4">
+        <label class="block text-sm font-medium mb-1 text-zinc-400">Jenis Izin</label>
+        <select name="jenis_izin" required class="w-full bg-zinc-900 border border-zinc-700 rounded-lg p-2.5 text-white outline-none focus:ring-2 focus:ring-red-600">
+          <option value="Izin Sakit">Izin Sakit</option>
+          <option value="Acara Keluarga">Acara Keluarga</option>
+          <option value="Cuti">Cuti</option>
+          <option value="Lainnya">Lainnya</option>
+        </select>
+      </div>
+
+      <div class="mb-4">
+        <label class="block text-sm font-medium mb-1 text-zinc-400">Keterangan</label>
+        <textarea name="keterangan" rows="2" class="w-full bg-zinc-900 border border-zinc-700 rounded-lg p-2.5 text-white outline-none focus:ring-2 focus:ring-red-600" placeholder="Berikan alasan detail..."></textarea>
+      </div>
+
+      <div class="mb-6">
+        <label class="block text-sm font-medium mb-1 text-zinc-400">Bukti Foto (Opsional)</label>
+        <input type="file" id="fotoInput" accept="image/*" class="w-full text-xs text-zinc-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-red-600/20 file:text-red-400 hover:file:bg-red-600/30 cursor:pointer">
+      </div>
+
+      <button type="submit" id="btnSubmit" class="w-full btn-red text-white font-bold py-3 px-4 rounded-lg shadow-lg">
+        Kirim Permohonan
+      </button>
+
+      <p id="msg" class="mt-4 text-center text-sm font-semibold min-h-[1.25rem]"></p>
+    </form>
+  </div>
+
+  <script>
+    // 1. MASUKKAN URL WEB APP ANDA DI SINI
+    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbyMrswtvwMWof-ZIsQHEdk8ckIkP-Q_xNm01L-pEOUUYENncKbCzIEQDeEAs7PH8rzX/exec";
+
+    // 2. Ambil Daftar Nama saat Halaman Dimuat
+    window.onload = async () => {
+      const select = document.getElementById("namaKaryawan");
+      try {
+        // Kita gunakan ?action=getNames agar .gs tahu fungsi mana yang dijalankan
+        const response = await fetch(`${WEB_APP_URL}?action=getNames`, { 
+          method: 'POST' 
+        });
+        const names = await response.json();
+        
+        select.innerHTML = '<option value="">-- Pilih Nama --</option>';
+        if (Array.isArray(names)) {
+          names.forEach(name => {
+            const opt = document.createElement("option");
+            opt.value = name; 
+            opt.innerText = name;
+            select.appendChild(opt);
+          });
+        }
+      } catch (e) {
+        console.error("Gagal memuat nama:", e);
+        select.innerHTML = '<option value="">Gagal memuat daftar nama</option>';
+      }
+    };
+
+    // 3. Proses Pengiriman Form
+    document.getElementById("absensiForm").onsubmit = async (e) => {
+      e.preventDefault();
+      const btn = document.getElementById("btnSubmit");
+      const msg = document.getElementById("msg");
+      const fileInput = document.getElementById("fotoInput").files[0];
+      
+      btn.disabled = true;
+      btn.innerText = "Sedang Mengirim...";
+      msg.innerText = "";
+      msg.style.color = "white";
+
+      let fileData = null;
+      // Konversi foto ke base64 jika ada
+      if (fileInput) {
+        try {
+          const base64Data = await toBase64(fileInput);
+          fileData = {
+            base64: base64Data.split(',')[1],
+            mimeType: fileInput.type,
+            name: fileInput.name
+          };
+        } catch (err) {
+          console.error("Gagal memproses foto:", err);
+        }
+      }
+
+      const formData = {
+        nama: e.target.nama.value,
+        tgl_mulai: e.target.tgl_mulai.value,
+        tgl_selesai: e.target.tgl_selesai.value,
+        jenis_izin: e.target.jenis_izin.value,
+        keterangan: e.target.keterangan.value,
+        foto: fileData
+      };
+
+      try {
+        const response = await fetch(`${WEB_APP_URL}?action=submitForm`, {
+          method: 'POST',
+          body: JSON.stringify(formData)
+        });
+        const res = await response.json();
+        
+        msg.innerText = res;
+        msg.style.color = res.includes("✅") ? "#22c55e" : "#ef4444";
+        
+        if(res.includes("✅")) {
+          e.target.reset(); // Kosongkan form jika sukses
+        }
+      } catch (err) {
+        console.error("Error submitting form:", err);
+        msg.innerText = "❌ Koneksi gagal. Pastikan URL Web App benar.";
+        msg.style.color = "#ef4444";
+      }
+
+      btn.disabled = false;
+      btn.innerText = "Kirim Permohonan";
+    };
+
+    // Fungsi Pembantu: Ubah File ke Base64
+    const toBase64 = file => new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = error => reject(error);
+    });
+  </script>
+</body>
+</html>

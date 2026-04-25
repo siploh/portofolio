@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Data Penjualan Sales vs Target</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+    background-color: #f5f5f5;
+  }
+  h1 {
+    text-align: center;
+    color: #333;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    background-color: #fff;
+  }
+  th, td {
+    border: 1px solid #ccc;
+    padding: 10px;
+    text-align: center;
+  }
+  th {
+    background-color: #1db954;
+    color: white;
+  }
+  tr.success {
+    background-color: #d4edda;
+  }
+  tr.fail {
+    background-color: #f8d7da;
+  }
+</style>
+</head>
+<body>
+
+<h1>Data Penjualan Sales vs Target</h1>
+
+<table id="salesTable">
+  <thead>
+    <tr>
+      <th>Keterangan</th>
+      <th>Tenaga Penjual</th>
+      <th>EC</th>
+      <th>Total</th>
+      <th>Target</th>
+      <th>Status</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr><td colspan="6">Loading data...</td></tr>
+  </tbody>
+</table>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tabletop.js/1.5.4/tabletop.min.js"></script>
+<script>
+  // Gunakan URL pubhtml dari Google Sheets yang kamu berikan
+  const sheetUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTv1CWoG44idElFpBMXmkFQun2Ad9tQuMUIneskZu5bQvL2ffFZzjtA8j_kgl_T-7J6_7Q41Xj_3Nj_/pubhtml';
+
+  function init() {
+    Tabletop.init({
+      key: sheetUrl,
+      simpleSheet: true,
+      callback: showData
+    });
+  }
+
+  function showData(data) {
+    const tbody = document.querySelector('#salesTable tbody');
+    tbody.innerHTML = '';
+
+    data.forEach(item => {
+      // Pastikan nama kolom persis sama dengan di sheet
+      const total = parseFloat(item.Total) || 0;
+      const target = parseFloat(item.Target) || 0;
+      const tr = document.createElement('tr');
+      tr.className = total >= target ? 'success' : 'fail';
+
+      tr.innerHTML = `
+        <td>${item.Keterangan || ''}</td>
+        <td>${item['Tenaga Penjual'] || ''}</td>
+        <td>${item.EC || ''}</td>
+        <td>${total}</td>
+        <td>${target}</td>
+        <td>${total >= target ? 'Tercapai ✅' : 'Belum ❌'}</td>
+      `;
+      tbody.appendChild(tr);
+    });
+  }
+
+  window.addEventListener('DOMContentLoaded', init);
+</script>
+
+</body>
+</html>

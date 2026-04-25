@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+  <title>HRIS Mobile - Dashboard Karyawan</title>
+  
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  
+  <style>
+    :root {
+      --primary-color: #2e7d32;
+      --accent-color: #1b5e20;
+    }
+    body { background-color: #f0f2f5; font-family: 'Roboto', sans-serif; margin-bottom: 80px; }
+    
+    /* Header */
+    nav { height: 64px; line-height: 64px; box-shadow: 0 2px 4px rgba(0,0,0,0.1) !important; }
+    .brand-logo { font-weight: 700 !important; color: white !important; left: 20px !important; transform: none !important; font-size: 1.4rem !important; }
+
+    /* Search Bar Sticky */
+    .search-container { 
+      padding: 12px 15px; 
+      background: #fff; 
+      position: sticky; 
+      top: 0; 
+      z-index: 99; 
+      margin-bottom: 10px; 
+      box-shadow: 0 2px 5px rgba(0,0,0,0.05); 
+    }
+    .search-wrapper { 
+      background: #f1f3f4; 
+      padding: 0 15px; 
+      border-radius: 12px; 
+      display: flex; 
+      align-items: center; 
+    }
+    .search-wrapper input { border: none !important; box-shadow: none !important; margin: 0 !important; height: 48px; flex: 1; }
+    
+    /* Card Karyawan */
+    .employee-card { border-radius: 16px; margin-bottom: 15px; border: none; box-shadow: 0 3px 10px rgba(0,0,0,0.08); overflow: hidden; background: #fff; }
+    .card-content { padding: 16px !important; }
+    .card-title { font-size: 1.15rem !important; font-weight: 700 !important; color: var(--primary-color); margin-bottom: 12px !important; border-bottom: 1px solid #f0f0f0; padding-bottom: 10px; }
+    
+    .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .info-item { display: flex; align-items: center; font-size: 0.85rem; color: #555; }
+    .info-item i { font-size: 18px; margin-right: 8px; color: var(--primary-color); }
+    
+    .card-action { background: #fdfdfd !important; padding: 12px 16px !important; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #eee !important; }
+    .action-links a { margin-right: 20px !important; font-weight: 700; text-transform: uppercase; font-size: 0.85rem; letter-spacing: 1px; }
+    .action-icons i { font-size: 22px; cursor: pointer; transition: 0.2s; }
+    .action-icons i:active { transform: scale(1.3); }
+    
+    /* Floating Action Button */
+    .fab-add { position: fixed; bottom: 90px; right: 20px; z-index: 998; }
+
+    /* Bottom Navigation */
+    .bottom-nav {
+      position: fixed; bottom: 0; width: 100%; background: #fff;
+      display: flex; justify-content: space-around; padding: 10px 0;
+      box-shadow: 0 -3px 12px rgba(0,0,0,0.1); z-index: 1000;
+    }
+    .bottom-nav-item { text-align: center; color: #9e9e9e; flex: 1; cursor: pointer; transition: 0.3s; }
+    .bottom-nav-item.active { color: var(--primary-color); }
+    .bottom-nav-item i { display: block; font-size: 26px; margin-bottom: 2px; }
+    .bottom-nav-item span { font-size: 11px; font-weight: 600; }
+
+    /* Form Container */
+    .form-container { background: #fff; padding: 25px 20px; border-radius: 20px; margin-top: 15px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); }
+    .btn-submit { height: 54px; line-height: 54px; border-radius: 12px; font-weight: 800; width: 100%; margin-top: 25px; letter-spacing: 1px; }
+    
+    /* Modal / Pop-up Image */
+    .modal { border-radius: 20px; max-height: 85% !important; width: 92% !important; }
+    .modal-content img { width: 100%; border-radius: 12px; object-fit: contain; margin-top: 15px; }
+
+    /* Helper */
+    .loader-container { padding: 40px; }
+    .hide-file-path .file-path-wrapper { display: none; }
+
+    @media only screen and (min-width: 993px) {
+      .container { width: 60%; }
+      .bottom-nav, .fab-add { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="navbar-fixed">
+    <nav class="green darken-3">
+      <div class="nav-wrapper">
+        <span class="brand-logo">HRIS Mobile</span>
+        <ul class="right hide-on-med-and-down">
+          <li><a href="#" onclick="showSection('dashboard')">Dashboard</a></li>
+          <li><a href="#" onclick="showSection('input')">Tambah Karyawan</a></li>
+        </ul>
+      </div>
+    </nav>
+  </div>
+
+  <div class="fab-add hide-on-large-only" id="fabAdd">
+    <a class="btn-floating btn-large waves-effect waves-light green darken-4 z-depth-3" onclick="showSection('input')">
+      <i class="material-icons">person_add_alt</i>
+    </a>
+  </div>
+
+  <div class="container">
+    
+    <div id="dashboard-section">
+      <div class="search-container">
+        <div class="search-wrapper">
+          <i class="material-icons grey-text">search</i>
+          <input type="text" id="searchInput" placeholder="Cari nama atau ID..." onkeyup="filterData()">
+          <i class="material-icons green-text text-darken-3" onclick="downloadExcel()" style="cursor:pointer; margin-left:12px; font-size: 28px;">file_download</i>
+        </div>
+      </div>
+
+      <div id="loader" class="loader-container center" style="display:none;">
+         <div class="preloader-wrapper active small">
+           <div class="spinner-layer spinner-green-only"><div class="circle-clipper left"><div class="circle"></div></div></div>
+         </div>
+         <p class="grey-text" style="font-size: 12px; margin-top: 10px;">Menghubungkan ke database...</p>
+      </div>
+      
+      <div id="card-container" class="row"></div>
+    </div>
+
+    <div id="input-section" style="display:none;">
+      <div class="form-container">
+        <h5 id="form-title" class="green-text text-darken-4" style="margin-top:0; font-weight:900;">Tambah Karyawan</h5>
+        <form id="employeeForm">
+          <input type="hidden" id="row_index">
+          <input type="hidden" id="existing_ktp">
+          <input type="hidden" id="existing_kk">
+          
+          <div class="row" style="margin-bottom:0">
+            <div class="input-field col s12"><i class="material-icons prefix">account_circle</i><input type="text" id="nama" required><label for="nama">Nama Lengkap</label></div>
+            <div class="input-field col s12"><i class="material-icons prefix">badge</i><input type="text" id="id_karyawan" required><label for="id_karyawan">ID Karyawan</label></div>
+            <div class="input-field col s12"><i class="material-icons prefix">whatsapp</i><input type="tel" id="no_hp" required><label for="no_hp">Nomor WA</label></div>
+            <div class="input-field col s12"><i class="material-icons prefix">work_outline</i><input type="text" id="jabatan" required><label for="jabatan">Jabatan</label></div>
+            <div class="input-field col s12 m6"><i class="material-icons prefix">health_and_safety</i><input type="text" id="bpjs_kes"><label for="bpjs_kes">No BPJS Kesehatan</label></div>
+            <div class="input-field col s12 m6"><i class="material-icons prefix">security</i><input type="text" id="bpjs_ket"><label for="bpjs_ket">No BPJS Ketenagakerjaan</label></div>
+            <div class="input-field col s12"><i class="material-icons prefix">location_on</i><textarea id="alamat" class="materialize-textarea"></textarea><label for="alamat">Alamat Domisili</label></div>
+          </div>
+          
+          <div class="row">
+            <div class="col s6">
+              <div class="file-field input-field hide-file-path">
+                <div class="btn-small green darken-2" style="width:100%; border-radius:8px;"><span>UPLOAD KTP</span><input type="file" id="ktp_file" accept="image/*"></div>
+                <div class="file-path-wrapper"><input class="file-path" type="text"></div>
+              </div>
+            </div>
+            <div class="col s6">
+              <div class="file-field input-field hide-file-path">
+                <div class="btn-small green darken-4" style="width:100%; border-radius:8px;"><span>UPLOAD KK</span><input type="file" id="kk_file" accept="image/*"></div>
+                <div class="file-path-wrapper"><input class="file-path" type="text"></div>
+              </div>
+            </div>
+          </div>
+
+          <button class="btn-large green darken-3 btn-submit z-depth-2 waves-effect waves-light" type="submit" id="btnSubmit">SIMPAN DATA</button>
+          <button class="btn-large grey lighten-2 black-text btn-submit" type="button" onclick="cancelEdit()" id="btnCancel" style="display:none;">BATAL EDIT</button>
+        </form>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="bottom-nav hide-on-large-only">
+    <div class="bottom-nav-item active" id="nav-dash" onclick="showSection('dashboard')">
+      <i class="material-icons">groups</i><span>Data</span>
+    </div>
+    <div class="bottom-nav-item" id="nav-input" onclick="showSection('input')">
+      <i class="material-icons">person_add</i><span>Tambah</span>
+    </div>
+    <div class="bottom-nav-item" onclick="downloadExcel()">
+      <i class="material-icons">file_download</i><span>Export</span>
+    </div>
+  </div>
+
+  <div id="modal-preview" class="modal">
+    <div class="modal-content center-align">
+      <h6 id="modal-title" style="font-weight: bold; margin-bottom: 0;">Preview Dokumen</h6>
+      <img id="img-preview" src="" alt="Preview">
+    </div>
+    <div class="modal-footer">
+      <a href="#!" class="modal-close waves-effect waves-green btn-flat" style="font-weight:bold">TUTUP</a>
+    </div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+  <script>
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzi3LBvByPpS0kHu-rakMfrCbF372HYaW1our8KM39E3_WOp5aUeKeNQu_i0RQz46xF/exec";
+    let allData = [];
+
+    document.addEventListener('DOMContentLoaded', function() {
+      M.Modal.init(document.querySelectorAll('.modal'));
+      loadDashboard();
+    });
+
+    function showSection(section) {
+      document.getElementById('dashboard-section').style.display = (section === 'dashboard') ? 'block' : 'none';
+      document.getElementById('input-section').style.display = (section === 'input') ? 'block' : 'none';
+      document.getElementById('fabAdd').style.display = (section === 'dashboard') ? 'block' : 'none';
+      
+      document.getElementById('nav-dash').classList.toggle('active', section === 'dashboard');
+      document.getElementById('nav-input').classList.toggle('active', section === 'input');
+
+      if(section === 'dashboard') loadDashboard();
+      window.scrollTo({top: 0, behavior: 'smooth'});
+    }
+
+    const toBase64 = file => new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve({base64: reader.result.split(',')[1], type: file.type});
+      reader.onerror = error => reject(error);
+    });
+
+    // POP-UP PREVIEW IMAGE
+    function previewImage(url, title) {
+      if (!url || url === "Tidak ada file" || url === "undefined" || url === "") {
+        M.toast({html: '⚠️ Foto belum diupload', classes: 'rounded orange darken-3'});
+        return;
+      }
+      const modalElement = document.getElementById('modal-preview');
+      const modalInstance = M.Modal.getInstance(modalElement);
+      document.getElementById('modal-title').innerText = title;
+      document.getElementById('img-preview').src = url;
+      modalInstance.open();
+    }
+
+    // SIMPAN DATA
+    document.getElementById('employeeForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const btn = document.getElementById('btnSubmit');
+      btn.disabled = true; btn.innerText = "SEDANG MENGIRIM...";
+
+      try {
+        const payload = {
+          nama: document.getElementById('nama').value,
+          id_karyawan: document.getElementById('id_karyawan').value,
+          no_hp: document.getElementById('no_hp').value,
+          alamat: document.getElementById('alamat').value,
+          jabatan: document.getElementById('jabatan').value,
+          bpjs_kes: document.getElementById('bpjs_kes').value,
+          bpjs_ket: document.getElementById('bpjs_ket').value,
+          row_index: document.getElementById('row_index').value,
+          existing_ktp: document.getElementById('existing_ktp').value,
+          existing_kk: document.getElementById('existing_kk').value,
+          ktp: null, kk: null
+        };
+
+        const ktpFile = document.getElementById('ktp_file').files[0];
+        const kkFile = document.getElementById('kk_file').files[0];
+        if (ktpFile) payload.ktp = await toBase64(ktpFile);
+        if (kkFile) payload.kk = await toBase64(kkFile);
+
+        const response = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'save', data: payload }) });
+        const resText = await response.text();
+        M.toast({html: resText, classes: 'rounded green darken-2'});
+        cancelEdit();
+        showSection('dashboard');
+      } catch (err) {
+        M.toast({html: "❌ Koneksi Gagal", classes: 'rounded red'});
+      }
+      btn.disabled = false; btn.innerText = "SIMPAN DATA";
+    });
+
+    // LOAD DATA
+    async function loadDashboard() {
+      const container = document.getElementById('card-container');
+      const loader = document.getElementById('loader');
+      container.innerHTML = ""; loader.style.display = "block";
+      try {
+        const res = await fetch(`${SCRIPT_URL}?action=read`);
+        allData = await res.json();
+        loader.style.display = "none";
+        renderCards(allData);
+      } catch (e) {
+        loader.style.display = "none";
+        M.toast({html: "Gagal memuat database", classes: 'red'});
+      }
+    }
+
+    // RENDER CARDS
+    function renderCards(data) {
+      const container = document.getElementById('card-container');
+      container.innerHTML = "";
+      if(data.length === 0) {
+        container.innerHTML = "<div class='center grey-text' style='margin-top:50px;'><i class='material-icons large'>search_off</i><p>Data tidak ditemukan</p></div>";
+        return;
+      }
+      data.forEach(item => {
+        const row = item.data;
+        container.innerHTML += `
+          <div class="col s12 m6 l4">
+            <div class="card employee-card z-depth-1">
+              <div class="card-content">
+                <span class="card-title truncate">${row[0]}</span>
+                <div class="info-grid">
+                  <div class="info-item"><i class="material-icons">badge</i>${row[1]}</div>
+                  <div class="info-item"><i class="material-icons">work</i>${row[4]}</div>
+                  <div class="info-item"><i class="material-icons">phone_iphone</i>${row[2]}</div>
+                  <div class="info-item"><i class="material-icons">verified_user</i>${row[7] ? 'BPJS Aktif' : '-'}</div>
+                </div>
+              </div>
+              <div class="card-action">
+                <div class="action-links">
+                  <a href="javascript:void(0)" onclick="previewImage('${row[5]}', 'KTP - ${row[0]}')" class="green-text text-darken-3">KTP</a>
+                  <a href="javascript:void(0)" onclick="previewImage('${row[6]}', 'KK - ${row[0]}')" class="orange-text text-darken-4">KK</a>
+                </div>
+                <div class="action-icons">
+                  <i class="material-icons orange-text text-darken-2" style="margin-right:20px" onclick="editData('${item.rowNumber}', '${row[0]}', '${row[1]}', '${row[2]}', '${row[3]}', '${row[4]}', '${row[5]}', '${row[6]}', '${row[7]}', '${row[8]}')">edit_note</i>
+                  <i class="material-icons red-text text-lighten-1" onclick="confirmDelete('${item.rowNumber}')">delete_outline</i>
+                </div>
+              </div>
+            </div>
+          </div>`;
+      });
+    }
+
+    function filterData() {
+      const query = document.getElementById('searchInput').value.toLowerCase();
+      renderCards(allData.filter(i => i.data[0].toLowerCase().includes(query) || i.data[1].toString().toLowerCase().includes(query)));
+    }
+
+    function editData(rowIdx, nama, id, hp, alamat, jabatan, ktp, kk, kes, ket) {
+      showSection('input');
+      document.getElementById('form-title').innerText = "Edit: " + nama;
+      document.getElementById('row_index').value = rowIdx;
+      document.getElementById('nama').value = nama;
+      document.getElementById('id_karyawan').value = id;
+      document.getElementById('no_hp').value = hp;
+      document.getElementById('alamat').value = alamat;
+      document.getElementById('jabatan').value = jabatan;
+      document.getElementById('bpjs_kes').value = kes;
+      document.getElementById('bpjs_ket').value = ket;
+      document.getElementById('existing_ktp').value = ktp;
+      document.getElementById('existing_kk').value = kk;
+      document.getElementById('btnCancel').style.display = "block";
+      M.updateTextFields();
+      M.textareaAutoResize(document.getElementById('alamat'));
+    }
+
+    function cancelEdit() {
+      document.getElementById('employeeForm').reset();
+      document.getElementById('row_index').value = "";
+      document.getElementById('form-title').innerText = "Tambah Karyawan";
+      document.getElementById('btnCancel').style.display = "none";
+    }
+
+    async function confirmDelete(rowIdx) {
+      if(confirm("Hapus data karyawan ini?")) {
+        try {
+          const res = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'delete', rowNumber: rowIdx }) });
+          M.toast({html: "🗑️ Data berhasil dihapus", classes: 'red darken-2'});
+          loadDashboard();
+        } catch(e) { M.toast({html: "Gagal menghapus"}); }
+      }
+    }
+
+    async function downloadExcel() {
+      M.toast({html: '⏳ Menyiapkan file Excel...'});
+      try {
+        const res = await fetch(`${SCRIPT_URL}?action=download`);
+        const url = await res.text();
+        window.open(url, '_blank');
+      } catch(e) { M.toast({html: "Gagal export"}); }
+    }
+  </script>
+</body>
+</html>

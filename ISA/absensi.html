@@ -1,0 +1,863 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PRESENSI ISA</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
+
+    <!-- SweetAlert CSS -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+	
+	<style>
+		#fotoProfil{
+			width: 120px;
+			height: 120px;
+			border-radius: 50%;
+			background-color: #ddd;
+			background-size: cover;
+			background-position: center;
+			background-repeat: no-repeat;
+			position: absolute;
+			top: 60px;
+			z-index: 9;
+			border: 5px solid white;
+			left: 50%;
+			transform: translateX(-50%);
+		}
+		#nml{
+			position: absolute;
+			top: 15px;
+			text-align: center;
+			color: white;
+			width: 100%;
+			left: 50%;
+			transform: translateX(-50%);
+			font-size:25px;
+		}
+		#navbg{
+			width: 100%;
+			height: 150px;
+			position: relative;
+			border-bottom-left-radius: 20px;
+			border-bottom-right-radius: 20px;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+		}
+		#navbg2{
+			width: 90%;
+			height: 150px;
+			background-color: white;
+			position: relative;
+			border-radius: 10px;
+			align-items: center;
+			justify-content: center;
+			position: absolute;
+			top: 100px;
+			left: 50%;
+			transform: translateX(-50%);
+			box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.2);
+		}
+		#jamdigital{
+			font-size: 30px;
+			font-weight:bold;
+		}
+		#date{
+			color: gray;
+		}
+		#jame{
+			width: fit-content;
+			margin: auto;
+			padding: 10px;
+			line-height: initial;
+			border-radius: 5px;
+			border:1px solid lightgray;
+		}
+		.tengah{text-align: center;vertical-align: middle;}
+		.kanan{text-align: right;vertical-align: middle;padding:0px}
+		#formPetugas, #formMunfiq{
+			padding:15px;
+			border: 2px solid blue;
+			border-radius: 10px;
+		}
+		.hidden {
+			display: none;
+		}
+
+		@media print {
+		  table {
+			page-break-inside: avoid;
+			width: 100%;
+		  }
+		  tr {
+			page-break-inside: avoid;
+		  }
+		  th, td {
+			page-break-inside: avoid;
+		  }
+		  .noprint{display:none}
+		}
+
+	</style>
+</head>
+<body>
+    <!-- Div pertama -->
+	<div id="lembaga" class="text-center" style="margin-top:60px;padding:15px;display:none">
+		<div id="logo"></div>
+        <h2 id="namaLembaga" style="color:black;margin:0px auto;"></h2>
+        <h6 id="alamatLembaga" style="color:black;margin:0px auto;"></h6>
+	</div>
+    <div id="div1" class="text-center" style="margin-top:0px;padding:15px;display:none">
+        <h4 style="margin-top:20px">Login Sebagai</h4>
+        <button id="btnPetugas" class="btn btn-success m-2">PETUGAS</button>
+        <button id="btnPelanggan" class="btn btn-success m-2">DONATUR</button>
+    </div>
+
+    <!-- Div kedua -->
+    <div id="div2" class="hal awal" style="padding:20px;display:none">
+        <form id="formPetugas">
+			<h3 style="text-align:center">Login Karyawan</h3>
+            <div class="mb-3">
+                <label for="usernamePetugas" class="form-label">Username</label>
+                <input type="text" id="usernamePetugas" class="form-control" placeholder="ID" required>
+            </div>
+            <div class="mb-3">
+                <label for="passwordPetugas" class="form-label">Password</label>
+                <input type="password" id="passwordPetugas" class="form-control" placeholder="Kata Sandi" required>
+            </div>
+			<div style="text-align:center">
+				<span class="btn btn-secondary" onclick="awal()" style="display:none">CANCEL</span>
+				<button type="submit" class="btn btn-success">LOGIN</button>
+			</div>
+        </form>
+    </div>
+
+    <!-- Div ketiga -->
+    <div id="div3" class="hal" style="padding:20px;display:none">
+        <form id="formMunfiq">
+			<h3 style="text-align:center">Login Donatur</h3>
+            <div class="mb-3">
+                <label for="usernamePelanggan" class="form-label">Username</label>
+                <input type="text" id="usernamePelanggan" class="form-control" placeholder="Kode Donatur" required>
+            </div>
+            <div class="mb-3">
+                <label for="passwordPelanggan" class="form-label">Password</label>
+                <input type="password" id="passwordPelanggan" class="form-control" placeholder="Kata Sandi" required>
+            </div>
+            <div style="text-align:center">
+				<span class="btn btn-secondary" onclick="awal()">CANCEL</span>
+				<button type="submit" class="btn btn-success">LOGIN</button>
+			</div>
+        </form>
+    </div>
+	<div id="halPetugas" class="hal" style="display:none">
+		<div id="divok" style="padding:0px">
+			<div id="navbg" class="bg-primary"></div>
+			<div id="navbg2" style="z-index:5"></div>
+			<div id="welcomePetugas" style="padding:20px;margin-top:5px">
+				<div id="nml" class="namaLembaga"></div>
+				<h3 style="position:relative;top: 10px;z-index: 7;text-align:center;margin-bottom:0px"><span class="namaPetugas"></span></h3>
+				<h6 style="position:relative;top: 10px;z-index: 7;text-align:center;"><span class="posisiPetugas"></span></h6>
+				<div id="fotoProfil"></div>
+				<div id="luarRadius" style="border:2px solid red;border-radius:5px;padding:5px;text-align:center;margin-top:50px;display:none">
+					<h2>ANDA BELUM MEMASUKI AREA PRESENSI</h2>
+				</div>
+				<div id="dalamRadius" style="border:2px solid #0d6efd;border-radius:5px;padding:5px;text-align:center;margin-top:50px;display:none">
+					<div style="padding:10px;margin:10px auto;border-bottom:1px solid lightgray;">
+						<button class="btn btn-primary" onclick="getPresensi()">Presensi</button>
+						<button class="btn btn-secondary" onclick="rekap()">Rekap</button>
+						<button class="btn btn-danger" onclick="logout()">Logout</button>
+					</div>
+					<div id="prapresensi">
+						<h3>Selamat Datang di Aplikasi Presensi.</h3>
+						<p>Silakan pilih fungsi dengan klik tombol.</p>
+					</div>
+					<div id="presensi" style="display:none">
+						<div id="jame">
+							<div id="jamdigital">Loading...</div>
+							<div id="date">Loading...</div>
+							<div id="bulanok" style="display:none"></div>
+							<div id="tanggalok" style="display:none"></div>
+						</div>
+						<div style="text-align:center;padding:10px;">
+							Jam Masuk dan Pulang Anda:
+							<div style="font-weight:bold">Masuk: <span id="jamMasuk">-</span>  |  Pulang: <span id="jamPulang">-</span></div>
+						</div>
+						<div style="text-align:center;padding:10px;">
+							<button class="btn btn-success" onclick="presensi('M')">MASUK</button>
+							<button class="btn btn-warning" onclick="presensi('P')">PULANG</button>
+						</div>
+					</div>
+					<div id="rekap" style="display:none">
+						<h4>Rekap Presensi</h4>
+						<select id="pilihBulan" class="form-control" style="margin-bottom:20px">
+							<option selected disabled>Pilih Bulan</option>
+							<option value="JAN">JANUARI</option>
+							<option value="FEB">FEBRUARI</option>
+							<option value="MAR">MARET</option>
+							<option value="APR">APRIL</option>
+							<option value="MEI">MEI</option>
+							<option value="JUN">JUNI</option>
+							<option value="JUL">JULI</option>
+							<option value="AGU">AGUSTUS</option>
+							<option value="SEP">SEPTEMBER</option>
+							<option value="OKT">OKTOBER</option>
+							<option value="NOV">NOVEMBER</option>
+							<option value="DES">DESEMBER</option>
+						</select>
+						<button class="btn btn-success" onclick="rekapbulan()">TAMPILKAN</button>
+						
+						<div id="divTabelRekap" class="table-responsive" style="margin-top: 20px;display:none">
+							<table id="tabelRekap" class="table table-bordered table-striped">
+							<thead class="thead-dark">
+								<tr class="tengah">
+									<th>Hari / Tanggal</th>
+									<th>Masuk</th>
+									<th>Pulang</th>
+									<th>Keterangan</th>
+								</tr>
+							</thead>
+							<tbody id="tabelRekapBody">
+							</tbody>
+						</table>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+	</div>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    $(document).ready(function() {
+		if(localStorage.getItem('statuslogin')=='petugas'){
+			loadHalPTK();
+			$('#halPetugas').show();
+		}else if(localStorage.getItem('statuslogin')=='munfiq'){
+			loadHalPelanggan();
+			$('#halPelanggan').show();
+		}else{
+			firstLoad();
+		}
+        $("#btnPetugas").click(function() {
+            loginPetugas();
+        });
+		$("#btnPelanggan").click(function() {
+            loginMunfiq();
+        });
+
+        // Form login petugas
+        $("#formPetugas").submit(function(e) {
+			e.preventDefault();
+			logPetugas();
+		});
+		
+		// Form login pelanggan
+        $("#formMunfiq").submit(function(e) {
+			e.preventDefault();
+			logMunfiq();
+		});
+		
+		$(document).on('click', '.nav-link', function () {
+			$('.navbar-collapse').collapse('hide');
+		});
+    });
+	
+	let serverTimestamp = 0;
+    let localStartTime = 0;
+	async function fetchServerTime() {
+		try {
+			let response = await fetch("https://appsekolah.my.id/waktu.php");
+			let data = await response.json();
+
+			serverTimestamp = data.timestamp;
+			localStartTime = Math.floor(Date.now() / 1000);
+
+			updateClock();
+		} catch (error) {
+			console.error("Gagal mengambil waktu dari server", error);
+			document.getElementById("jamdigital").innerText = "Gagal memuat waktu";
+			document.getElementById("date").innerText = "";
+		}
+	}
+
+	// Fungsi untuk memperbarui jam setiap detik dengan waktu yang dihitung di klien
+	function updateClock() {
+		let now = Math.floor(Date.now() / 1000);
+		let elapsed = now - localStartTime;
+		let currentTimestamp = serverTimestamp + elapsed;
+
+		let serverTime = new Date(currentTimestamp * 1000);
+		//document.getElementById("jamdigital").innerText = serverTime.toLocaleTimeString("id-ID");
+		let jam = serverTime.getHours().toString().padStart(2, "0");
+		let menit = serverTime.getMinutes().toString().padStart(2, "0");
+		let detik = serverTime.getSeconds().toString().padStart(2, "0");
+
+		document.getElementById("jamdigital").innerText = `${jam}:${menit}:${detik}`;
+
+		document.getElementById("date").innerText = serverTime.toLocaleDateString("id-ID", { 
+			weekday: 'long', 
+			day: 'numeric', 
+			month: 'long', 
+			year: 'numeric' 
+		});
+		const monthNames = ["JAN", "FEB", "MAR", "APR", "MEI", "JUN", "JUL", "AGU", "SEP", "OKT", "NOV", "DES"];
+		if(sessionStorage.getItem('bulanok') != monthNames[serverTime.getMonth()]){
+			sessionStorage.setItem('bulanok',monthNames[serverTime.getMonth()]);
+		};
+		if(sessionStorage.getItem('tanggalok') != serverTime.getDate()){
+			sessionStorage.setItem('tanggalok',serverTime.getDate());
+		};
+		
+		//document.getElementById("bulanok").innerText = monthNames[serverTime.getMonth()];
+		//document.getElementById("tanggalok").innerText = serverTime.getDate();
+	}
+
+	fetchServerTime();
+	setInterval(updateClock, 1000);
+	
+	var urlGAS= 'https://script.google.com/macros/s/AKfycbyLuE5zzrwBssmeqHOiv-2I3cRusVObFj-ydB4LxBb_f51aOeA7E2fLjarRj5hvYyC-/exec';
+    let dataPTK = [];
+    let dataLaporan = [];
+	
+	function firstData(){
+		Swal.fire({
+			title: 'Welcome',
+			text: 'Please wait...',
+			allowOutsideClick: false,
+			didOpen: () => {
+				Swal.showLoading();
+			}
+		});
+        $.ajax({
+            url: urlGAS + "?mode=load",
+            method: 'GET',
+            dataType: 'json',
+            success: function(response) {
+				//console.log(response);
+				// masukkan data petugas
+				localStorage.setItem('tahun',response[3].Value);
+				localStorage.setItem('gps',response[4].Value);
+				localStorage.setItem('koordinat',response[5].Value);
+				localStorage.setItem('radius',response[6].Value);
+				const ptgs = response[7].Value;
+
+				ptgs.split('#').forEach(item => {
+					const [kode, nama, baris, jabatan, foto] = item.split(';');
+					dataPTK.push({ kode, nama, baris, jabatan, foto });
+				});
+				//console.log(dataPTK);
+				
+				// Jam Kerja
+				const jk = response[8].Value;
+				let bag = jk.split("#");
+				let bulan = ["JAN", "FEB", "MAR", "APR", "MEI", "JUN", "JUL", "AGS", "SEP", "OKT", "NOV", "DES"];
+				bulan.forEach((namaBulan, index) => {
+					sessionStorage.setItem(`jamKerja${namaBulan}`, bag[index] || "");
+				});
+				
+				//Swal.close();
+				if(localStorage.getItem('gps')=="YA"){
+					cekRadius();
+				}else{
+					$('#dalamRadius').show();
+					Swal.close();
+				}
+            },
+            error: function() {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Gagal menginisiasi!'
+                });
+            }
+        });
+	}
+	function firstLoad() {
+		Swal.fire({
+			title: 'Welcome',
+			text: 'Please wait...',
+			allowOutsideClick: false,
+			didOpen: () => {
+				Swal.showLoading();
+			}
+		});
+        $.ajax({
+            url: urlGAS + "?mode=load",
+            method: 'GET',
+            dataType: 'json',
+            success: function(response) {
+				//console.log(response);
+				$('#logo').html('<img src='+cekGambar(response[2].Value)+' style="width:200px"></img>');
+				// masukkan data petugas
+				localStorage.setItem('tahun',response[3].Value);
+				localStorage.setItem('gps',response[4].Value);
+				localStorage.setItem('koordinat',response[5].Value);
+				localStorage.setItem('koordinat',response[6].Value);
+				const ptgs = response[7].Value;
+
+				ptgs.split('#').forEach(item => {
+					const [kode, nama, baris, jabatan, foto] = item.split(';');
+					dataPTK.push({ kode, nama, baris, jabatan, foto });
+				});
+				//console.log(dataPTK);
+				
+				$('#namaLembaga').html(response[0].Value);
+				$('#alamatLembaga').html(response[1].Value);
+				localStorage.setItem("namaLembaga",response[0].Value);
+				localStorage.setItem("alamatLembaga",response[1].Value);
+				Swal.close();
+				$('#lembaga').show();
+				$('#div2').show();
+            },
+            error: function() {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Gagal menginisiasi!'
+                });
+            }
+        });
+    }
+	
+	// Koordinat Presensi
+	function cekJarak(lat1, lon1, lat2, lon2) {
+		const R = 6371000; // Radius bumi dalam meter
+		const dLat = (lat2 - lat1) * Math.PI / 180;
+		const dLon = (lon2 - lon1) * Math.PI / 180;
+		const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+				  Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+				  Math.sin(dLon / 2) * Math.sin(dLon / 2);
+		const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+		return R * c;
+	}
+
+	function cekRadius() {
+		if (!navigator.geolocation) {
+			alert("Geolocation tidak didukung di browser Anda.");
+			return;
+		}
+		
+		const koordinat = localStorage.getItem("koordinat");
+		const radius = parseFloat(localStorage.getItem("radius"));
+		
+		if (!koordinat) {
+			alert("Koordinat tidak tersedia di LocalStorage.");
+			return;
+		}
+		
+		const [targetLat, targetLon] = koordinat.split(",").map(Number);
+		
+		navigator.geolocation.getCurrentPosition(position => {
+			const { latitude, longitude } = position.coords;
+			const distance = cekJarak(targetLat, targetLon, latitude, longitude);
+			//alert(targetLat+','+targetLon+' | '+latitude+','+longitude);
+			if (distance >= radius) {
+				$('#luarRadius').show();
+				Swal.close();
+			} else {
+				$('#dalamRadius').show();
+				Swal.close();
+			}
+		}, () => {
+			alert("Gagal mendapatkan lokasi Anda.");
+		});
+	}
+	
+    // Fungsi untuk login petugas
+    function loginPetugas() {
+		$("#div1").hide();
+        $("#div2").show();
+    }
+	// Fungsi untuk login petugas
+    function loginMunfiq() {
+		$("#div1").hide();
+        $("#div3").show();
+    }
+	function logPetugas(){
+		Swal.fire({
+			title: 'Loading...',
+			text: 'Memeriksa Data',
+			allowOutsideClick: false,
+			didOpen: () => {
+				Swal.showLoading();
+			}
+		});
+
+		const username = $("#usernamePetugas").val();
+		const password = $("#passwordPetugas").val();
+
+		const ptk = dataPTK.find(item => item.kode === username);
+		const barisData = ptk ? ptk["baris"] : null;
+		//console.log(ptk);
+		
+		if (barisData !== null) {
+			$.ajax({
+				url: urlGAS + "?mode=loginptk&user=" + username + "&pass=" + password + "&baris=" + barisData,
+				method: 'GET',
+				dataType: 'json',
+				success: function(response) {
+					//console.log(response);
+					Swal.close(); // Close loading first
+					if (response.status == "success") {
+						// Do something on success
+						Swal.fire({
+							icon: 'success',
+							title: 'Success',
+							text: 'Login Berhasil!',
+							confirmButtonText: 'OK'
+						});
+						localStorage.setItem('statuslogin','petugas');
+						localStorage.setItem('user',ptk['kode']);
+						localStorage.setItem('baris',ptk['baris']);
+						localStorage.setItem('posisi',ptk['jabatan']);
+						localStorage.setItem('nama',ptk['nama']);
+						localStorage.setItem('foto',ptk['foto']);
+						
+						loadHalPTK();
+					} else {
+						// Show error if login fails
+						Swal.fire({
+							icon: 'error',
+							title: 'Error',
+							text: 'Username/Password Salah. Silakan Ulangi Lagi!',
+							confirmButtonText: 'OK'
+						});
+					}
+				},
+				error: function() {
+					Swal.close(); // Close loading if there is an error
+					Swal.fire({
+						icon: 'error',
+						title: 'Error',
+						text: 'Gagal memuat data',
+						confirmButtonText: 'OK'
+					});
+				}
+			});
+		} else {
+			Swal.close(); // Close loading before showing error
+			
+			setTimeout(function() {
+				Swal.fire({
+					icon: 'error',
+					title: 'Error',
+					text: 'Pengguna tidak ditemukan!',
+					confirmButtonText: 'OK'
+				});
+			}, 500);
+		}
+	}
+	
+	function awal(){
+		$('.awal').show();
+		$('.hal').hide();
+	}
+	function logout(){
+		localStorage.clear();
+		sessionStorage.clear();
+		$('#lembaga').show();
+		$('.awal').show();
+		$('.hal').hide();
+		$('#prapresensi').show();
+		$('#presensi').hide();
+		$('#rekap').hide();
+		firstLoad();
+	}
+	function loadHalPTK(){
+		$('.namaPetugas').html(localStorage.getItem('nama'));
+		$('.posisiPetugas').html(localStorage.getItem('posisi'));
+		$('.namaLembaga').html(localStorage.getItem('namaLembaga'));
+
+		$('#fotoProfil').css({
+			'background-image': 'url(' + cekGambar(localStorage.getItem('foto')) + ')'
+		});
+
+		$('#lembaga').hide();
+		$("#div2").hide();
+		firstData();
+		$("#halPetugas").show();
+	}
+	
+	function cekGambar(url) {
+	  const match = url.match(/(?:drive\.google\.com\/(?:file\/d\/|open\?id=)|docs\.google\.com\/uc\?id=)([-\w]{25,})/);
+
+	  if (match && match[1]) {
+		const id = match[1];
+		return 'https://lh3.googleusercontent.com/d/' + id;
+	  } else {
+		return url;
+	  }
+	}
+	
+	function loadHalPelanggan(){
+		$('.namamunfiq').html(localStorage.getItem('nama'));
+		$('.wilayah').html(localStorage.getItem('wilayah'));
+		$('.idmunfiq').html(localStorage.getItem('user'));
+		$('.namaLembaga').html(localStorage.getItem('namaLembaga'));
+		$('#lembaga').hide();
+		$("#div3").hide();
+		firstData();
+		$("#halPelanggan").show();
+	}
+
+	function isValidURL(string) {
+		const pattern = /^(https?:\/\/)?([\w-]+(\.[\w-]+)+)(:\d+)?(\/.*)?$/i;
+		return pattern.test(string);
+	}
+
+	function getPresensi(){
+		Swal.fire({
+			title: 'Presensi',
+			text: 'Memuat Data Presensi...',
+			allowOutsideClick: false,
+			didOpen: () => {
+				Swal.showLoading();
+			}
+		});
+		
+		okbln = sessionStorage.getItem('bulanok');
+		oktgl = sessionStorage.getItem('tanggalok')
+		
+		$.ajax({
+			url: urlGAS + "?mode=loadpresensi&bulan="+okbln+"&baris="+localStorage.getItem('baris'),
+			method: 'GET',
+			dataType: 'json',
+			success: function(response) {
+				//console.log(response);
+				//console.log(response[okbln]["Kolom1"]);
+				Swal.fire({
+					icon: 'info',
+					title: 'Siap',
+					text: 'Silakan Melakukan Presensi'
+				});
+				//get jamMasuk
+				ma = (parseFloat(oktgl) - 1) * 2 + 4;  
+				pu = ma + 1;
+				jamas = response[okbln]["Kolom"+ma];
+				if(jamas==""){jamas="-"};
+				japul = response[okbln]["Kolom"+pu];
+				if(japul==""){japul="-"};
+				$("#jamMasuk").html(jamas);
+				$("#jamPulang").html(japul);
+				$("#prapresensi").hide();
+				$("#rekap").hide();
+				$("#presensi").show();
+			},
+			error: function() {
+				Swal.fire({
+					icon: 'error',
+					title: 'Error',
+					text: 'Gagal memuat data!'
+				});
+			}
+		});
+	}
+	function presensi(mode){
+		if(mode=="M"){
+			md = "Masuk";
+			mde = "jamMasuk";
+			if($("#jamMasuk").text()=="-"){
+				stts = "Y";
+			}else{
+				stts = "N";
+			}
+		}else{
+			md = "Pulang";
+			mde = "jamPulang";
+			if($("#jamPulang").text()=="-"){
+				stts = "Y";
+			}else{
+				stts = "N";
+			}
+		}
+		if(stts=="N"){
+			Swal.fire({
+				icon: 'warning',
+				title: 'Maaf',
+				text: 'Anda sudah presensi. Tidak bisa diulang.'
+			});
+		}else{
+			Swal.fire({
+				title: 'Presensi '+md,
+				text: 'Menyimpan Data ...',
+				allowOutsideClick: false,
+				didOpen: () => {
+					Swal.showLoading();
+				}
+			});
+			
+			okbln = sessionStorage.getItem('bulanok');
+			oktgl = sessionStorage.getItem('tanggalok');
+			okwk = $("#jamdigital").text();
+			okwkt = okwk.split(':').slice(0, 2).join(':');
+			
+			$.ajax({
+				url: urlGAS + "?mode=tulispresensi&bulan="+okbln+"&tanggal="+oktgl+"&mp="+mode+"&waktu="+okwkt+"&baris="+localStorage.getItem('baris'),
+				method: 'GET',
+				dataType: 'json',
+				success: function(response) {
+					//console.log(response);
+					Swal.fire({
+						icon: 'success',
+						title: 'Berhasil',
+						text: 'Berhasil menyimpan'
+					});
+					
+					$('#'+mde).text(okwkt);
+				},
+				error: function() {
+					Swal.fire({
+						icon: 'error',
+						title: 'Error',
+						text: 'Gagal memuat data!'
+					});
+				}
+			});
+		}
+	}
+	function rekap(){
+		$('#prapresensi').hide();
+		$('#presensi').hide();
+		$('#rekap').show();
+	}
+	function rekapbulan(){
+		if($('#pilihBulan').val()){
+			Swal.fire({
+				title: 'Presensi',
+				text: 'Memuat Rekap...',
+				allowOutsideClick: false,
+				didOpen: () => {
+					Swal.showLoading();
+				}
+			});
+			
+			okbln = $('#pilihBulan').val();
+			okthn = localStorage.getItem('tahun');
+			
+			$.ajax({
+				url: urlGAS + "?mode=loadpresensi&bulan="+okbln+"&baris="+localStorage.getItem('baris'),
+				method: 'GET',
+				dataType: 'json',
+				success: function(response) {
+					//console.log(response);
+					//console.log(response[okbln]["Kolom1"]);
+					
+					let tbody = document.getElementById("tabelRekapBody");
+					tbody.innerHTML = "";
+
+					let year = okthn;
+					let month = angkabulan(okbln);
+					let lastDay = new Date(year, month, 0).getDate();
+					//console.log('Tahun '+year);
+					//console.log('Bulan '+month);
+
+					for (let day = 1; day <= lastDay; day++) {
+						let date = new Date(year, month - 1, day);
+						
+						// Format hari dalam bahasa Indonesia
+						let hari = date.toLocaleDateString("id-ID", { weekday: 'long' });
+
+						// Buat baris tabel
+						let row = document.createElement("tr");
+						
+						let day2 = String(day).padStart(2, '0');
+						omM = (day - 1) * 2 + 4;  
+						omP = omM + 1;
+						let kolomM = `Kolom${omM}`;
+						let kolomP = `Kolom${omP}`;
+						//console.log(kolomM);
+						//console.log(kolomP);
+						// Kolom 1: Hari dan Tanggal
+						let col1 = document.createElement("td");col1.innerHTML = hari+'<br/>'+day2+'-'+month+'-'+year;col1.classList.add("tengah");
+						let col2 = document.createElement("td");col2.id=`m-${day}`;col2.textContent = response[okbln][kolomM];col2.classList.add("tengah");
+						let col3 = document.createElement("td");col3.id=`p-${day}`;col3.textContent = response[okbln][kolomP];col3.classList.add("tengah");
+						let col4 = document.createElement("td");col4.id=`ket-${day}`;col4.textContent = "";col4.classList.add("tengah");
+
+						// Tambahkan kolom ke dalam baris
+						row.appendChild(col1);
+						row.appendChild(col2);
+						row.appendChild(col3);
+						row.appendChild(col4);
+
+						// Tambahkan baris ke dalam tabel
+						tbody.appendChild(row);
+					}
+					// hitung jam kerja
+					jamKerjaOK = sessionStorage.getItem('jamKerja'+okbln);
+					jamKerjaBulanIni = jamKerjaOK.split(';');
+					
+					//console.log(jamKerjaBulanIni);
+					for (let i = 0; i < lastDay; i++) {
+						let idx = i + 1;
+						let mElement = document.getElementById(`m-${idx}`);
+						let pElement = document.getElementById(`p-${idx}`);
+
+						if (mElement) {
+							let pM = mElement.textContent.trim();
+							//console.log(i+" "+pM);
+							//console.log(i+" jk "+jamKerjaBulanIni[i * 2]);
+							if(pM.length > 0){
+								if(timeToMinutes(pM) > timeToMinutes(jamKerjaBulanIni[i * 2])){
+									brp = timeToMinutes(pM) - timeToMinutes(jamKerjaBulanIni[i * 2]);
+									$("#ket-"+idx).append('<div style="color:red">Datang Telat '+brp+' Menit</div>');
+								}else{
+									$("#ket-"+idx).append('<div style="color:green">Datang Sesuai</div>');
+								}
+							}
+						}
+						if (pElement) {
+							pP = pElement.textContent.trim();
+							//console.log(i+" "+pP);
+							//console.log(i+" jk "+jamKerjaBulanIni[i * 2 + 1]);
+							if(pP.length > 0){
+								if(timeToMinutes(pP) < timeToMinutes(jamKerjaBulanIni[i * 2 + 1])){
+									brp = timeToMinutes(jamKerjaBulanIni[i * 2 + 1]) - timeToMinutes(pP);
+									$("#ket-"+idx).append('<div style="color:red">Pulang Cepat '+brp+' Menit</div>');
+								}else{
+									$("#ket-"+idx).append('<div style="color:green">Pulang Sesuai</div>');
+								}
+							}
+						}
+					}
+
+					
+					Swal.close();
+					$('#divTabelRekap').show();
+				},
+				error: function() {
+					Swal.fire({
+						icon: 'error',
+						title: 'Error',
+						text: 'Gagal memuat data!'
+					});
+				}
+			});
+		}else{
+			Swal.fire({
+				icon: 'error',
+				title: 'Error',
+				text: 'Pilih bulan terlebih dahulu!'
+			});
+		}
+	}
+	function angkabulan(month) {
+		let months = ["JAN", "FEB", "MAR", "APR", "MEI", "JUN", "JUL", "AGU", "SEP", "OKT", "NOV", "DES"];
+		let index = months.indexOf(month.toUpperCase());
+		return index !== -1 ? String(index + 1).padStart(2, '0') : "Invalid";
+	}
+	function timeToMinutes(time) {
+		if (!time) return 0;  // Jika kosong, anggap 0
+		let [hours, minutes] = time.split(":").map(Number);
+		return hours * 60 + minutes;
+	}
+</script>
+</body>
+</html>

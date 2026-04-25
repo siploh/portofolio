@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<title>Manajemen Pelanggan</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+<style>
+*{box-sizing:border-box;font-family:Poppins,Arial,sans-serif}
+body{
+  background:linear-gradient(135deg,#e8f5e9,#f4f6f9);
+  padding:20px;
+}
+.container{
+  max-width:1200px;
+  margin:auto;
+  background:#fff;
+  padding:20px;
+  border-radius:16px;
+  box-shadow:0 15px 35px rgba(0,0,0,.12);
+}
+h1{text-align:center;color:#2e7d32;margin-bottom:20px}
+
+/* FORM */
+.form{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+  gap:10px;
+  margin-bottom:15px;
+}
+.form input,.form button{
+  padding:12px;
+  border-radius:10px;
+  border:1px solid #ccc;
+}
+.form button{
+  background:#2e7d32;
+  color:#fff;
+  font-weight:600;
+  border:none;
+  cursor:pointer;
+}
+.form button:hover{opacity:.9}
+
+/* SEARCH */
+.search{margin-bottom:15px}
+.search input{
+  width:100%;
+  padding:12px;
+  border-radius:10px;
+  border:1px solid #ccc;
+}
+
+/* TABLE DESKTOP */
+table{width:100%;border-collapse:collapse}
+thead{
+  background:linear-gradient(135deg,#2e7d32,#43a047);
+  color:#fff;
+}
+th,td{padding:12px;font-size:14px;text-align:left}
+tbody tr:nth-child(even){background:#f7f9fb}
+tbody tr:hover{background:#e8f5e9}
+
+/* MOBILE CARD */
+.mobile-list{display:none}
+.card{
+  border:1px solid #ddd;
+  border-radius:14px;
+  padding:15px;
+  margin-bottom:12px;
+  box-shadow:0 8px 18px rgba(0,0,0,.08);
+}
+.card h3{
+  margin:0 0 8px;
+  color:#2e7d32;
+}
+.card p{
+  margin:4px 0;
+  font-size:14px;
+}
+.card .row{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-top:10px;
+}
+
+/* STATUS */
+.active{color:#2e7d32;font-weight:600}
+.expired{color:#d32f2f;font-weight:600}
+
+/* BUTTON */
+.btn-delete{
+  background:#d32f2f;
+  color:#fff;
+  border:none;
+  padding:6px 12px;
+  border-radius:8px;
+  cursor:pointer;
+  font-size:12px;
+}
+.btn-delete:hover{opacity:.85}
+
+/* RESPONSIVE */
+@media(max-width:768px){
+  table{display:none}
+  .mobile-list{display:block}
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+<h1>Manajemen Pelanggan</h1>
+
+<!-- FORM -->
+<div class="form">
+  <input id="nama" placeholder="Nama Pelanggan">
+  <input id="email" placeholder="Email">
+  <input id="hp" placeholder="No HP">
+  <input id="domain" placeholder="Domain">
+  <input id="expired" type="date">
+  <button onclick="tambahPelanggan()">Tambah</button>
+</div>
+
+<!-- SEARCH -->
+<div class="search">
+  <input id="search" placeholder="Cari pelanggan..." onkeyup="filterData()">
+</div>
+
+<!-- TABLE DESKTOP -->
+<table id="tabel">
+<thead>
+<tr>
+  <th>No</th>
+  <th>Nama</th>
+  <th>Email</th>
+  <th>No HP</th>
+  <th>Domain</th>
+  <th>Expired</th>
+  <th>Sisa</th>
+  <th>Status</th>
+  <th>Aksi</th>
+</tr>
+</thead>
+<tbody></tbody>
+</table>
+
+<!-- MOBILE CARD -->
+<div class="mobile-list" id="mobileList"></div>
+
+</div>
+
+<script>
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw96H_nfOX5KFdbZJs-kaQ-SbxdVnhgmonF3n2UYpmJNVzkBjd0Vt6j4vXkhBm9K9lJ_w/exec";
+let data = [];
+
+/* SISA HARI */
+function sisaHari(tanggal){
+  const today = new Date();
+  const exp = new Date(tanggal);
+  return Math.ceil((exp - today) / (1000*60*60*24));
+}
+
+/* RENDER */
+function render(){
+  const tbody = document.querySelector("#tabel tbody");
+  const mobile = document.getElementById("mobileList");
+  tbody.innerHTML = "";
+  mobile.innerHTML = "";
+
+  data.forEach((d,i)=>{
+    const sisa = sisaHari(d.expired);
+    const status = sisa < 0 ? "Expired" : "Aktif";
+    const warna = sisa < 30 ? "expired" : "active";
+
+    /* TABLE */
+    tbody.innerHTML += `
+      <tr>
+        <td>${i+1}</td>
+        <td>${d.nama}</td>
+        <td>${d.email}</td>
+        <td>${d.hp}</td>
+        <td>${d.domain}</td>
+        <td>${d.expired}</td>
+        <td class="${warna}">${sisa < 0 ? 0 : sisa} hari</td>
+        <td class="${status=='Aktif'?'active':'expired'}">${status}</td>
+        <td><button class="btn-delete" onclick="hapusData(${i+2})">Hapus</button></td>
+      </tr>`;
+
+    /* MOBILE CARD */
+    mobile.innerHTML += `
+      <div class="card">
+        <h3>${d.nama}</h3>
+        <p><b>Email:</b> ${d.email}</p>
+        <p><b>No HP:</b> ${d.hp}</p>
+        <p><b>Domain:</b> ${d.domain}</p>
+        <p><b>Expired:</b> ${d.expired}</p>
+        <div class="row">
+          <span class="${warna}">${sisa < 0 ? 0 : sisa} hari (${status})</span>
+          <button class="btn-delete" onclick="hapusData(${i+2})">Hapus</button>
+        </div>
+      </div>`;
+  });
+}
+
+/* LOAD */
+async function loadData(){
+  const res = await fetch(SCRIPT_URL);
+  data = await res.json();
+  render();
+}
+
+/* TAMBAH */
+async function tambahPelanggan(){
+  if(!nama.value || !expired.value){
+    alert("Nama & tanggal expired wajib diisi");
+    return;
+  }
+
+  await fetch(SCRIPT_URL,{
+    method:"POST",
+    body:JSON.stringify({
+      nama:nama.value,
+      email:email.value,
+      hp:hp.value,
+      domain:domain.value,
+      expired:expired.value
+    })
+  });
+
+  document.querySelectorAll(".form input").forEach(i=>i.value="");
+  loadData();
+}
+
+/* HAPUS */
+async function hapusData(row){
+  if(!confirm("Yakin hapus data ini?")) return;
+
+  await fetch(SCRIPT_URL,{
+    method:"POST",
+    body:JSON.stringify({action:"delete",row})
+  });
+
+  loadData();
+}
+
+/* SEARCH */
+function filterData(){
+  const q = search.value.toLowerCase();
+  document.querySelectorAll(".card, #tabel tbody tr").forEach(el=>{
+    el.style.display = el.innerText.toLowerCase().includes(q) ? "" : "none";
+  });
+}
+
+loadData();
+</script>
+
+</body>
+</html>
