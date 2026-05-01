@@ -1,0 +1,4 @@
+?page=opname
+?page=admin
+?page=master
+?page=user_admin
