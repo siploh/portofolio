@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bawah Tangga Production</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;800&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --ps5-accent: #0072ce;
+            --ps5-glow: rgba(0, 114, 206, 0.4);
+            --item-w: 160px; 
+            --item-h: 240px;
+            --item-gap: 20px;
+        }
+
+        body {
+            margin: 0;
+            background: #000;
+            color: white;
+            font-family: 'Inter', sans-serif;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Background Layer */
+        #bgImage {
+            position: absolute; top: 0; left: 0;
+            width: 100%; height: 100%;
+            background-size: cover; background-position: center;
+            transition: background-image 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: -3; filter: brightness(1.1) contrast(1.1); 
+        }
+
+        .bg-overlay {
+            position: absolute; top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: radial-gradient(circle at center, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0.8) 100%);
+            z-index: -2;
+        }
+
+        #particleCanvas {
+            position: absolute; top: 0; left: 0;
+            width: 100%; height: 100%;
+            z-index: -1; pointer-events: none;
+        }
+
+        /* Layout Container */
+        .container {
+            flex: 1;
+            display: grid;
+            grid-template-rows: 15% 15% 45% 25%; 
+            align-items: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .menu-row-area {
+            grid-row: 3;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+
+        .menu-track {
+            display: flex;
+            position: absolute;
+            transition: transform 0.6s cubic-bezier(0.15, 1, 0.3, 1);
+        }
+
+        .menu-item {
+            width: var(--item-w);
+            height: var(--item-h);
+            margin: 0 var(--item-gap);
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: all 0.5s cubic-bezier(0.15, 1, 0.3, 1);
+            opacity: 0.5;
+            transform: scale(0.85);
+            backdrop-filter: blur(8px);
+            position: relative;
+        }
+
+        .menu-item.active {
+            opacity: 1;
+            transform: scale(1.15);
+            border: 3px solid white;
+            background: rgba(255, 255, 255, 0.15);
+            box-shadow: 0 15px 45px rgba(0,0,0,0.5);
+            z-index: 10;
+        }
+
+        .menu-item i { font-size: 3.5rem; color: white; filter: drop-shadow(0 2px 10px rgba(0,0,0,0.5)); }
+
+        /* --- VERTICAL SIDE POPUP --- */
+        .user-popup {
+            position: absolute;
+            left: 115%; top: 50%;
+            transform: translateY(-50%);
+            display: none; 
+            flex-direction: column;
+            gap: 12px;
+            padding-left: 20px;
+            z-index: 100;
+        }
+
+        .user-popup.show { display: flex; }
+
+        .popup-option {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            color: white;
+            background: rgba(0, 0, 0, 0.8);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            width: 220px;
+            padding: 14px 20px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            backdrop-filter: blur(15px);
+            opacity: 0;
+            transform: translateY(-10px);
+        }
+
+        .user-popup.show .popup-option {
+            animation: slideDown 0.4s forwards;
+        }
+
+        .user-popup.show .popup-option:nth-child(1) { animation-delay: 0.1s; }
+        .user-popup.show .popup-option:nth-child(2) { animation-delay: 0.2s; }
+        .user-popup.show .popup-option:nth-child(3) { animation-delay: 0.3s; }
+
+        @keyframes slideDown {
+            to { opacity: 0.7; transform: translateY(0); }
+        }
+
+        .popup-option.selected {
+            opacity: 1 !important;
+            background: var(--ps5-accent);
+            border-color: white;
+            transform: scale(1.08) translateX(10px);
+            box-shadow: 0 0 25px var(--ps5-glow);
+        }
+
+        .popup-option i { font-size: 1.8rem; margin-right: 15px; width: 35px; text-align: center; }
+        .popup-option span { font-weight: 800; letter-spacing: 1px; text-transform: uppercase; font-size: 0.85rem; }
+
+        /* Info & Controls */
+        .info-row-area { grid-row: 4; text-align: center; align-self: start; padding-top: 20px; }
+        #menuTitle { font-size: 3rem; font-weight: 800; letter-spacing: 8px; text-transform: uppercase; margin: 0; text-shadow: 0 4px 15px rgba(0,0,0,0.8); }
+        .subtitle { color: var(--ps5-accent); letter-spacing: 10px; font-size: 0.8rem; margin-top: 10px; font-weight: bold; }
+        
+        .controls { position: absolute; bottom: 35px; right: 60px; display: flex; gap: 25px; opacity: 0.7; font-size: 0.7rem; font-weight: bold; }
+        .btn-cap { background: white; color: black; padding: 2px 10px; border-radius: 20px; margin-right: 5px; }
+    </style>
+</head>
+<body>
+
+    <div id="bgImage"></div>
+    <div class="bg-overlay"></div>
+    <canvas id="particleCanvas"></canvas>
+
+    <div class="container">
+        <div></div> <div></div>
+
+        <div class="menu-row-area">
+            <div class="menu-track" id="menuTrack">
+                <!-- Navigasi Horizontal -->
+                <div class="menu-item" data-name="ADMIN" data-bg="img/admin.jpeg" data-url="Admin.html"><i class="fas fa-user-shield"></i></div>
+                <div class="menu-item" data-name="MASTER DATA" data-bg="img/masterdata.jpeg" data-url="Master.html"><i class="fas fa-database"></i></div>
+                <div class="menu-item" data-name="STOCK OPNAME" data-bg="img/SO.jpeg" data-url="SO.html"><i class="fas fa-boxes-stacked"></i></div>
+                <div class="menu-item" data-name="TAKING ORDER" data-bg="img/TO.jpeg" data-url="TO.html"><i class="fas fa-file-invoice-dollar"></i></div>
+                <div class="menu-item" data-name="LOADING LIST" data-bg="img/loadinglist.jpeg" data-url="Loading_List.html"><i class="fas fa-truck-loading"></i></div>
+                <div class="menu-item" data-name="E-KATALOG" data-bg="img/katalog.jpeg" data-url="Admin_Katalog.html"><i class="fas fa-list-ul"></i></div>
+                
+                <!-- Menu Dengan Popup Vertikal -->
+                <div class="menu-item" data-name="USER" data-bg="img/user.jpeg" id="userMenuItem">
+                    <i class="fas fa-users-gear"></i>
+                    <div class="user-popup" id="userPopup">
+                        <a href="User.html" class="popup-option"> <i class="fas fa-user"></i> <span>User Management</span> </a>
+                        <a href="admin_absensi.html" class="popup-option"> <i class="fas fa-calendar-check"></i> <span>Presensi</span> </a>
+                        <a href="salespoin.html" class="popup-option"> <i class="fas fa-ellipsis-h"></i> <span>Sales Point</span> </a>
+                    </div>
+                </div>
+
+                <div class="menu-item" data-name="BILLING" data-bg="img/Billing.jpeg" data-url="#"><i class="fas fa-sliders"></i></div>
+            </div>
+        </div>
+
+        <div class="info-row-area">
+            <h1 id="menuTitle">ADMIN</h1>
+            <div class="subtitle">BAWAH TANGGA PRODUCTION</div>
+        </div>
+
+        <div class="controls">
+            <span><span class="btn-cap">← →</span> NAVIGASI</span>
+            <span><span class="btn-cap">↑ ↓</span> PILIH SUB</span>
+            <span><span class="btn-cap">ENTER</span> OK</span>
+        </div>
+    </div>
+
+    <script>
+        // --- PARTICLE SYSTEM ---
+        const canvas = document.getElementById('particleCanvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+        function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+        window.addEventListener('resize', resize); resize();
+        class Particle {
+            constructor() { this.reset(); }
+            reset() { this.x = Math.random() * canvas.width; this.y = Math.random() * canvas.height; this.size = Math.random() * 1.8; this.speedX = (Math.random() - 0.5) * 0.3; this.speedY = (Math.random() - 0.5) * 0.3; this.opacity = Math.random() * 0.5; }
+            update() { this.x += this.speedX; this.y += this.speedY; if (this.x < 0 || this.x > canvas.width || this.y < 0 || this.y > canvas.height) this.reset(); }
+            draw() { ctx.fillStyle = `rgba(255, 255, 255, ${this.opacity})`; ctx.beginPath(); ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2); ctx.fill(); }
+        }
+        for (let i = 0; i < 60; i++) particles.push(new Particle());
+        function animate() { ctx.clearRect(0, 0, canvas.width, canvas.height); particles.forEach(p => { p.update(); p.draw(); }); requestAnimationFrame(animate); }
+        animate();
+
+        // --- MENU LOGIC ---
+        const track = document.getElementById('menuTrack');
+        const items = document.querySelectorAll('.menu-item');
+        const titleEl = document.getElementById('menuTitle');
+        const bgImageEl = document.getElementById('bgImage'); 
+        const userPopup = document.getElementById('userPopup');
+        const popupOptions = document.querySelectorAll('.popup-option');
+        
+        const step = 160 + (20 * 2); // item width + gap
+        let currentIndex = 0;
+        let subIndex = 0;
+        let isPopupOpen = false;
+
+        function updateMenu() {
+            isPopupOpen = false;
+            userPopup.classList.remove('show');
+            items.forEach((item, index) => { item.classList.toggle('active', index === currentIndex); });
+            
+            const activeItem = items[currentIndex];
+            track.style.transform = `translateX(${-(currentIndex * step)}px)`;
+            
+            // Animasi Judul & BG
+            titleEl.style.opacity = 0;
+            setTimeout(() => {
+                titleEl.innerText = activeItem.getAttribute('data-name');
+                titleEl.style.opacity = 1;
+            }, 200);
+
+            const bgPath = activeItem.getAttribute('data-bg');
+            if (bgPath) bgImageEl.style.backgroundImage = `url('${bgPath}')`;
+        }
+
+        function updateSubMenu() {
+            popupOptions.forEach((opt, index) => {
+                opt.classList.toggle('selected', index === subIndex);
+            });
+        }
+
+        // --- KEYBOARD CONTROLS ---
+        window.addEventListener('keydown', (e) => {
+            if (!isPopupOpen) {
+                // Mode Horizontal
+                if (e.key === 'ArrowRight' && currentIndex < items.length - 1) { 
+                    currentIndex++; updateMenu(); 
+                }
+                else if (e.key === 'ArrowLeft' && currentIndex > 0) { 
+                    currentIndex--; updateMenu(); 
+                }
+                else if (e.key === 'Enter') {
+                    if (items[currentIndex].id === "userMenuItem") {
+                        isPopupOpen = true;
+                        subIndex = 0;
+                        userPopup.classList.add('show');
+                        updateSubMenu();
+                    } else {
+                        const url = items[currentIndex].getAttribute('data-url');
+                        if (url && url !== "#") window.location.href = url;
+                    }
+                }
+            } else {
+                // Mode Vertikal (Pop-up aktif)
+                if (e.key === 'ArrowDown' && subIndex < popupOptions.length - 1) {
+                    subIndex++; updateSubMenu();
+                }
+                else if (e.key === 'ArrowUp' && subIndex > 0) {
+                    subIndex--; updateSubMenu();
+                }
+                else if (e.key === 'Escape' || e.key === 'ArrowLeft') {
+                    isPopupOpen = false;
+                    userPopup.classList.remove('show');
+                }
+                else if (e.key === 'Enter') {
+                    window.location.href = popupOptions[subIndex].getAttribute('href');
+                }
+            }
+        });
+
+        // Initialize
+        updateMenu();
+    </script>
+</body>
+</html>
