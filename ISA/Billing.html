@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Billing Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --primary: #4f46e5;
+            --primary-soft: #eef2ff;
+            --success: #10b981;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --bg-body: #f8fafc;
+            --white: #ffffff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-body);
+            /* Mesh Gradient Background */
+            background-image: 
+                radial-gradient(at 0% 0%, hsla(253,16%,7%,1) 0, transparent 50%), 
+                radial-gradient(at 50% 0%, hsla(225,39%,30%,1) 0, transparent 50%), 
+                radial-gradient(at 100% 0%, hsla(339,49%,30%,1) 0, transparent 50%);
+            background-attachment: fixed;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        /* --- Billing Card --- */
+        .card {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            width: 100%;
+            max-width: 420px;
+            border-radius: 32px;
+            padding: 40px 32px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            animation: fadeIn 0.6s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+
+        .icon-box {
+            width: 64px;
+            height: 64px;
+            background: var(--primary-soft);
+            color: var(--primary);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            margin: 0 auto 16px;
+        }
+
+        .header h1 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-main);
+            letter-spacing: -0.025em;
+        }
+
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: #ecfdf5;
+            color: var(--success);
+            padding: 6px 14px;
+            border-radius: 100px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-top: 12px;
+            border: 1px solid #d1fae5;
+        }
+
+        .info-container {
+            background: rgba(241, 245, 249, 0.5);
+            border-radius: 24px;
+            padding: 8px 20px;
+            margin-bottom: 32px;
+        }
+
+        .info-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 18px 0;
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+        }
+
+        .info-item:last-child { border: none; }
+
+        .info-label {
+            color: var(--text-muted);
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+
+        .info-value {
+            color: var(--text-main);
+            font-weight: 600;
+            font-size: 0.925rem;
+        }
+
+        .price-highlight {
+            color: var(--primary);
+            font-size: 1.25rem;
+            font-weight: 800;
+        }
+
+        .btn-pay {
+            width: 100%;
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 18px;
+            border-radius: 20px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 12px;
+            font-size: 1rem;
+            box-shadow: 0 10px 20px -5px rgba(79, 70, 229, 0.4);
+        }
+
+        .btn-pay:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 25px -5px rgba(79, 70, 229, 0.5);
+            filter: brightness(1.1);
+        }
+
+        /* --- Modal Pop-up --- */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(10px);
+            display: grid;
+            place-items: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-box {
+            background: var(--white);
+            width: 90%;
+            max-width: 380px;
+            padding: 32px;
+            border-radius: 32px;
+            text-align: center;
+            transform: scale(0.9);
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .modal-overlay.active .modal-box {
+            transform: scale(1);
+        }
+
+        .qris-container {
+            background: #fff;
+            padding: 15px;
+            border-radius: 24px;
+            border: 2px solid #f1f5f9;
+            margin: 20px 0;
+        }
+
+        .qris-image {
+            width: 100%;
+            height: auto;
+            border-radius: 12px;
+            display: block;
+        }
+
+        .btn-secondary {
+            background: #f1f5f9;
+            color: var(--text-main);
+            border: none;
+            width: 100%;
+            padding: 14px;
+            border-radius: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .btn-secondary:hover { background: #e2e8f0; }
+
+        @media (max-width: 480px) {
+            .card { padding: 32px 24px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="card">
+        <div class="header">
+            <div class="icon-box">
+                <i class="fa-solid fa-receipt"></i>
+            </div>
+            <h1>Ringkasan Tagihan</h1>
+            <div class="status-badge">
+                <i class="fa-solid fa-check-circle"></i>
+                Layanan Aktif
+            </div>
+        </div>
+
+        <div class="info-container">
+            <div class="info-item">
+                <span class="info-label">No. Tagihan</span>
+                <span class="info-value">#INV-202509-001</span>
+            </div>
+            <div class="info-item">
+                <span class="info-label">Total Pembayaran</span>
+                <span class="info-value price-highlight">Rp 650.000</span>
+            </div>
+            <div class="info-item">
+                <span class="info-label">Jatuh Tempo</span>
+                <span class="info-value" style="color: var(--primary);">30 September 2026</span>
+            </div>
+        </div>
+
+        <button class="btn-pay" id="openPay">
+            <i class="fa-solid fa-qrcode"></i>
+            Bayar Sekarang
+        </button>
+        
+        <p style="text-align: center; font-size: 0.75rem; color: var(--text-muted); margin-top: 20px;">
+            <i class="fa-solid fa-shield-halved"></i> Pembayaran Aman & Terenkripsi
+        </p>
+    </div>
+
+    <!-- Modal QRIS -->
+    <div class="modal-overlay" id="paymentModal">
+        <div class="modal-box">
+            <h2 style="font-size: 1.25rem; margin-bottom: 8px;">Scan Kode QRIS</h2>
+            <p style="font-size: 0.85rem; color: var(--text-muted);">Selesaikan pembayaran melalui aplikasi e-wallet pilihan Anda</p>
+            
+            <div class="qris-container">
+                <!-- Sumber gambar kembali ke folder lokal -->
+                <img src="img/Qris.jpeg" alt="QRIS" class="qris-image">
+            </div>
+
+            <button class="btn-secondary" id="closePay">Tutup</button>
+        </div>
+    </div>
+
+    <script>
+        const openBtn = document.getElementById('openPay');
+        const closeBtn = document.getElementById('closePay');
+        const modal = document.getElementById('paymentModal');
+
+        openBtn.addEventListener('click', () => modal.classList.add('active'));
+        closeBtn.addEventListener('click', () => modal.classList.remove('active'));
+        
+        // Tutup modal jika klik area luar
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) modal.classList.remove('active');
+        });
+    </script>
+</body>
+</html>
