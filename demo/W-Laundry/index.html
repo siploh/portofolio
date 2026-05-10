@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>W-Laundry</title>
+
+    <link rel="icon" href="images/ybci2.png">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#ffffff">
+
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&family=Poppins:wght@600&display=swap" rel="stylesheet">
+
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: #f8f9fa;
+            color: #212529;
+            min-height: 100vh;
+            overflow-x: hidden;
+            padding-bottom: 80px; 
+        }
+
+        /* SPLASH SCREEN */
+        #splash {
+            position: fixed; inset: 0; background: #ffffff;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            z-index: 999999; transition: opacity 0.5s ease;
+        }
+        #splash img { width: 120px; animation: zoom 1.2s; }
+        #splash h3 { margin-top: 10px; font-weight: 600; font-family: 'Poppins', sans-serif; color: #2ecc71; }
+        @keyframes zoom { from { transform: scale(.6); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+
+        /* REFRESH INDICATOR */
+        #pullRefresh {
+            position: fixed; top: -50px; left: 50%; transform: translateX(-50%);
+            background: #ffffff; padding: 8px 16px; border-radius: 20px;
+            font-size: 12px; transition: .3s; z-index: 2000; border: 1px solid #ddd;
+            color: #2ecc71; box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        /* HEADER & DATE */
+        .datetime-container {
+            width: 90%; max-width: 500px; margin: 20px auto 10px;
+            background: #ffffff; padding: 16px; border-radius: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            opacity: 0; animation: fadeIn 0.8s forwards 1s;
+            border-left: 5px solid #2ecc71;
+        }
+        .datetime { font-size: 13px; color: #6c757d; }
+        .greeting { font-size: 18px; font-weight: 700; margin-top: 4px; color: #212529; }
+
+        /* SLIDER */
+        .slider-container {
+            width: 90%; max-width: 500px; height: 200px;
+            margin: 10px auto 20px; border-radius: 22px; overflow: hidden;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1); position: relative;
+            background: #eee; opacity: 0; animation: fadeIn 0.8s forwards 0.5s;
+        }
+        .slides { display: flex; height: 100%; width: 100%; transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1); }
+        .slide { min-width: 100%; height: 100%; transform: scale(0.96); transition: 0.8s; }
+        .slide.active { transform: scale(1); }
+        .slide img { width: 100%; height: 100%; object-fit: cover; border-radius: 22px; }
+
+        .dots { position: absolute; bottom: 12px; left: 50%; transform: translateX(-50%); display: flex; gap: 8px; z-index: 10; }
+        .dot { width: 8px; height: 8px; border-radius: 50%; background: rgba(0,0,0,.2); transition: 0.3s; }
+        .dot.active { background: #2ecc71; width: 20px; border-radius: 10px; }
+
+        /* MENU GRID */
+        .grid { width: 90%; max-width: 500px; margin: 0 auto 20px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+        .top-menu { opacity: 0; animation: fadeInUp 0.8s forwards 1.2s; }
+        
+        .menu-item {
+            background: #ffffff; border-radius: 20px; padding: 16px 10px;
+            text-align: center; box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            transition: all 0.2s; cursor: pointer;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            min-height: 110px; border: 1px solid #f1f3f5;
+        }
+        .menu-item:active { transform: scale(.92); background: #f8f9fa; }
+        
+        .menu-icon img { width: 44px; height: 44px; object-fit: contain; display: block; }
+        .menu-label { font-size: 11px; margin-top: 10px; font-weight: 600; color: #495057; line-height: 1.2; }
+
+        /* MODALS */
+        .modal-overlay {
+            position: fixed; inset: 0; background: rgba(0, 0, 0, 0.5);
+            display: none; justify-content: center; align-items: center;
+            z-index: 99999; backdrop-filter: blur(4px);
+        }
+        .modal-content {
+            background: #ffffff; width: 85%; max-width: 350px;
+            padding: 25px; border-radius: 25px; text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2); animation: zoomIn 0.3s ease;
+        }
+        .modal-title { font-family: 'Poppins', sans-serif; font-size: 18px; margin-bottom: 15px; color: #212529; }
+        .modal-buttons { display: flex; flex-direction: column; gap: 12px; }
+        .modal-btn {
+            padding: 14px; border-radius: 15px; text-decoration: none;
+            font-size: 14px; font-weight: 600; display: flex;
+            align-items: center; justify-content: center; gap: 10px; transition: 0.2s;
+        }
+        .btn-wa { background: #25d366; color: #fff; border: none; }
+        .btn-popup { background: #f8f9fa; color: #495057; border: 1px solid #dee2e6; justify-content: flex-start; padding-left: 20px; }
+        .btn-popup img { width: 22px; height: 22px; }
+
+        /* BOTTOM NAV */
+        .bottom-nav {
+            position: fixed; bottom: 0; left: 0; width: 100%; height: 70px;
+            background: #ffffff; display: flex; justify-content: space-around; align-items: center;
+            box-shadow: 0 -4px 15px rgba(0,0,0,0.05); z-index: 1000;
+            border-top: 1px solid #f1f3f5;
+        }
+        .nav-item { display: flex; flex-direction: column; align-items: center; font-size: 11px; color: #adb5bd; text-decoration: none; width: 33.3%; }
+        .nav-item img { filter: grayscale(1) opacity(0.5); width: 22px; margin-bottom: 4px; }
+        .nav-item.active { color: #2ecc71; font-weight: 700; }
+        .nav-item.active img { filter: none; opacity: 1; }
+
+        /* ANIMATIONS */
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes zoomIn { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+    </style>
+</head>
+<body>
+
+    <div id="splash">
+        <img src="img/logo.png" alt="Logo">
+        <h3>Bawah Tangga Production</h3>
+    </div>
+
+    <div id="pullRefresh">↻ Lepaskan untuk Refresh</div>
+
+    <div class="datetime-container">
+        <div class="datetime" id="datetime">Memuat waktu...</div>
+        <div class="greeting">Bawah Tangga Production</div>
+    </div>
+
+    <div class="slider-container">
+        <div class="slides" id="slides">
+            <div class="slide active"><img src="img/slide1.jpeg"></div>
+            <div class="slide"><img src="img/slide2.jpeg"></div>
+            <div class="slide"><img src="img/slide3.jpeg"></div>
+        </div>
+        <div class="dots" id="dotsContainer">
+            <div class="dot active"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+        </div>
+    </div>
+
+    <div class="grid top-menu">
+        <!-- MENU LAUNDRY (Langsung ke kasir.html) -->
+        <div class="menu-item" onclick="location.href='kasir.html'">
+            <div class="menu-icon">
+                <img src="https://img.icons8.com/fluency/48/washing-machine.png" alt="Laundry">
+            </div>
+            <div class="menu-label">Laundry</div>
+        </div>
+
+        <!-- MENU DAFTAR HARGA -->
+        <div class="menu-item" onclick="location.href='harga.html'">
+            <div class="menu-icon">
+                <img src="https://img.icons8.com/fluency/48/price-tag.png" alt="Daftar Harga">
+            </div>
+            <div class="menu-label">Daftar Harga </div>
+        </div>
+
+        <!-- MENU PAKET HARGA MEMBER -->
+<div class="menu-item" onclick="location.href='paket.html'">
+    <div class="menu-icon">
+        <!-- Menggunakan ikon VIP yang lebih universal dari Icons8 -->
+        <img src="https://img.icons8.com/fluency/48/membership-card.png" alt="Paket Member">
+    </div>
+    <div class="menu-label">Paket Harga Member</div>
+</div>
+
+        <!-- MENU PENGELUARAN -->
+        <div class="menu-item" onclick="location.href='pengeluaran.html'">
+            <div class="menu-icon">
+                <img src="https://img.icons8.com/fluency/48/request-money.png" alt="Pengeluaran">
+            </div>
+            <div class="menu-label">Pengeluaran</div>
+        </div>
+
+        <!-- MENU MEMBER -->
+        <div class="menu-item" onclick="location.href='member.html'">
+            <div class="menu-icon">
+                <img src="https://img.icons8.com/fluency/48/group.png" alt="Member">
+            </div>
+            <div class="menu-label">Member</div>
+        </div>
+    </div>
+
+    <!-- Modals -->
+    <!-- presensiModal disembunyikan karena fungsinya sudah diganti redirect langsung -->
+    
+    <div id="aboutModal" class="modal-overlay" onclick="closeModal('aboutModal')">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <h3 class="modal-title">Tentang Aplikasi</h3>
+            <div style="text-align: left; font-size: 13px; color: #495057; line-height: 1.6; margin-bottom: 20px;">
+                <p><strong>W-Laundry</strong> adalah platform digital resmi Bawah Tangga Production.</p>
+                <p><strong>Versi:</strong> 1.0.5 (Build 2026)</p>
+            </div>
+            <button onclick="closeModal('aboutModal')" style="background:none; border:none; color:#adb5bd; cursor:pointer">Tutup</button>
+        </div>
+    </div>
+
+    <!-- Bottom Navigation -->
+    <div class="bottom-nav">
+        <a href="#" class="nav-item active">
+            <img src="https://img.icons8.com/ios-filled/50/2ecc71/home.png" alt="Home">
+            <span>Home</span>
+        </a>
+        <a href="dashboard.html" class="nav-item">
+             <img src="https://img.icons8.com/ios-filled/50/212529/speedometer.png" alt="Dashboard">
+             <span>Dashboard</span>
+        </a>
+        <a href="javascript:void(0)" class="nav-item" onclick="openModal('aboutModal')">
+            <img src="https://img.icons8.com/ios-filled/50/212529/info.png" alt="About">
+            <span>About</span>
+        </a>
+    </div>
+
+    <script>
+        // --- SPLASH SCREEN ---
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                const splash = document.getElementById('splash');
+                if(splash) {
+                    splash.style.opacity = '0';
+                    setTimeout(() => splash.style.display = 'none', 500);
+                }
+            }, 1000);
+        });
+
+        // --- UPDATE TIME ---
+        function updateTime() {
+            const d = new Date();
+            const options = { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' };
+            const timeStr = d.toLocaleDateString('id-ID', options) + " | " + d.toLocaleTimeString('id-ID');
+            const el = document.getElementById('datetime');
+            if(el) el.innerHTML = timeStr;
+        }
+        setInterval(updateTime, 1000);
+        updateTime();
+
+        // --- SLIDER ---
+        let currentIndex = 0;
+        const slides = document.querySelectorAll('.slide');
+        const dots = document.querySelectorAll('.dot');
+        function goToSlide(index) {
+            const container = document.getElementById('slides');
+            if(container) container.style.transform = `translateX(-${index * 100}%)`;
+            slides.forEach((s, i) => s.classList.toggle('active', i === index));
+            dots.forEach((d, i) => d.classList.toggle('active', i === index));
+        }
+        setInterval(() => {
+            if(slides.length > 0) {
+                currentIndex = (currentIndex + 1) % slides.length;
+                goToSlide(currentIndex);
+            }
+        }, 4000);
+
+        // --- MODAL ---
+        function openModal(id) { 
+            const el = document.getElementById(id);
+            if(el) { el.style.display = 'flex'; document.body.style.overflow = 'hidden'; }
+        }
+        function closeModal(id) { 
+            const el = document.getElementById(id);
+            if(el) { el.style.display = 'none'; document.body.style.overflow = 'auto'; }
+        }
+
+        // --- PULL TO REFRESH ---
+        let startY = 0;
+        document.addEventListener('touchstart', e => { startY = e.touches[0].pageY; });
+        document.addEventListener('touchmove', e => {
+            const y = e.touches[0].pageY;
+            const pullEl = document.getElementById('pullRefresh');
+            if (window.scrollY === 0 && y - startY > 120 && pullEl) pullEl.style.top = '20px';
+        });
+        document.addEventListener('touchend', () => { 
+            const pullEl = document.getElementById('pullRefresh');
+            if (pullEl && parseInt(pullEl.style.top) > 0) location.reload(); 
+        });
+    </script>
+</body>
+</html>
