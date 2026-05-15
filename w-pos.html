@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WPOS - Solusi Kasir Cerdas</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <!-- Swiper CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+    
+    <style>
+        :root {
+            --primary-blue: #00a8ff;
+            --light-blue: #e1f5fe;
+            --dark-blue: #0077b6;
+            --white: #ffffff;
+            --gray: #f4f7f6;
+            --whatsapp-green: #25d366;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--gray);
+            color: #333;
+            line-height: 1.6;
+        }
+
+        /* Hero Section */
+        header {
+            background: linear-gradient(135deg, var(--primary-blue), var(--dark-blue));
+            color: white;
+            padding: 80px 20px;
+            text-align: center;
+            border-bottom-right-radius: 50px;
+            border-bottom-left-radius: 50px;
+        }
+
+        header h1 {
+            font-size: 3rem;
+            margin-bottom: 10px;
+            letter-spacing: 2px;
+        }
+
+        header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        /* Content Section */
+        .container {
+            max-width: 1000px;
+            margin: -50px auto 50px;
+            padding: 20px;
+        }
+
+        .card {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+
+        .section-title {
+            color: var(--dark-blue);
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2rem;
+        }
+
+        /* Slider Styles */
+        .swiper {
+            width: 100%;
+            padding-top: 20px;
+            padding-bottom: 50px;
+        }
+
+        .swiper-slide {
+            background-position: center;
+            background-size: cover;
+            width: 300px; 
+            height: auto;
+            filter: blur(1px);
+            opacity: 0.7;
+            transition: 0.3s;
+        }
+
+        .swiper-slide-active {
+            filter: blur(0);
+            opacity: 1;
+            transform: scale(1.1);
+            z-index: 2;
+        }
+
+        .screenshot-img {
+            width: 100%;
+            border-radius: 15px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+            border: 5px solid #333; 
+        }
+
+        /* Features */
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .feature-item {
+            text-align: center;
+            padding: 20px;
+            border-radius: 15px;
+            background: var(--light-blue);
+            transition: transform 0.3s;
+        }
+
+        .feature-item:hover {
+            transform: translateY(-10px);
+        }
+
+        .feature-item i {
+            font-size: 2.5rem;
+            color: var(--dark-blue);
+            margin-bottom: 15px;
+        }
+
+        /* Pricing Table */
+        .pricing-box {
+            background: var(--white);
+            border: 2px solid var(--primary-blue);
+            border-radius: 20px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 40px;
+            position: relative;
+        }
+
+        .price-tag {
+            font-size: 2.5rem;
+            color: var(--dark-blue);
+            font-weight: bold;
+            margin: 20px 0;
+        }
+
+        .promo-badge {
+            background: #ff4757;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .details-list {
+            list-style: none;
+            width: 100%;
+            margin-bottom: 30px;
+        }
+
+        .details-list li {
+            padding: 12px 0;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            align-items: center;
+        }
+
+        .details-list li i {
+            color: #2ed573;
+            margin-right: 10px;
+        }
+
+        .btn {
+            background: var(--primary-blue);
+            color: white;
+            padding: 15px 40px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: 0.3s;
+            display: inline-block;
+        }
+
+        .btn:hover {
+            background: var(--dark-blue);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        /* WhatsApp Floating Button */
+        .wa-float {
+            position: fixed;
+            width: 60px;
+            height: 60px;
+            bottom: 40px;
+            right: 40px;
+            background-color: var(--whatsapp-green);
+            color: #FFF;
+            border-radius: 50px;
+            text-align: center;
+            font-size: 30px;
+            box-shadow: 2px 2px 10px rgba(0,0,0,0.3);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+        .wa-float:hover {
+            transform: scale(1.1);
+            background-color: #1ebe57;
+            color: white;
+        }
+
+        footer {
+            text-align: center;
+            padding: 40px;
+            color: #777;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 600px) {
+            header h1 { font-size: 2rem; }
+            .card { padding: 20px; }
+            .swiper-slide { width: 220px; }
+            .wa-float {
+                width: 50px;
+                height: 50px;
+                bottom: 20px;
+                right: 20px;
+                font-size: 25px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- WhatsApp Button -->
+    <a href="https://wa.me/6285183329989?text=Halo%20W-POS,%20saya%20tertarik%20dengan%20sistem%20kasir%20cerdas%20ini." class="wa-float" target="_blank">
+        <i class="fab fa-whatsapp"></i>
+    </a>
+
+    <header>
+        <h1>W-POS</h1>
+        <p>Satu Aplikasi, Solusi Bisnis UMKM yang Lebih Cerdar.</p>
+    </header>
+
+    <div class="container">
+        
+        <!-- Penjelasan Aplikasi -->
+        <div class="card">
+            <h2 class="section-title">Apa itu W-POS?</h2>
+            <p style="text-align: center; max-width: 800px; margin: 0 auto; margin-bottom: 30px;">
+                WPOS adalah aplikasi manajemen kasir berbasis cloud yang dirancang untuk mempercepat transaksi, mengelola stok secara real-time, dan memberikan laporan keuangan yang akurat.
+            </p>
+
+            <!-- Slider Screenshot Aplikasi -->
+            <div class="swiper mySwiper">
+                <div class="swiper-wrapper">
+                    <div class="swiper-slide">
+                        <img src="img/1.png" class="screenshot-img" alt="Tampilan Dashboard">
+                    </div>
+                    <div class="swiper-slide">
+                        <img src="img/2.png" class="screenshot-img" alt="Menu Transaksi">
+                    </div>
+                    <div class="swiper-slide">
+                        <img src="img/3.png" class="screenshot-img" alt="Laporan Stok">
+                    </div>
+                    <div class="swiper-slide">
+                        <img src="img/4.png" class="screenshot-img" alt="Analitik">
+                    </div>
+                </div>
+                <div class="swiper-pagination"></div>
+            </div>
+            
+            <div class="features">
+                <div class="feature-item">
+                    <i class="fas fa-rocket"></i>
+                    <h3>Cepat & Ringan</h3>
+                    <p>Transaksi selesai dalam hitungan detik.</p>
+                </div>
+                <div class="feature-item">
+                    <i class="fas fa-shield-alt"></i>
+                    <h3>Data Aman</h3>
+                    <p>Backup data otomatis secara berkala.</p>
+                </div>
+                <div class="feature-item">
+                    <i class="fas fa-chart-line"></i>
+                    <h3>Laporan Lengkap</h3>
+                    <p>Pantau keuntungan di mana saja.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Penawaran Harga -->
+        <div class="card">
+            <h2 class="section-title">Investasi Bisnis</h2>
+            <div class="pricing-box">
+                <div class="promo-badge">PROMO TERBATAS!</div>
+                <p>Biaya Instalasi Awal</p>
+                <div class="price-tag">Rp 1.000.000</div>
+                
+                <ul class="details-list">
+                    <li><i class="fas fa-check-circle"></i> <strong>FREE</strong> -Biaya Tahunan (Tahun ke-1)</li>
+                    <li><i class="fas fa-check-circle"></i> <strong>FREE</strong> -Presensi Karyawan</li>
+                    <li><i class="fas fa-check-circle"></i> Setup Sistem & Database</li>
+                    <li><i class="fas fa-check-circle"></i> Pelatihan Penggunaan (Training)</li>
+                    <li><i class="fas fa-check-circle"></i> Dukungan Teknis Prioritas</li>
+                    <li><i class="fas fa-info-circle"></i> Pemeliharaan Tahun Berikutnya: Rp 525.000/tahun</li>
+                </ul>
+
+                <a href="https://wa.me/6285183329989" class="btn">Dapatkan Sekarang</a>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2024 W-POS By Bawah Tangga Production.</p>
+    </footer>
+
+    <!-- Swiper JS -->
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+
+    <!-- Initialize Swiper -->
+    <script>
+        var swiper = new Swiper(".mySwiper", {
+            effect: "coverflow",
+            grabCursor: true,
+            centeredSlides: true,
+            slidesPerView: "auto",
+            coverflowEffect: {
+                rotate: 20,
+                stretch: 0,
+                depth: 100,
+                modifier: 1,
+                slideShadows: false,
+            },
+            pagination: {
+                el: ".swiper-pagination",
+                clickable: true,
+            },
+            loop: true,
+            autoplay: {
+                delay: 3000,
+                disableOnInteraction: false,
+            },
+        });
+    </script>
+</body>
+</html>
