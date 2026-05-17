@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <title>Sales Point</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { -webkit-tap-highlight-color: transparent; }
+    #video { width: 100%; border-radius: 1.5rem; background: #000; aspect-ratio: 4/3; object-fit: cover; }
+    .loading-spin { border: 2px solid #f3f3f3; border-top: 2px solid #ef4444; border-radius: 50%; width: 16px; height: 16px; animation: spin 1s linear infinite; display: inline-block; }
+    @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+  </style>
+</head>
+<body class="bg-slate-50 min-h-screen font-sans">
+
+  <!-- Login Panel -->
+  <div id="loginPanel" class="max-w-md mx-auto p-6 pt-20">
+    <div class="bg-white rounded-[2rem] shadow-xl p-8 text-center">
+      <h1 class="text-3xl font-black mb-6">Sales Point</h1>
+      <input type="text" id="inputId" placeholder="ID Sales" class="w-full p-4 bg-slate-100 rounded-xl font-bold mb-4 outline-none focus:ring-2 focus:ring-red-500">
+      <button onclick="auth()" id="btnLogin" class="w-full bg-red-600 text-white font-bold py-4 rounded-xl shadow-lg active:scale-95">MASUK</button>
+      <p id="loginError" class="text-red-500 text-xs font-bold mt-4"></p>
+    </div>
+  </div>
+
+  <!-- App Panel -->
+  <div id="appPanel" class="max-w-md mx-auto p-4 hidden">
+    <div class="bg-white rounded-[2rem] shadow-2xl overflow-hidden">
+      <div class="bg-slate-900 p-6 flex justify-between items-center text-white">
+        <div><h2 id="displayNama" class="font-bold text-lg">---</h2><p class="text-[10px] text-slate-400">SALES REPRESENTATIVE</p></div>
+        <button onclick="location.reload()" class="bg-red-600 text-[10px] font-bold px-3 py-2 rounded-lg">LOGOUT</button>
+      </div>
+
+      <div class="p-6 space-y-6">
+        <div>
+          <label class="text-[10px] font-black text-slate-400 uppercase mb-2 block">Pilih Toko</label>
+          <select id="tokoSelect" class="w-full p-4 bg-slate-50 rounded-xl font-bold appearance-none shadow-inner border-none"></select>
+        </div>
+
+        <div class="relative">
+          <video id="video" autoplay playsinline muted></video>
+          <canvas id="canvas" class="hidden"></canvas>
+          <div id="gpsBox" class="absolute top-4 left-4 bg-black/60 text-[10px] text-white px-3 py-1 rounded-full font-bold tracking-widest">GPS: MENCARI...</div>
+          
+          <button onclick="switchCamera()" class="absolute bottom-4 right-4 bg-white/20 hover:bg-white/40 backdrop-blur-md p-3 rounded-full transition-all">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12c0 1.2-4.03 6-9 6s-9-4.8-9-6c0-1.2 4.03-6 9-6s9 4.8 9 6Z"/><path d="M3 12h18"/><path d="M12 21a9 9 0 0 0 0-18"/></svg>
+          </button>
+        </div>
+
+        <button onclick="prosesCheckin()" id="btnCheckin" class="w-full bg-red-600 text-white font-black py-4 rounded-xl shadow-lg active:scale-95">CHECK-IN</button>
+        <p id="statusMsg" class="text-center text-xs font-bold mt-2 text-slate-500"></p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // GANTI DENGAN URL EXEC ANDA
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzGXgsd6kQfSQF68XVAApfMqgp6hZAJFXCP3QuV4SdIOgZOyjOh9xoBeMLlivjLrWlX/exec"; 
+    
+    let userData = { id: '', nama: '', toko: [] };
+    let currentCoords = null;
+    let currentStream = null;
+    let useFrontCamera = false;
+
+    async function callAPI(payload) {
+      try {
+        const response = await fetch(SCRIPT_URL, {
+          method: "POST",
+          body: JSON.stringify(payload)
+        });
+        return await response.json();
+      } catch (e) {
+        return { success: false, msg: "Koneksi Gagal" };
+      }
+    }
+
+    async function auth() {
+      const id = document.getElementById('inputId').value.trim();
+      if(!id) return;
+      document.getElementById('btnLogin').innerHTML = '<span class="loading-spin"></span>';
+      
+      const res = await callAPI({ action: "login", id: id });
+      if(res.success) {
+        userData = { ...res, id: id };
+        updateDropdown(res.toko);
+        document.getElementById('displayNama').innerText = res.nama;
+        document.getElementById('loginPanel').classList.add('hidden');
+        document.getElementById('appPanel').classList.remove('hidden');
+        initCamera(); initGPS();
+      } else {
+        document.getElementById('loginError').innerText = res.msg;
+        document.getElementById('btnLogin').innerText = "MASUK";
+      }
+    }
+
+    function updateDropdown(list) {
+      const select = document.getElementById('tokoSelect');
+      select.innerHTML = list.length ? list.map(t => `<option value="${t.nama}">${t.nama}</option>`).join('') : '<option value="">Jadwal Selesai!</option>';
+      document.getElementById('btnCheckin').disabled = !list.length;
+    }
+
+    async function initCamera() {
+      if (currentStream) currentStream.getTracks().forEach(track => track.stop());
+      const constraints = { video: { facingMode: useFrontCamera ? "user" : "environment" } };
+      try {
+        currentStream = await navigator.mediaDevices.getUserMedia(constraints);
+        document.getElementById('video').srcObject = currentStream;
+      } catch (err) {
+        alert("Gagal akses kamera.");
+      }
+    }
+
+    function switchCamera() {
+      useFrontCamera = !useFrontCamera;
+      initCamera();
+    }
+
+    function initGPS() {
+      navigator.geolocation.watchPosition(p => {
+        currentCoords = p.coords;
+        const box = document.getElementById('gpsBox');
+        box.innerText = "GPS: AKTIF";
+        box.style.backgroundColor = "rgba(22, 163, 74, 0.8)";
+      }, null, { enableHighAccuracy: true });
+    }
+
+    async function prosesCheckin() {
+      const btn = document.getElementById('btnCheckin');
+      const status = document.getElementById('statusMsg');
+      const video = document.getElementById('video');
+      const canvas = document.getElementById('canvas');
+      const nameToko = document.getElementById('tokoSelect').value;
+
+      if (!nameToko) return alert("Pilih toko terlebih dahulu!");
+
+      // Ambil Frame Foto
+      canvas.width = video.videoWidth; 
+      canvas.height = video.videoHeight;
+      const ctx = canvas.getContext('2d');
+      if (useFrontCamera) {
+        ctx.translate(canvas.width, 0);
+        ctx.scale(-1, 1);
+      }
+      ctx.drawImage(video, 0, 0);
+      
+      const fotoBase64 = canvas.toDataURL('image/jpeg', 0.5);
+
+      btn.disabled = true;
+      btn.classList.add('opacity-50');
+      status.innerHTML = '<span class="loading-spin"></span> Mengirim...';
+
+      const payload = {
+        action: "submit",
+        data: {
+          sales: userData.nama,
+          toko: nameToko,
+          foto: fotoBase64,
+          statusLoc: currentCoords ? `LAT: ${currentCoords.latitude}, LNG: ${currentCoords.longitude}` : "NO GPS"
+        }
+      };
+
+      const res = await callAPI(payload);
+      if(res.success) {
+        alert(res.msg);
+        // Refresh daftar toko
+        const refresh = await callAPI({ action: "login", id: userData.id });
+        if(refresh.success) {
+          updateDropdown(refresh.toko);
+        }
+        status.innerText = "Berhasil dikirim.";
+      } else {
+        alert("Gagal: " + res.msg);
+        status.innerText = "Gagal mengirim.";
+      }
+      btn.disabled = false;
+      btn.classList.remove('opacity-50');
+    }
+  </script>
+</body>
+</html>
