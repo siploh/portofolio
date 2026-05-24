@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unduh Aplikasi APK</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 30px;
+            color: #333;
+        }
+
+        .wrapper {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            width: 100%;
+            max-width: 900px;
+        }
+
+        .container {
+            background-color: white;
+            padding: 35px 25px;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .container:hover {
+            transform: translateY(-5px);
+        }
+
+        .app-icon {
+            width: 80px;
+            height: 80px;
+            background-color: #f0f2f5;
+            border-radius: 18px;
+            margin: 0 auto 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 40px;
+            box-shadow: inset 0 2px 5px rgba(0,0,0,0.05);
+        }
+
+        h1 {
+            font-size: 1.4rem;
+            margin-bottom: 10px;
+            color: #2d3436;
+        }
+
+        p {
+            font-size: 0.9rem;
+            color: #636e72;
+            margin-bottom: 25px;
+            line-height: 1.6;
+        }
+
+        .download-btn {
+            display: inline-block;
+            background: #6c5ce7;
+            color: white;
+            padding: 14px 22px;
+            text-decoration: none;
+            border-radius: 12px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(108, 92, 231, 0.3);
+        }
+
+        .download-btn:hover {
+            background: #a29bfe;
+            box-shadow: 0 6px 20px rgba(108, 92, 231, 0.4);
+            transform: scale(1.02);
+        }
+
+        .footer-text {
+            margin-top: 18px;
+            font-size: 0.75rem;
+            color: #b2bec3;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="wrapper">
+
+        <!-- W-POS -->
+        <div class="container">
+            <div class="app-icon">🛒</div>
+
+            <h1>Install W-POS</h1>
+
+            <p>
+                Download aplikasi W-POS versi terbaru untuk mendukung sistem kasir dan transaksi bisnis Anda.
+            </p>
+
+            <a href="https://drive.google.com/file/d/1G_su2H3d0K2LI_I6Ec4aBmHns7OoVkV5/view?usp=sharing" class="download-btn">
+                Download W-POS
+            </a>
+
+            <div class="footer-text">
+                Aman • APK Terverifikasi
+            </div>
+        </div>
+
+        <!-- RawBT -->
+        <div class="container">
+            <div class="app-icon">🖨️</div>
+
+            <h1>Install RawBT</h1>
+
+            <p>
+                Download aplikasi RawBT untuk kebutuhan print bluetooth dan thermal printer Anda.
+            </p>
+
+            <a href="https://drive.google.com/file/d/1MjWrxtR0xhGcprWuFAf0KP3-1yUDKhaX/view?usp=sharing" class="download-btn">
+                Download RawBT
+            </a>
+
+            <div class="footer-text">
+                Aman • APK Terverifikasi
+            </div>
+        </div>
+
+    </div>
+
+</body>
+</html>
