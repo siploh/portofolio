@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard TYCI</title>
+    <style>
+        :root {
+            --bg-body: #121212;
+            --card-bg: #1e1e1e;
+            --accent-red: #e60012;
+            --text-main: #ffffff;
+            --text-secondary: #b0b0b0;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: var(--bg-body);
+            color: var(--text-main);
+            min-height: 100vh;
+            padding-bottom: 90px;
+        }
+
+        /* HEADER */
+        .header { width: 90%; max-width: 500px; margin: 20px auto; display: flex; justify-content: space-between; align-items: center; }
+        .user-avatar { width: 40px; height: 40px; background: #333; border-radius: 50%; border: 2px solid var(--accent-red); }
+
+        /* HERO SLIDER */
+        .slider-container { width: 90%; max-width: 500px; height: 200px; margin: 0 auto 20px; border-radius: 15px; overflow: hidden; position: relative; background: #222; touch-action: pan-y; }
+        .slides { display: flex; height: 100%; transition: transform 0.5s ease-in-out; cursor: grab; }
+        .slide { min-width: 100%; height: 100%; }
+        .slide img { width: 100%; height: 100%; object-fit: cover; }
+        .dots { position: absolute; bottom: 10px; left: 50%; transform: translateX(-50%); display: flex; gap: 6px; }
+        .dot { width: 8px; height: 8px; border-radius: 50%; background: rgba(255,255,255,0.3); }
+        .dot.active { background: var(--accent-red); }
+
+        /* QUICK ACCESS GRID */
+        .section-title { width: 90%; max-width: 500px; margin: 15px auto 10px; font-weight: bold; font-size: 14px; }
+        .grid { width: 90%; max-width: 500px; margin: 0 auto 20px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+        .menu-item { background: var(--card-bg); border-radius: 12px; padding: 15px 5px; text-align: center; border: 1px solid #333; text-decoration: none; transition: 0.3s; }
+        .menu-item:hover { border-color: var(--accent-red); }
+        .menu-icon img { width: 30px; height: 30px; filter: invert(1); }
+        .menu-label { font-size: 10px; margin-top: 8px; color: var(--text-secondary); }
+
+        /* EVENT HIGHLIGHTS */
+        .event-card { width: 90%; max-width: 500px; margin: 0 auto; background: var(--card-bg); border-radius: 15px; padding: 15px; border-left: 5px solid var(--accent-red); }
+
+        /* BOTTOM NAV */
+        .bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; height: 70px; background: #000; display: flex; justify-content: space-around; align-items: center; border-top: 1px solid #333; }
+        .nav-item { display: flex; flex-direction: column; align-items: center; color: var(--text-secondary); text-decoration: none; font-size: 10px; }
+        .nav-item.active { color: var(--accent-red); }
+        .nav-item img { width: 24px; filter: invert(1); margin-bottom: 4px; }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <div>
+            <div style="font-size: 12px; color: var(--accent-red);">TOYOTA</div>
+            <div style="font-size: 18px; font-weight: 800;">YARIS CLUB INDONESIA</div>
+        </div>
+        <div class="user-avatar"></div>
+    </div>
+
+    <div class="section-title">HERO SLIDER</div>
+    <div class="slider-container" id="sliderContainer">
+        <div class="slides" id="slides">
+            <div class="slide"><img src="img/slide1.jpeg" alt="Slide 1"></div>
+            <div class="slide"><img src="img/slide2.jpeg" alt="Slide 2"></div>
+            <div class="slide"><img src="img/slide3.jpeg" alt="Slide 3"></div>
+        </div>
+        <div class="dots" id="dotsContainer">
+            <div class="dot active"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+        </div>
+    </div>
+
+    <div class="section-title">QUICK ACCESS</div>
+    <div class="grid">
+        <a href="#" class="menu-item">
+            <div class="menu-icon"><img src="https://img.icons8.com/ios-filled/50/000000/membership-card.png"></div>
+            <div class="menu-label">KTA</div>
+        </a>
+        <a href="Agenda.html" class="menu-item">
+            <div class="menu-icon"><img src="https://img.icons8.com/ios-filled/50/000000/calendar.png"></div>
+            <div class="menu-label">Events</div>
+        </a>
+        <a href="#" class="menu-item">
+            <div class="menu-icon"><img src="https://img.icons8.com/ios-filled/50/000000/chat.png"></div>
+            <div class="menu-label">Forum</div>
+        </a>
+        <a href="#" class="menu-item">
+            <div class="menu-icon"><img src="https://img.icons8.com/ios-filled/50/000000/phone.png"></div>
+            <div class="menu-label">SOS</div>
+        </a>
+    </div>
+
+    <div class="section-title">EVENT HIGHLIGHTS</div>
+    <div class="event-card">
+        <h4 style="color: var(--text-main);">KOPDAR CHAPTER JAKARTA</h4>
+        <p style="font-size: 12px; color: var(--text-secondary); margin-top:5px;">20 Oct | 10 AM | @Bintaro Xchange</p>
+    </div>
+
+    <div class="bottom-nav">
+        <a href="index.html" class="nav-item active"><img src="https://img.icons8.com/ios-filled/50/000000/home.png"><span>HOME</span></a>
+        <a href="Agenda.html" class="nav-item"><img src="https://img.icons8.com/ios-filled/50/000000/calendar.png"><span>EVENTS</span></a>
+        <a href="#" class="nav-item"><img src="https://img.icons8.com/ios-filled/50/000000/chat.png"><span>FORUM</span></a>
+        <a href="member.html" class="nav-item"><img src="https://img.icons8.com/ios-filled/50/000000/conference.png"><span>MEMBERS</span></a>
+    </div>
+
+    <script>
+        let currentIndex = 0;
+        const slides = document.getElementById('slides');
+        const dots = document.querySelectorAll('.dot');
+        const totalSlides = 3;
+        
+        let startX = 0;
+        let isDragging = false;
+
+        function updateSlider() {
+            slides.style.transition = 'transform 0.5s ease-in-out';
+            slides.style.transform = `translateX(-${currentIndex * 100}%)`;
+            dots.forEach((dot, index) => {
+                dot.classList.toggle('active', index === currentIndex);
+            });
+        }
+
+        // Event Touch (Mobile)
+        slides.addEventListener('touchstart', (e) => {
+            startX = e.touches[0].clientX;
+            isDragging = true;
+            slides.style.transition = 'none';
+        });
+
+        slides.addEventListener('touchmove', (e) => {
+            if (!isDragging) return;
+            let currentX = e.touches[0].clientX;
+            let diff = currentX - startX;
+            slides.style.transform = `translateX(calc(-${currentIndex * 100}% + ${diff}px))`;
+        });
+
+        slides.addEventListener('touchend', (e) => {
+            if (!isDragging) return;
+            isDragging = false;
+            let endX = e.changedTouches[0].clientX;
+            let diff = endX - startX;
+
+            if (diff > 50 && currentIndex > 0) currentIndex--;
+            else if (diff < -50 && currentIndex < totalSlides - 1) currentIndex++;
+            
+            updateSlider();
+        });
+
+        // Auto slide
+        setInterval(() => {
+            if (!isDragging) {
+                currentIndex = (currentIndex + 1) % totalSlides;
+                updateSlider();
+            }
+        }, 4000);
+    </script>
+</body>
+</html>
