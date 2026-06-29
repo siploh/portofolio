@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Kalender Agenda TYCI</title>
+    <style>
+        * { box-sizing: border-box; }
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            margin: 0;
+            padding: 20px 10px;
+            background: #0f172a;
+            background-image: radial-gradient(circle at top right, #1e293b, transparent), radial-gradient(circle at bottom left, #1e293b, transparent);
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        h1 {
+            font-size: 24px;
+            margin-bottom: 25px;
+            letter-spacing: -0.5px;
+            background: linear-gradient(to right, #f87171, #fb923c);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .calendar-container, .event-list {
+            width: 100%;
+            max-width: 450px;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+            margin-bottom: 20px;
+        }
+
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .header button {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: none;
+            width: 40px; height: 40px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .header button:hover { background: #e74c3c; }
+
+        #month-year { font-weight: 700; font-size: 1.2rem; }
+
+        table { width: 100%; border-collapse: collapse; }
+        th { color: #94a3b8; font-size: 11px; padding-bottom: 10px; text-transform: uppercase; }
+        td { height: 45px; text-align: center; cursor: pointer; transition: 0.2s; }
+        
+        .event-day {
+            width: 32px; height: 32px;
+            line-height: 32px;
+            border-radius: 50%;
+            margin: auto;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .event-list h3 { font-size: 15px; margin-bottom: 15px; border-left: 4px solid #e74c3c; padding-left: 10px; }
+        .event-item {
+            background: rgba(255, 255, 255, 0.07);
+            padding: 12px;
+            border-radius: 12px;
+            margin-bottom: 8px;
+            font-size: 13px;
+            border-left: 4px solid transparent;
+        }
+        .event-item.rapat { border-left-color: #f87171; }
+        .event-item.sosial { border-left-color: #60a5fa; }
+        .event-item.lainnya { border-left-color: #4ade80; }
+
+        .legend { display: flex; gap: 15px; margin-bottom: 20px; }
+        .legend-item { display: flex; align-items: center; font-size: 11px; color: #94a3b8; }
+        .legend-color { width: 8px; height: 8px; border-radius: 50%; margin-right: 5px; }
+    </style>
+</head>
+<body>
+
+<h1>Kalender Agenda TYCI</h1>
+
+<div class="legend">
+    <div class="legend-item"><div class="legend-color" style="background:#f87171;"></div> Rapat</div>
+    <div class="legend-item"><div class="legend-color" style="background:#60a5fa;"></div> Sosial</div>
+    <div class="legend-item"><div class="legend-color" style="background:#4ade80;"></div> Lainnya</div>
+</div>
+
+<div class="calendar-container">
+    <div class="header">
+        <button onclick="prevMonth()">◀</button>
+        <div id="month-year"></div>
+        <button onclick="nextMonth()">▶</button>
+    </div>
+    <table>
+        <thead>
+            <tr><th>Min</th><th>Sen</th><th>Sel</th><th>Rab</th><th>Kam</th><th>Jum</th><th>Sab</th></tr>
+        </thead>
+        <tbody id="calendar-body"></tbody>
+    </table>
+</div>
+
+<div class="event-list">
+    <h3>Detail: <span id="selected-date" style="color:#e74c3c;">Pilih Tanggal</span></h3>
+    <div id="event-details"></div>
+</div>
+
+<script>
+    // Logika JavaScript tetap sama agar fungsi kalender berjalan normal
+    const API_URL = "https://script.google.com/macros/s/AKfycby_1QsjKgdmkuZExZ1JkwZODlEtr4pAclOApw2RUukUaStCReaTawGXIx8B6-eGln2x/exec";
+    let eventData = {}, eventCategory = {}, current = new Date();
+
+    async function fetchEvents() {
+        try {
+            const res = await fetch(API_URL);
+            const data = await res.json();
+            data.forEach(ev => {
+                const dateKey = new Date(ev.date).toISOString().split('T')[0];
+                if (!eventData[dateKey]) { eventData[dateKey] = []; eventCategory[dateKey] = []; }
+                eventData[dateKey].push(ev.title);
+                eventCategory[dateKey].push(ev.category);
+            });
+            loadCalendar();
+        } catch (err) { console.error(err); }
+    }
+
+    function loadCalendar() {
+        const year = current.getFullYear(), month = current.getMonth();
+        document.getElementById("month-year").textContent = current.toLocaleString("id-ID", { month: "long", year: "numeric" });
+        const first = new Date(year, month, 1).getDay(), days = new Date(year, month + 1, 0).getDate();
+        const body = document.getElementById("calendar-body");
+        body.innerHTML = "";
+        let row = document.createElement("tr");
+        for (let i = 0; i < first; i++) row.appendChild(document.createElement("td"));
+        for (let d = 1; d <= days; d++) {
+            let dateStr = `${year}-${String(month+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+            let cell = document.createElement("td");
+            let dayDiv = document.createElement("div");
+            dayDiv.className = "event-day";
+            dayDiv.textContent = d;
+            if (eventData[dateStr]) dayDiv.style.background = "#e74c3c";
+            cell.appendChild(dayDiv);
+            cell.onclick = () => showEvents(dateStr);
+            row.appendChild(cell);
+            if ((first + d) % 7 === 0) { body.appendChild(row); row = document.createElement("tr"); }
+        }
+        body.appendChild(row);
+    }
+
+    function prevMonth() { current.setMonth(current.getMonth()-1); loadCalendar(); }
+    function nextMonth() { current.setMonth(current.getMonth()+1); loadCalendar(); }
+
+    function showEvents(dateStr) {
+        document.getElementById("selected-date").textContent = new Date(dateStr).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
+        const box = document.getElementById("event-details");
+        box.innerHTML = eventData[dateStr] ? eventData[dateStr].map((ev, i) => `<div class="event-item ${eventCategory[dateStr][i]}">${ev}</div>`).join('') : "<i style='color:#666'>Tidak ada jadwal.</i>";
+    }
+
+    fetchEvents();
+</script>
+</body>
+</html>

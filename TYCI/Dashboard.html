@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<title>Dashboard TYCI</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<style>
+:root{
+  --red:#ef4444;       /* Warna ikon merah */
+  --red-dark:#991b1b;  /* Warna gradasi ikon */
+  --dark-bg:#0f172a;   /* Warna latar belakang utama */
+  --card-bg:rgba(30, 41, 59, 0.7); /* Warna kartu semi transparan */
+  --text-main:#f8fafc;
+}
+
+*{box-sizing:border-box}
+
+body{
+  margin:0;
+  font-family:'Poppins',sans-serif;
+  /* Latar belakang gradasi hitam gelap */
+  background: radial-gradient(circle at top left, #1e293b, #020617);
+  min-height:100vh;
+  color: var(--text-main);
+}
+
+/* ===== DASHBOARD ===== */
+.dashboard{
+  max-width:1250px;
+  margin:50px auto;
+  padding:25px;
+}
+
+.dashboard h1{
+  font-size:34px;
+  font-weight:700;
+  color: #fff;
+}
+
+.subtitle{
+  color:#94a3b8;
+  margin-bottom:40px;
+}
+
+/* ===== GRID ===== */
+.menu-grid{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:26px;
+}
+
+.menu-link{
+  text-decoration:none;
+}
+
+/* ===== CARD ===== */
+.menu-box{
+  position:relative;
+  background: var(--card-bg);
+  backdrop-filter:blur(14px);
+  border-radius:22px;
+  padding:34px 24px;
+  text-align:center;
+  border: 1px solid rgba(255,255,255,0.1);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+  transition:.45s cubic-bezier(.4,0,.2,1);
+  overflow:hidden;
+}
+
+/* Neon glow merah */
+.menu-box::after{
+  content:"";
+  position:absolute;
+  inset:-2px;
+  background:linear-gradient(135deg,transparent,rgba(239,68,68,.3),transparent);
+  opacity:0;
+  transition:.45s;
+}
+
+.menu-box:hover::after{
+  opacity:1;
+}
+
+/* Hover motion */
+.menu-box:hover{
+  transform:translateY(-12px) scale(1.04);
+  box-shadow: 0 20px 40px rgba(239,68,68,0.2);
+  border-color: var(--red);
+}
+
+/* ICON - Sekarang Merah */
+.menu-box i{
+  font-size:42px;
+  margin-bottom:16px;
+  background:linear-gradient(135deg,var(--red),var(--red-dark));
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  animation:float 4s ease-in-out infinite;
+}
+
+@keyframes float{
+  0%,100%{transform:translateY(0)}
+  50%{transform:translateY(-6px)}
+}
+
+/* TITLE */
+.menu-box h3{
+  margin:0;
+  font-size:19px;
+  font-weight:600;
+  color: #fff;
+}
+
+/* DESC */
+.menu-box p{
+  margin-top:6px;
+  font-size:13px;
+  color:#94a3b8;
+}
+
+/* ===== RESPONSIVE ===== */
+@media(max-width:1100px){ .menu-grid{grid-template-columns:repeat(3,1fr)} }
+@media(max-width:768px){ .menu-grid{grid-template-columns:repeat(2,1fr)} }
+@media(max-width:420px){ .menu-grid{grid-template-columns:1fr} }
+</style>
+</head>
+
+<body>
+
+<div class="dashboard">
+  <h1>Dashboard TYCI</h1>
+  <div class="subtitle">Dashboard Sistem & Aplikasi Pengnas TYCI</div>
+
+  <div class="menu-grid">
+    <a href="Surat.html" class="menu-link">
+      <div class="menu-box">
+        <i class="fas fa-envelope-open-text"></i>
+        <h3>Management Surat</h3>
+        <p>Database Surat</p>
+      </div>
+    </a>
+
+    <a href="member.html" class="menu-link" target="_blank">
+      <div class="menu-box">
+        <i class="fas fa-users"></i>
+        <h3>Member</h3>
+        <p>Data Member</p>
+      </div>
+    </a>
+
+    <a href="Agenda.html" class="menu-link">
+      <div class="menu-box">
+        <i class="fas fa-calendar-alt"></i>
+        <h3>Kalender Kegiatan</h3>
+        <p>Riwayat dan kegiatan TYCI</p>
+      </div>
+    </a>
+
+    <a href="#" class="menu-link">
+      <div class="menu-box">
+        <i class="fas fa-wallet"></i>
+        <h3>Kas Pengnas</h3>
+        <p>Coming Soon</p>
+      </div>
+    </a>
+
+    <a href="#" class="menu-link"><div class="menu-box"><i class="fas fa-tools"></i><h3>Coming Soon</h3><p>Coming Soon</p></div></a>
+    <a href="#" class="menu-link"><div class="menu-box"><i class="fas fa-tools"></i><h3>Coming Soon</h3><p>Coming Soon</p></div></a>
+    <a href="#" class="menu-link"><div class="menu-box"><i class="fas fa-tools"></i><h3>Coming Soon</h3><p>Coming Soon</p></div></a>
+    <a href="#" class="menu-link"><div class="menu-box"><i class="fas fa-tools"></i><h3>Coming Soon</h3><p>Coming Soon</p></div></a>
+  </div>
+</div>
+
+</body>
+</html>

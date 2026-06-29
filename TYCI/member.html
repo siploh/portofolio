@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>Data Member TYCI</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary: #800000;
+            --secondary: #2c3e50;
+            --bg: #f4f7f6;
+            --card-shadow: 0 10px 20px rgba(0,0,0,0.05);
+        }
+
+        body { 
+            background-color: var(--bg); 
+            font-family: 'Inter', sans-serif; 
+            color: #333;
+        }
+
+        .navbar-brand { font-weight: 800; color: var(--primary) !important; letter-spacing: -1px; }
+
+        .dashboard-container { max-width: 1200px; margin: auto; padding: 20px; }
+
+        /* Stats Cards */
+        .stat-card {
+            background: #fff;
+            border-radius: 20px;
+            padding: 25px;
+            border: none;
+            box-shadow: var(--card-shadow);
+            display: flex;
+            align-items: center;
+        }
+        .stat-icon {
+            background: rgba(128,0,0,0.1);
+            color: var(--primary);
+            width: 50px; height: 50px;
+            display: flex; align-items: center; justify-content: center;
+            border-radius: 12px; font-size: 1.5rem; margin-right: 15px;
+        }
+
+        /* Search & Filter */
+        .search-box {
+            border: none;
+            padding: 15px 25px;
+            border-radius: 50px;
+            box-shadow: var(--card-shadow);
+            outline: none;
+        }
+
+        /* Modern Table */
+        .table-card {
+            background: #fff;
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: var(--card-shadow);
+        }
+        .table thead { background: #f8f9fa; }
+        .table thead th { color: #888; font-size: 0.85rem; text-transform: uppercase; padding: 15px; border: none; }
+        .table tbody td { padding: 18px; font-weight: 500; border-bottom: 1px solid #eee; }
+        
+        .badge-chapter {
+            background: #f0f0f0; color: var(--secondary);
+            padding: 6px 12px; border-radius: 8px; font-size: 0.8rem;
+        }
+
+        .btn-nav {
+            background: var(--primary);
+            color: white;
+            padding: 10px 25px;
+            border-radius: 10px;
+            border: none;
+            transition: 0.3s;
+        }
+        .btn-nav:hover { background: #5a0000; color: white; }
+    </style>
+</head>
+<body>
+
+<nav class="navbar navbar-light bg-white shadow-sm mb-4">
+    <div class="container dashboard-container">
+        <a class="navbar-brand" href="#"><i class="fas fa-car"></i> USER TYCI</a>
+    </div>
+</nav>
+
+<div class="dashboard-container">
+    <!-- Statistics -->
+    <div class="row g-4 mb-4">
+        <div class="col-md-6">
+            <div class="stat-card">
+                <div class="stat-icon"><i class="fas fa-users"></i></div>
+                <div>
+                    <h5 class="text-muted mb-0">Total Member</h5>
+                    <h3 id="totalMember" class="fw-bold mb-0">0</h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="stat-card">
+                <div class="stat-icon" style="background: rgba(44, 62, 80, 0.1); color: var(--secondary);"><i class="fas fa-map-marked-alt"></i></div>
+                <div>
+                    <h5 class="text-muted mb-0">Total Chapter Aktif</h5>
+                    <h3 id="totalChapter" class="fw-bold mb-0">0</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Controls -->
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <select id="chapterFilter" class="form-select search-box" onchange="updateDashboard()">
+                <option value="All">Semua Chapter</option>
+            </select>
+        </div>
+        <div class="col-md-9">
+            <input type="text" id="search" class="form-control search-box" placeholder="🔍 Cari nama, NRA, atau informasi lainnya..." onkeyup="applySearch()">
+        </div>
+    </div>
+
+    <!-- Table -->
+    <div class="table-card">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle">
+                <thead>
+                    <tr>
+                        <th>NAMA</th>
+                        <th>CHAPTER</th>
+                        <th>NRA</th>
+                        <th>ALAMAT</th>
+                        <th>HP</th>
+                    </tr>
+                </thead>
+                <tbody id="table-body"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Pagination -->
+    <div class="d-flex justify-content-between mt-4">
+        <button class="btn btn-nav" onclick="prevPage()"><i class="fas fa-arrow-left me-2"></i> Prev</button>
+        <button class="btn btn-nav" onclick="nextPage()">Next <i class="fas fa-arrow-right ms-2"></i></button>
+    </div>
+</div>
+
+<script>
+    const URL = "https://opensheet.elk.sh/1z4jVawKZlL57kC_BOIW8UN__ZC4SmcRA9tuVcgfvois/Members";
+    let originalData = [], filteredData = [], currentPage = 1, rowsPerPage = 10, searchKeyword = "";
+
+    fetch(URL).then(res => res.json()).then(data => {
+        originalData = data; 
+        filteredData = data;
+        populateChapterFilter(); 
+        updateDashboard();
+    });
+
+    function populateChapterFilter() {
+        const chapterSet = new Set(originalData.map(r => r.Chapter).filter(c => c));
+        const chapterFilter = document.getElementById("chapterFilter");
+        chapterSet.forEach(ch => {
+            let option = document.createElement("option");
+            option.value = ch; option.text = ch;
+            chapterFilter.add(option);
+        });
+    }
+
+    function renderTable() {
+        const tableBody = document.getElementById("table-body");
+        tableBody.innerHTML = "";
+        let start = (currentPage - 1) * rowsPerPage;
+        let pageData = filteredData.slice(start, start + rowsPerPage);
+        pageData.forEach(row => {
+            tableBody.innerHTML += `
+                <tr>
+                    <td class="fw-bold text-dark">${row.Nama || "-"}</td>
+                    <td><span class="badge badge-chapter">${row.Chapter || "-"}</span></td>
+                    <td>${row.NRA || "-"}</td>
+                    <td>${row.Alamat || "-"}</td>
+                    <td>${row.hp || "-"}</td>
+                </tr>
+            `;
+        });
+    }
+
+    function updateDashboard() {
+        const selectedChapter = document.getElementById("chapterFilter").value;
+        let dataToCount = originalData.filter(r => selectedChapter === "All" || r.Chapter === selectedChapter);
+        
+        if (searchKeyword) {
+            dataToCount = dataToCount.filter(r => Object.values(r).some(val => String(val).toLowerCase().includes(searchKeyword)));
+        }
+        
+        filteredData = dataToCount;
+        
+        // Update Stats
+        animateCount("totalMember", dataToCount.length);
+        const uniqueChapters = new Set(dataToCount.map(r => r.Chapter).filter(c => c));
+        animateCount("totalChapter", uniqueChapters.size);
+        
+        currentPage = 1;
+        renderTable();
+    }
+
+    function applySearch() {
+        searchKeyword = document.getElementById("search").value.toLowerCase();
+        updateDashboard();
+    }
+
+    function nextPage() { if (currentPage * rowsPerPage < filteredData.length) { currentPage++; renderTable(); } }
+    function prevPage() { if (currentPage > 1) { currentPage--; renderTable(); } }
+
+    function animateCount(id, endValue) {
+        const el = document.getElementById(id);
+        let startValue = 0;
+        const duration = 800;
+        const startTime = performance.now();
+        function update(currentTime) {
+            const elapsed = currentTime - startTime;
+            const progress = Math.min(elapsed / duration, 1);
+            el.innerText = Math.floor(startValue + (endValue - startValue) * progress);
+            if (progress < 1) requestAnimationFrame(update);
+        }
+        requestAnimationFrame(update);
+    }
+</script>
+</body>
+</html>
