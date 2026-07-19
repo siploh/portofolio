@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<title>Unibis Langsa</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- Font & Icon -->
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<style>
+:root {
+  --red: #dc2626;
+  --red-dark: #991b1b;
+  --white: #ffffff;
+  --dark: #1e293b;
+}
+
+*{box-sizing:border-box}
+
+body{
+  margin:0;
+  font-family:'Poppins',sans-serif;
+  background: linear-gradient(135deg, #fef2f2, #ffffff);
+  min-height:100vh;
+}
+
+/* ===== DASHBOARD ===== */
+.dashboard{
+  max-width:1250px;
+  margin:50px auto;
+  padding:25px;
+}
+
+.dashboard h1{
+  font-size:34px;
+  font-weight:700;
+  color:var(--red);
+}
+
+.subtitle{
+  color:#64748b;
+  margin-bottom:40px;
+}
+
+/* ===== GRID ===== */
+.menu-grid{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:26px;
+}
+
+.menu-link{
+  text-decoration:none;
+}
+
+/* ===== CARD ===== */
+.menu-box{
+  position:relative;
+  background:rgba(255,255,255,0.9);
+  border: 1px solid #fee2e2;
+  border-radius:22px;
+  padding:34px 24px;
+  text-align:center;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+  transition:.45s cubic-bezier(.4,0,.2,1);
+  overflow:hidden;
+}
+
+/* Hover motion */
+.menu-box:hover{
+  transform:translateY(-12px);
+  box-shadow: 0 20px 40px rgba(220, 38, 38, 0.2);
+  border-color: var(--red);
+}
+
+/* ICON */
+.menu-box i{
+  font-size:42px;
+  margin-bottom:16px;
+  color: var(--red);
+  animation:float 4s ease-in-out infinite;
+}
+
+@keyframes float{
+  0%,100%{transform:translateY(0)}
+  50%{transform:translateY(-6px)}
+}
+
+/* TITLE */
+.menu-box h3{
+  margin:0;
+  font-size:19px;
+  font-weight:600;
+  color:var(--dark);
+}
+
+/* DESC */
+.menu-box p{
+  margin-top:6px;
+  font-size:13px;
+  color:#64748b;
+}
+
+/* ===== RESPONSIVE ===== */
+@media(max-width:1100px){ .menu-grid{grid-template-columns:repeat(3,1fr)} }
+@media(max-width:768px){ .menu-grid{grid-template-columns:repeat(2,1fr)} }
+@media(max-width:420px){ .menu-grid{grid-template-columns:1fr} }
+</style>
+</head>
+
+<body>
+
+<div class="dashboard">
+  <h1>UNIBIS Langsa</h1>
+  <div class="subtitle">Dashboard Sistem & Aplikasi Perusahaan</div>
+
+  <div class="menu-grid">
+
+    <!-- Katalog -->
+    <a href="katalog.html" class="menu-link">
+      <div class="menu-box">
+        <i class="fas fa-book-open"></i>
+        <h3>Katalog</h3>
+        <p>Daftar Katalog Unibis</p>
+      </div>
+    </a>
+
+    <!-- Toko -->
+    <a href="toko.html" class="menu-link"> 
+      <div class="menu-box">
+        <i class="fas fa-store"></i>
+        <h3>Toko</h3>
+        <p>Daftar Toko</p>
+      </div>
+    </a>
+
+    <!-- Dashboard KPI -->
+    <a href="#" class="menu-link">
+      <div class="menu-box">
+        <i class="fas fa-chart-pie"></i>
+        <h3>Dashboard KPI</h3>
+        <p>Pelaporan Pajak</p>
+      </div>
+    </a>
+
+    <!-- Tambah Toko -->
+    <a href="tambahtoko.html" class="menu-link">
+      <div class="menu-box">
+        <i class="fas fa-plus-circle"></i>
+        <h3>Tambah Toko</h3>
+        <p>Tambah/Ubah Daftar Toko</p>
+      </div>
+    </a>
+
+    <!-- Field Action -->
+    <a href="dash.kunjungan.html" class="menu-link">
+      <div class="menu-box">
+        <i class="fas fa-route"></i>
+        <h3>Field Action</h3>
+        <p>Dashboard Field Action</p>
+      </div>
+    </a>
+
+    <!-- Program -->
+    <a href="#" class="menu-link">
+      <div class="menu-box">
+        <i class="fas fa-bullhorn"></i>
+        <h3>Program</h3>
+        <p>Daftar Program Berjalan</p>
+      </div>
+    </a>
+
+    <!-- Surat -->
+    <a href="surat.html" class="menu-link">
+      <div class="menu-box">
+        <i class="fas fa-file-contract"></i>
+        <h3>Surat</h3>
+        <p>Daftar Surat dan Aturan</p>
+      </div>
+    </a>
+
+    <!-- Kunjungan Sales -->
+    <a href="kunjungan.html" class="menu-link">
+      <div class="menu-box">
+        <i class="fas fa-map-marked-alt"></i> <!-- Mengganti ikon menjadi fa-map-marked-alt -->
+        <h3>Kunjungan Sales</h3>
+        <p>Check In Toko</p>
+      </div>
+    </a>
+
+  </div>
+</div>
+
+</body>
+</html>

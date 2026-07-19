@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Katalog Arta Boga - Koreksi Harga</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background-color: #f4f4f4;
+            padding: 10px;
+            width: 100vw;
+            overflow-x: hidden;
+        }
+
+        .header {
+            width: 100%;
+            background: white;
+            padding: 12px;
+            text-align: center;
+            border-radius: 5px;
+            margin-bottom: 12px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            border: 1px solid #ddd;
+        }
+
+        .header h1 {
+            font-size: 1.6em;
+            color: #333;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .catalog-container {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr); 
+            gap: 6px;
+            width: 100%;
+        }
+
+        .card {
+            background: #fff;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .image-container {
+            width: 100%;
+            height: 120px; 
+            background: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 5px;
+        }
+
+        .image-container img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+
+        .details {
+            padding: 8px 4px;
+            text-align: center;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .category {
+            font-size: 8px;
+            font-weight: bold;
+            color: #2980b9;
+            text-transform: uppercase;
+            margin-bottom: 3px;
+        }
+
+        .product-name {
+            font-size: 9px;
+            font-weight: bold;
+            color: #333;
+            min-height: 28px;
+            line-height: 1.1;
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .qty-info {
+            font-size: 16px; 
+            color: #ffffff;
+            font-weight: 900;
+            background: #27ae60;
+            padding: 3px 8px;
+            border-radius: 4px;
+            margin: 2px auto 6px;
+            display: inline-block;
+        }
+
+        .price {
+            font-size: 13px;
+            font-weight: 900;
+            color: #e74c3c;
+            margin-top: auto;
+            padding-top: 6px;
+            border-top: 1px dashed #eee;
+            white-space: nowrap;
+        }
+
+        footer {
+            text-align: center;
+            padding: 15px;
+            color: #bdc3c7;
+            font-size: 9px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <h1>KATALOG OT</h1>
+</div>
+
+<div class="catalog-container">
+    
+    <div class="card">
+        <div class="image-container"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTjHlXKt3yo9EJs3UuGUqSLUgrw8iDs1UqAtw&s"></div>
+        <div class="details">
+            <span class="category">ARTA BOGA</span>
+            <div class="product-name">ABC ALK LR-03 8B NEW</div>
+            <div class="qty-info">36 Hgr</div>
+            <div class="price">Rp 1.578.420</div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="image-container"><img src="https://www.static-src.com/wcsstore/Indraprastha/images/catalog/medium//102/MTA-51856094/alkaline_baterai_abc_alkaline_aaa_lr03_1_set_isi_2_pcs_full01_tjq2pzzq.jpg"></div>
+        <div class="details">
+            <span class="category">ARTA BOGA</span>
+            <div class="product-name">ABC ALK LR-03-2B</div>
+            <div class="qty-info">24 Lsn</div>
+            <div class="price">Rp 2.237.760</div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="image-container"><img src="https://www.static-src.com/wcsstore/Indraprastha/images/catalog/full//101/MTA-24627791/abc_abc_alkaline_lr-06-2b_mp_baterai_-1_pack_isi_2_pcs-_full01_sraf6b2f.jpg"></div>
+        <div class="details">
+            <span class="category">ARTA BOGA</span>
+            <div class="product-name">ABC ALK LR-06 2B</div>
+            <div class="qty-info">24 Lsn</div>
+            <div class="price">Rp 2.237.760</div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="image-container"><img src="https://www.static-src.com/wcsstore/Indraprastha/images/catalog/full/catalog-image/90/MTA-163044060/abc_abc-alk-lr6-8b_full01-ef925a6a.jpg"></div>
+        <div class="details">
+            <span class="category">ARTA BOGA</span>
+            <div class="product-name">ABC ALK LR-06 8B NEW</div>
+            <div class="qty-info">36 Hgr</div>
+            <div class="price">Rp 1.578.420</div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="image-container"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSwWMbwQQdGBRcGtBNqw0aqyeWXpKE-DOgyOw&s"></div>
+        <div class="details">
+            <span class="category">ARTA BOGA</span>
+            <div class="product-name">ABC ALK LR03 4B+2B</div>
+            <div class="qty-info">72 Hgr</div>
+            <div class="price">Rp 2.349.648</div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="image-container"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR7oUwVYHWS3bO7LT_qYdPyz0xNTB8MfNOvVQ&s"></div>
+        <div class="details">
+            <span class="category">ARTA BOGA</span>
+            <div class="product-name">ABC ALK LR06 4B+2B</div>
+            <div class="qty-info">72 Hgr</div>
+            <div class="price">Rp 2.349.648</div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="image-container"><img src="https://www.static-src.com/wcsstore/Indraprastha/images/catalog/full/abc_abc-super-power-9-volt-new-baterai--5-pcs-_full02.jpg"></div>
+        <div class="details">
+            <span class="category">ARTA BOGA</span>
+            <div class="product-name">ABC SPW 9 VOLT NEW</div>
+            <div class="qty-info">12 Lsn</div>
+            <div class="price">Rp 1.614.357</div> </div>
+    </div>
+
+    <div class="card">
+        <div class="image-container"><img src="https://down-id.img.susercontent.com/file/id-11134201-23020-j404lxamzwnv61"></div>
+        <div class="details">
+            <span class="category">ARTA BOGA</span>
+            <div class="product-name">SPW R03 RCG 2X6B</div>
+            <div class="qty-info">48 Rcg</div>
+            <div class="price">Rp 1.412.186</div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="image-container"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQhTU88JzOAFyn1U_fduTQGbIjt9TPgz3RdDw&s"></div>
+        <div class="details">
+            <span class="category">ARTA BOGA</span>
+            <div class="product-name">KRATINGDENG REGULER</div>
+            <div class="qty-info">50 Pcs</div>
+            <div class="price">Rp 255.300</div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="image-container"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRKWWCDhJGreWAoDSyMg7ILxKDNE5-Ag3zXog&s"></div>
+        <div class="details">
+            <span class="category">ARTA BOGA</span>
+            <div class="product-name">REDBULL GOLD</div>
+            <div class="qty-info">24 Pcs</div>
+            <div class="price">Rp 158.400</div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="image-container"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT97ezNwYyHAR3qTBZGKc9dAS98RtAeP1b16w&s"></div>
+        <div class="details">
+            <span class="category">ARTA BOGA</span>
+            <div class="product-name">YOU.C1000 APPLE</div>
+            <div class="qty-info">30 Pcs</div>
+            <div class="price">Rp 175.000</div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="image-container"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ8ApoxqcFifc8UAIwpMkch30zmjRVRS_khxg&s"></div>
+        <div class="details">
+            <span class="category">ARTA BOGA</span>
+            <div class="product-name">YOU.C1000 LEMON</div>
+            <div class="qty-info">30 Pcs</div>
+            <div class="price">Rp 175.000</div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="image-container"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSqaeUF6En5DwulgWxx5reeyHYknZ4w8eKbbg&s"></div>
+        <div class="details">
+            <span class="category">ARTA BOGA</span>
+            <div class="product-name">YOU.C1000 MANGO</div>
+            <div class="qty-info">30 Pcs</div>
+            <div class="price">Rp 175.000</div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="image-container"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTuSosqlFqCIuDfBTu-sa6LqY6bSEpozgoo9Q&s"></div>
+        <div class="details">
+            <span class="category">ARTA BOGA</span>
+            <div class="product-name">YOU.C1000 ORANGE</div>
+            <div class="qty-info">30 Pcs</div>
+            <div class="price">Rp 175.000</div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="image-container"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRCj9Gn5rlVgJCOhQuaphtAb7cKMW5QKst34A&s"></div>
+        <div class="details">
+            <span class="category">ARTA BOGA</span>
+            <div class="product-name">YOU C-1000 LEMON WATER</div>
+            <div class="qty-info">24 Pcs</div>
+            <div class="price">Rp 165.000</div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="image-container"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT7bRC3rcDFT3mTt5QlqI1u-3ZZj9LhJQwXYA&s"></div>
+        <div class="details">
+            <span class="category">ARTA BOGA</span>
+            <div class="product-name">YOU C-1000 ORANGE WATER</div>
+            <div class="qty-info">24 Pcs</div>
+            <div class="price">Rp 165.000</div>
+        </div>
+    </div>
+
+</div>
+
+<footer>
+    © 2026 Katalog Arta Boga - Koreksi Harga 7 Kolom
+</footer>
+
+</body>
+</html>
