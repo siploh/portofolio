@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard Kasir</title>
+  <base target="_top">
+  <!-- Font Modern: Plus Jakarta Sans -->
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <style>
+    :root {
+      --bg: #fdfdfd;
+      --card-bg: rgba(255, 255, 255, 0.8);
+      --text-main: #0f172a;
+      --text-muted: #64748b;
+      --primary: #4f46e5;
+      --danger: #ef4444;
+      --border: rgba(0, 0, 0, 0.05);
+      --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+      --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+
+    body {
+      background-color: var(--bg);
+      background-image: 
+        radial-gradient(at 0% 0%, hsla(253,16%,95%,1) 0, transparent 50%), 
+        radial-gradient(at 100% 0%, hsla(225,39%,95%,1) 0, transparent 50%);
+      color: var(--text-main);
+      min-height: 100vh;
+      padding-bottom: 50px;
+    }
+
+    /* --- Navigation --- */
+    nav {
+      background: rgba(255, 255, 255, 0.7);
+      backdrop-filter: blur(15px);
+      -webkit-backdrop-filter: blur(15px);
+      padding: 12px 5%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .brand { display: flex; align-items: center; gap: 12px; }
+    .brand-logo { 
+      background: linear-gradient(135deg, #4f46e5, #818cf8);
+      color: white; 
+      width: 40px; height: 40px;
+      display: flex; align-items: center; justify-content: center;
+      border-radius: 12px; font-size: 20px;
+      box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
+    }
+    .brand span { font-weight: 800; font-size: 20px; letter-spacing: -0.5px; }
+
+    .btn-logout {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 16px;
+      background: #fee2e2;
+      color: var(--danger);
+      text-decoration: none;
+      border-radius: 12px;
+      font-weight: 700;
+      font-size: 13px;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      border: 1px solid rgba(239, 68, 68, 0.1);
+    }
+
+    .btn-logout:hover {
+      background: var(--danger);
+      color: white;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(239, 68, 68, 0.2);
+    }
+
+    .container { max-width: 1200px; margin: 40px auto; padding: 0 24px; }
+
+    /* --- Stats --- */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 24px;
+      margin-bottom: 48px;
+    }
+    .stat-card {
+      background: var(--card-bg);
+      padding: 24px;
+      border-radius: 24px;
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      transition: all 0.3s ease;
+    }
+    .stat-icon-wrap {
+      width: 56px; height: 56px;
+      border-radius: 16px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 24px;
+    }
+    .stat-info p { color: var(--text-muted); font-size: 14px; font-weight: 600; margin-bottom: 4px; }
+    .stat-info h2 { font-size: 22px; font-weight: 800; }
+
+    /* --- Sections --- */
+    .section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 24px;
+      margin-top: 40px;
+    }
+    .section-title {
+      font-size: 14px;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: var(--text-muted);
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .section-title::after {
+      content: '';
+      width: 40px; height: 2px;
+      background: var(--primary);
+      display: inline-block;
+      opacity: 0.3;
+    }
+
+    /* --- Menu Grid --- */
+    .menu-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 20px;
+    }
+    
+    .menu-card {
+      padding: 28px;
+      border-radius: 28px;
+      text-decoration: none;
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      border: 1px solid rgba(255,255,255,0.2);
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      min-height: 180px;
+      box-shadow: var(--shadow-sm);
+      cursor: pointer;
+    }
+
+    .menu-card:hover {
+      transform: scale(1.03);
+      box-shadow: 0 20px 30px -10px rgba(0,0,0,0.15);
+    }
+
+    .menu-card i { font-size: 32px; margin-bottom: 20px; transition: 0.3s; color: #fff; }
+    .menu-card h3 { font-size: 18px; font-weight: 700; margin-bottom: 8px; color: #fff; }
+    .menu-card span { font-size: 13px; color: rgba(255, 255, 255, 0.85); font-weight: 500; }
+
+    /* Gradasi Warna */
+    .grad-amber  { background: linear-gradient(135deg, #f59e0b, #d97706); }
+    .grad-green  { background: linear-gradient(135deg, #10b981, #059669); }
+    .grad-blue   { background: linear-gradient(135deg, #3b82f6, #1d4ed8); }
+    .grad-indigo { background: linear-gradient(135deg, #6366f1, #4338ca); }
+
+    .quick-action-box {
+      background: linear-gradient(135deg, #4f46e5, #6366f1);
+      padding: 40px;
+      border-radius: 32px;
+      color: white;
+      text-align: center;
+      margin-bottom: 40px;
+      box-shadow: 0 15px 35px -10px rgba(79, 70, 229, 0.4);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn-white {
+      background: white;
+      color: var(--primary);
+      padding: 16px 32px;
+      border-radius: 16px;
+      font-weight: 700;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+      transition: all 0.3s;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+
+    @media (max-width: 768px) {
+      .menu-grid { grid-template-columns: 1fr 1fr; gap: 12px; }
+      .menu-card { padding: 20px; min-height: 150px; border-radius: 20px; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <div class="brand">
+    <div class="brand-logo"><i class="fa-solid fa-bolt"></i></div>
+    <span>W-POS</span>
+  </div>
+  <a href="index.html" class="btn-logout">
+    <i class="fa-solid fa-right-from-bracket"></i>
+    <span>Log Out</span>
+  </a>
+</nav>
+
+<div class="container">
+  
+  <!-- Stats Info -->
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-icon-wrap" style="background: #eef2ff; color: #4f46e5;"><i class="fa-solid fa-crown"></i></div>
+      <div class="stat-info">
+        <p>Lisensi Pro</p>
+        <h2>11 Mei 2026</h2>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon-wrap" style="background: #f0fdf4; color: #10b981;"><i class="fa-solid fa-shop"></i></div>
+      <div class="stat-info">
+        <p>Bawah Tangga Production</p>
+        <h2 id="statOmset">Info@bawahtangga.web.id</h2>
+      </div>
+    </div>
+  </div>
+
+  <!-- Hero Quick Action -->
+  <div class="quick-action-box">
+    <h2 style="font-size: 24px; margin-bottom: 10px; font-weight: 800;">Siap Berjualan?</h2>
+    <p style="opacity: 0.8; margin-bottom: 24px; font-weight: 500;">Kelola transaksi lebih cepat dengan sistem kasir otomatis kami.</p>
+    <button onclick="navigate('Kasir')" class="btn-white">
+      <i class="fa-solid fa-plus-circle" style="margin-right: 8px;"></i> Transaksi Baru
+    </button>
+  </div>
+
+  <!-- Operational Section -->
+  <div class="section-header">
+    <div class="section-title">Operasional Utama</div>
+  </div>
+
+  <div class="menu-grid">
+    <div onclick="navigate('absensi')" class="menu-card grad-amber">
+      <i class="fa-solid fa-user-clock"></i>
+      <div>
+        <h3>Absensi</h3>
+        <span>Presensi masuk & pulang</span>
+      </div>
+    </div>
+    
+    <div onclick="navigate('Kasir')" class="menu-card grad-green">
+      <i class="fa-solid fa-cash-register"></i>
+      <div>
+        <h3>Kasir / POS</h3>
+        <span>Mulai jualan sekarang</span>
+      </div>
+    </div>
+
+    <div onclick="navigate('Produk')" class="menu-card grad-blue">
+      <i class="fa-solid fa-boxes-stacked"></i>
+      <div>
+        <h3>Katalog Produk</h3>
+        <span>Kelola stok & harga</span>
+      </div>
+    </div>
+
+    <div onclick="navigate('Reprint')" class="menu-card grad-indigo">
+      <i class="fa-solid fa-print"></i>
+      <div>
+        <h3>Reprint</h3>
+        <span>Cetak ulang struk Transaksi</span>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  let scriptUrl = "";
+
+  window.onload = () => {
+    if (typeof google !== 'undefined') {
+      google.script.run.withSuccessHandler(url => { 
+        scriptUrl = url; 
+      }).getScriptUrl();
+
+      google.script.run.withSuccessHandler(data => {
+        if (data && data.omsetHariIni) {
+          document.getElementById('statOmset').innerText = 'Rp ' + (data.omsetHariIni).toLocaleString('id-ID');
+        }
+      }).getDashboardStats();
+    }
+  };
+
+  function navigate(pageName) {
+    if (typeof google !== 'undefined') {
+      google.script.run.withSuccessHandler(url => {
+          window.open(url + '?p=' + pageName, '_top');
+      }).getScriptUrl();
+    } else {
+      window.location.href = pageName + ".html";
+    }
+  }
+</script>
+
+</body>
+</html>
