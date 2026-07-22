@@ -145,31 +145,22 @@
         </div>
 
         <div class="grid top-menu">
-            <!-- YBCI Link -->
             <a href="https://ybci.org" target="_blank" class="menu-item">
                <div class="menu-icon"><img src="https://img.icons8.com/fluency/48/group.png"></div>
                 <div class="menu-label">YBCI</div>
             </a>
-
-            <!-- CV ISA Link -->
             <a href="https://bawahtangga.web.id/ISA/menu" target="_blank" class="menu-item">
                 <div class="menu-icon"><img src="https://img.icons8.com/fluency/48/group.png"></div>
                 <div class="menu-label">CV. Isa</div>
             </a>
-
-            <!-- Premium Bakery Link -->
             <a href="https://bawahtangga.web.id/Premium_Bakery" target="_blank" class="menu-item">
                 <div class="menu-icon"><img src="https://img.icons8.com/fluency/48/group.png"></div>
                 <div class="menu-label">Premium Bakery</div>
             </a>
-
-            <!-- UD Rizki Rizka Link -->
             <a href="https://bawahtangga.web.id/UD_Rizki_Rizka" target="_blank" class="menu-item">
                <div class="menu-icon"><img src="https://img.icons8.com/fluency/48/group.png"></div>
                 <div class="menu-label">UD. rizki Rizka</div>
             </a>
-
-            <!-- Member Link (Tetap lokal atau bisa diubah juga) -->
             <a href="https://bawahtangga.web.id/demo/W-Laundry" class="menu-item">
                 <div class="menu-icon"><img src="https://img.icons8.com/fluency/48/group.png"></div>
                 <div class="menu-label">W-Laundry</div>
@@ -237,10 +228,11 @@
             document.querySelectorAll('.nav-item').forEach(item => {
                 item.classList.remove('active');
                 const img = item.querySelector('img');
-                img.src = img.src.replace('2ecc71', '212529');
+                if(img) img.src = img.src.replace('2ecc71', '212529');
             });
             el.classList.add('active');
-            el.querySelector('img').src = el.querySelector('img').src.replace('212529', '2ecc71');
+            const activeImg = el.querySelector('img');
+            if(activeImg) activeImg.src = activeImg.src.replace('212529', '2ecc71');
         }
 
         // --- DASHBOARD LOGIC ---
@@ -248,8 +240,8 @@
             { nama: "YBCI", hp: "08123456789", app: "Website", tempo: "30 September 2026" },
             { nama: "CV. Isa Jaya", hp: "085260601214", app: "System Distributor", tempo: "30 September 2026" },
             { nama: "Premium Bakery", hp: "08116570404", app: "W-POS", tempo: "11 Mei 2027" },
-            { nama: "UD. Rizki Rizka", hp: "085262629900", app: "W-POS", tempo: "12 Mei 2027" }
-            { nama: "UD. Rizki Rizka", hp: "085262629900", app: "W-Egg", tempo: "11 Juni 2027" }
+            { nama: "UD. Rizki Rizka", hp: "085262629900", app: "W-POS", tempo: "12 Mei 2027" },
+            { nama: "UD. Rizki Rizka", hp: "085262629900", app: "W-Egg", tempo: "11 Juni 2027" },
             { nama: "Kuliner Kampung", hp: "082279071741", app: "W-POS", tempo: "31 Agustus 2027" }
         ];
 
@@ -278,18 +270,22 @@
         }
         displayClients(clients);
 
-        document.getElementById('searchInput').addEventListener('input', (e) => {
-            const val = e.target.value.toLowerCase();
-            const filtered = clients.filter(c => c.nama.toLowerCase().includes(val));
-            displayClients(filtered);
-        });
+        const searchInput = document.getElementById('searchInput');
+        if(searchInput) {
+            searchInput.addEventListener('input', (e) => {
+                const val = e.target.value.toLowerCase();
+                const filtered = clients.filter(c => c.nama.toLowerCase().includes(val));
+                displayClients(filtered);
+            });
+        }
 
         // --- HOME LOGIC (Time & Slider) ---
         function updateTime() {
             const d = new Date();
             const options = { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' };
             const timeStr = d.toLocaleDateString('id-ID', options) + " | " + d.toLocaleTimeString('id-ID');
-            document.getElementById('datetime').innerHTML = timeStr;
+            const dtEl = document.getElementById('datetime');
+            if(dtEl) dtEl.innerHTML = timeStr;
         }
         setInterval(updateTime, 1000); updateTime();
 
@@ -299,24 +295,32 @@
         setInterval(() => {
             if(slides.length > 0){
                 currentIndex = (currentIndex + 1) % slides.length;
-                document.getElementById('slides').style.transform = `translateX(-${currentIndex * 100}%)`;
+                const slidesContainer = document.getElementById('slides');
+                if(slidesContainer) slidesContainer.style.transform = `translateX(-${currentIndex * 100}%)`;
                 slides.forEach((s, i) => s.classList.toggle('active', i === currentIndex));
                 dots.forEach((d, i) => d.classList.toggle('active', i === currentIndex));
             }
         }, 4000);
 
-        function openModal(id) { document.getElementById(id).style.display = 'flex'; }
-        function closeModal(id) { document.getElementById(id).style.display = 'none'; }
+        function openModal(id) { 
+            const modal = document.getElementById(id);
+            if(modal) modal.style.display = 'flex'; 
+        }
+        function closeModal(id) { 
+            const modal = document.getElementById(id);
+            if(modal) modal.style.display = 'none'; 
+        }
 
         let startY = 0;
         document.addEventListener('touchstart', e => { startY = e.touches[0].pageY; });
         document.addEventListener('touchmove', e => {
             const y = e.touches[0].pageY;
-            if (window.scrollY === 0 && y - startY > 120) document.getElementById('pullRefresh').style.top = '20px';
+            const pull = document.getElementById('pullRefresh');
+            if (window.scrollY === 0 && y - startY > 120 && pull) pull.style.top = '20px';
         });
         document.addEventListener('touchend', () => { 
             const pull = document.getElementById('pullRefresh');
-            if (parseInt(pull.style.top) > 0) {
+            if (pull && parseInt(pull.style.top) > 0) {
                 pull.style.top = '-50px';
                 location.reload(); 
             }
