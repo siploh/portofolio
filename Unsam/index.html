@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SIPAKAR - Universitas Samudera</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { font-family: 'Poppins', sans-serif; }
+        body { overflow-x: hidden; }
+        .animated-bg {
+            background: linear-gradient(-45deg, #f8fbff, #dbeafe, #f0f9ff, #ffffff);
+            background-size: 400% 400%;
+            animation: gradient 14s ease infinite;
+        }
+        @keyframes gradient {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-15px); }
+        }
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(35px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .float { animation: float 5s ease-in-out infinite; }
+        .fade-up { animation: fadeUp 1s ease; }
+        .card-hover { transition: .35s; }
+        .card-hover:hover { transform: translateY(-10px); box-shadow: 0 30px 60px rgba(14, 165, 233, .18); }
+        .btn-glow:hover { box-shadow: 0 15px 35px rgba(14, 165, 233, .4); }
+        .grid-bg {
+            background-image: radial-gradient(#38bdf8 1px, transparent 1px);
+            background-size: 40px 40px;
+            opacity: .12;
+        }
+    </style>
+</head>
+<body class="animated-bg min-h-screen relative flex flex-col justify-between">
+
+    <!-- Background Elements -->
+    <div class="absolute inset-0 grid-bg pointer-events-none"></div>
+    <div class="absolute -top-40 -left-40 w-[450px] h-[450px] bg-sky-300 rounded-full blur-[150px] opacity-30 pointer-events-none"></div>
+    <div class="absolute -bottom-40 -right-40 w-[450px] h-[450px] bg-blue-300 rounded-full blur-[150px] opacity-30 pointer-events-none"></div>
+
+    <!-- Navbar -->
+    <nav class="relative z-20 max-w-7xl w-full mx-auto px-8 py-6">
+        <div class="flex items-center gap-3">
+            <img src="img/logo.png" class="w-11">
+            <div>
+                <h2 class="font-bold text-slate-800">SIPAKAR</h2>
+                <p class="text-xs text-gray-500">Universitas Samudera</p>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Section -->
+    <section class="relative z-10 max-w-7xl mx-auto px-6 py-4 grid lg:grid-cols-2 gap-14 items-center my-auto">
+        
+        <!-- LEFT -->
+        <div class="fade-up">
+            <span class="inline-flex items-center gap-2 bg-sky-100 text-sky-700 px-4 py-2 rounded-full text-sm font-semibold">
+                <span class="w-2 h-2 bg-sky-500 rounded-full animate-ping"></span>
+                Sistem Terintegrasi Universitas Samudera
+            </span>
+
+            <h1 class="text-6xl font-extrabold text-slate-900 mt-7 leading-tight">
+                SIPAKAR
+                <span class="block text-3xl text-sky-600 font-semibold mt-2">
+                    Sistem Perencanaan & Kinerja
+                </span>
+            </h1>
+
+            <p class="text-gray-600 mt-7 leading-8 text-justify">
+                SIPAKAR merupakan sistem informasi berbasis web yang mendukung pengelolaan perencanaan strategis, target kinerja, monitoring program, evaluasi capaian, serta pelaporan secara transparan dan terintegrasi di lingkungan Universitas Samudera.
+            </p>
+
+            <!-- Statistik -->
+            <div class="grid grid-cols-3 gap-5 mt-10">
+                <div class="bg-white/80 backdrop-blur-xl rounded-2xl p-5 text-center shadow-lg card-hover">
+                    <i class="fa-solid fa-building-columns text-sky-500 text-2xl"></i>
+                    <h2 class="text-3xl font-bold mt-3">16</h2>
+                    <p class="text-gray-500 text-sm">Fakultas</p>
+                </div>
+                <div class="bg-white/80 backdrop-blur-xl rounded-2xl p-5 text-center shadow-lg card-hover">
+                    <i class="fa-solid fa-list-check text-sky-500 text-2xl"></i>
+                    <h2 class="text-3xl font-bold mt-3">120+</h2>
+                    <p class="text-gray-500 text-sm">Program</p>
+                </div>
+                <div class="bg-white/80 backdrop-blur-xl rounded-2xl p-5 text-center shadow-lg card-hover">
+                    <i class="fa-solid fa-chart-line text-sky-500 text-2xl"></i>
+                    <h2 class="text-3xl font-bold mt-3">24/7</h2>
+                    <p class="text-gray-500 text-sm">Monitoring</p>
+                </div>
+            </div>
+
+            <!-- Button -->
+            <div class="flex gap-5 mt-10">
+                <a href="sipera.html" class="flex-1 text-center py-4 rounded-xl bg-gradient-to-r from-sky-500 to-cyan-500 text-white font-semibold shadow-xl hover:scale-105 duration-300 btn-glow">
+                    <i class="fa-solid fa-arrow-right mr-2"></i> Masuk SIPERA
+                </a>
+                <a href="#" class="flex-1 text-center py-4 rounded-xl bg-white border border-sky-200 font-semibold hover:bg-sky-500 hover:text-white duration-300">
+                    <i class="fa-solid fa-chart-column mr-2"></i> Kinerja
+                </a>
+            </div>
+        </div>
+
+        <!-- RIGHT -->
+        <div class="relative flex justify-center fade-up">
+            <div class="absolute w-80 h-80 bg-sky-300 rounded-full blur-[120px] opacity-30 pointer-events-none"></div>
+
+            <!-- Floating Card 1 -->
+            <div class="absolute left-5 top-12 bg-white rounded-2xl shadow-xl px-5 py-4 hidden md:flex items-center gap-3 z-10">
+                <i class="fa-solid fa-chart-pie text-sky-500 text-xl"></i>
+                <div>
+                    <h3 class="font-semibold text-sm">Monitoring</h3>
+                    <p class="text-xs text-gray-500">Real Time</p>
+                </div>
+            </div>
+
+            <!-- Floating Card 2 -->
+            <div class="absolute right-5 bottom-16 bg-white rounded-2xl shadow-xl px-5 py-4 hidden md:flex items-center gap-3 z-10">
+                <i class="fa-solid fa-bullseye text-green-500 text-xl"></i>
+                <div>
+                    <h3 class="font-semibold text-sm">Target</h3>
+                    <p class="text-xs text-gray-500">Terukur</p>
+                </div>
+            </div>
+
+            <!-- Logo Box -->
+            <div class="bg-white/70 backdrop-blur-xl rounded-[40px] shadow-2xl p-10 float border border-white text-center">
+                <img src="img/logo.png" class="w-72 mx-auto">
+                <div class="mt-8">
+                    <h2 class="text-4xl font-bold text-slate-800">PERENCANA</h2>
+                    <p class="uppercase tracking-[5px] text-sky-600 mt-2 text-sm">SIPERA & KINERJA</p>
+                </div>
+            </div>
+        </div>
+
+    </section>
+
+    <!-- Footer -->
+    <footer class="pb-8 text-center text-gray-500 relative z-10 text-sm">
+        © 2026 Universitas Samudera • SIPAKAR
+    </footer>
+
+</body>
+</html>
