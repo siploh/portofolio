@@ -2,18 +2,259 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Halaman Tidak Ditemukan</title>
     <style>
-        body { font-family: Arial, sans-serif; text-align: center; padding: 50px; background-color: #f4f4f4; color: #333; }
-        h1 { font-size: 50px; color: #d9534f; }
-        p { font-size: 18px; }
-        a { color: #007bff; text-decoration: none; font-weight: bold; }
-        a:hover { text-decoration: underline; }
+        /* --- Reset dan Dasar --- */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: #ffffff;
+            color: #1a237e; /* Warna teks utama */
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* --- Menu Navigasi (Hamburger) --- */
+        .nav-header {
+            padding: 30px;
+        }
+
+        .menu-icon {
+            font-size: 24px;
+            cursor: pointer;
+            color: #1a237e;
+            font-weight: bold;
+        }
+
+        /* --- Konten Utama (Flexbox) --- */
+        .main-container {
+            flex: 1; /* Mengisi sisa ruang vertikal */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 80px; /* Jarak antara ilustrasi dan teks */
+            padding: 0 50px;
+            margin-bottom: 100px; /* Sedikit ruang di bagian bawah */
+        }
+
+        /* --- Bagian Ilustrasi (Kabel Terputus) --- */
+        .illustration-container {
+            position: relative;
+            width: 300px;
+            height: 300px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .circle-bg {
+            position: absolute;
+            width: 240px;
+            height: 240px;
+            background-color: #f7f7f9; /* Warna latar abu-abu muda */
+            border-radius: 50%;
+            z-index: 1;
+        }
+
+        .cords-wrapper {
+            position: relative;
+            z-index: 2;
+            width: 60px; /* Lebar area kabel */
+            height: 200px; /* Tinggi area kabel */
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        /* Gaya umum untuk ikon steker */
+        .plug-icon {
+            width: 50px;
+            height: auto;
+            fill: #1a237e;
+        }
+
+        /* Membuat garis kabel dengan CSS */
+        .cord-line {
+            position: absolute;
+            width: 3px;
+            background-color: #1a237e;
+        }
+
+        /* Kabel Atas */
+        .cord-line.top {
+            height: 110px;
+            top: -113px; /* Panjang ke atas */
+            left: 28px;
+        }
+        .cord-line.top::after {
+            content: '';
+            position: absolute;
+            width: 120px;
+            height: 3px;
+            background-color: #1a237e;
+            left: 0;
+            top: 0;
+        }
+
+        /* Kabel Bawah */
+        .cord-line.bottom {
+            height: 110px;
+            bottom: -113px; /* Panjang ke bawah */
+            right: 28px;
+        }
+        .cord-line.bottom::after {
+            content: '';
+            position: absolute;
+            width: 120px;
+            height: 3px;
+            background-color: #1a237e;
+            right: 0;
+            bottom: 0;
+        }
+
+        /* Efek Percikan Api Kecil (Sparks) */
+        .spark {
+            position: absolute;
+            width: 6px;
+            height: 2px;
+            background-color: #1a237e;
+            border-radius: 2px;
+        }
+        /* Percikan Atas */
+        .spark.t1 { top: 40px; left: -15px; transform: rotate(45deg); }
+        .spark.t2 { top: 30px; left: -8px; }
+        .spark.t3 { top: 50px; left: -8px; transform: rotate(-45deg); }
+        /* Percikan Bawah */
+        .spark.b1 { bottom: 40px; right: -15px; transform: rotate(-45deg); }
+        .spark.b2 { bottom: 30px; right: -8px; }
+        .spark.b3 { bottom: 50px; right: -8px; transform: rotate(45deg); }
+
+        /* --- Bagian Teks --- */
+        .text-container {
+            max-width: 450px;
+            text-align: left;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        h1.error-code {
+            font-size: 110px;
+            font-weight: 800;
+            line-height: 1;
+            margin-bottom: -5px;
+        }
+
+        h2.error-title {
+            font-size: 36px;
+            font-weight: 700;
+        }
+
+        p.error-description {
+            font-size: 16px;
+            color: #757575; /* Warna abu-abu untuk deskripsi */
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+
+        .home-button {
+            display: inline-block;
+            padding: 14px 30px;
+            background-color: #1a237e; /* Warna tombol biru tua */
+            color: #ffffff;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: 600;
+            font-size: 15px;
+            transition: background-color 0.2s ease;
+            align-self: flex-start; /* Tombol rata kiri */
+        }
+
+        .home-button:hover {
+            background-color: #303f9f; /* Warna tombol saat dihover */
+        }
+
+        /* --- Responsivitas Mobile --- */
+        @media (max-width: 768px) {
+            .main-container {
+                flex-direction: column; /* Mengubah tata letak menjadi vertikal */
+                gap: 40px;
+                padding: 20px;
+                margin-bottom: 50px;
+            }
+
+            .text-container {
+                text-align: center; /* Teks menjadi rata tengah di mobile */
+                align-items: center;
+            }
+
+            h1.error-code {
+                font-size: 80px;
+            }
+
+            h2.error-title {
+                font-size: 28px;
+            }
+
+            .home-button {
+                align-self: center; /* Tombol rata tengah di mobile */
+            }
+            
+            /* Menyesuaikan kabel untuk tampilan vertikal */
+            .cord-line.top, .cord-line.bottom { display: none; }
+            .illustration-container { width: 200px; height: 200px; }
+            .circle-bg { width: 160px; height: 160px; }
+        }
     </style>
 </head>
 <body>
-    <h1>Oops! Halaman Tidak Ditemukan</h1>
-    <p>Maaf, halaman yang Anda tuju tidak ada atau sudah dipindahkan.</p>
-    <p><a href="#">Kembali ke Beranda</a></p>
+
+    <!-- Header dengan Ikon Menu -->
+    <header class="nav-header">
+        <div class="menu-icon">&#9776;</div> <!-- Kode HTML untuk ikon hamburger (☰) -->
+    </header>
+
+    <!-- Konten Utama 404 -->
+    <main class="main-container">
+        
+        <!-- Bagian Ilustrasi -->
+        <div class="illustration-container">
+            <div class="circle-bg"></div>
+            <div class="cords-wrapper">
+                <!-- Steker Atas (Socket) -->
+                <svg class="plug-icon" viewBox="0 0 24 24"><path d="M15 7V4c0-1.1-.9-2-2-2h-2c-1.1 0-2 .9-2 2v3H6v6l3 3v3c0 .55.45 1 1 1h4c.55 0 1-.45 1-1v-3l3-3V7h-3zm-1 5.14v3.86h-4v-3.86l-1-1V9h6v2.14l-1 1z"/></svg>
+                <div class="cord-line top"></div>
+                
+                <!-- Percikan Api -->
+                <div class="spark t1"></div><div class="spark t2"></div><div class="spark t3"></div>
+                <div class="spark b1"></div><div class="spark b2"></div><div class="spark b3"></div>
+
+                <!-- Steker Bawah (Plug) -->
+                <svg class="plug-icon" viewBox="0 0 24 24"><path d="M18.07 7.17c-.22-.42-.65-.67-1.11-.67h-1.96V4c0-1.1-.9-2-2-2h-2c-1.1 0-2 .9-2 2v2.5H7.04c-.46 0-.89.25-1.11.67L3 12.14v7.86c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2v-7.86l-3.93-4.97zM9 15v-2h6v2H9zm3 6l-3-3v-3h6v3l-3 3z"/></svg>
+                <div class="cord-line bottom"></div>
+            </div>
+        </div>
+
+        <!-- Bagian Teks -->
+        <div class="text-container">
+            <h1 class="error-code">404</h1>
+            <h2 class="error-title">Laman Hana Meuteumeung </h2>
+            <p class="error-description">
+                Kamoe meulakee meuah, tapi halaman nyang droeneuh mita hana meuteumeung.
+Neugisa lom bak halaman utama.
+            </p>
+            <a href="#" class="home-button">Neuwoe u rumoh</a>
+        </div>
+
+    </main>
+
 </body>
 </html>
