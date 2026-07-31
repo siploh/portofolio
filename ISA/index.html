@@ -30,6 +30,64 @@
             user-select: none;
         }
 
+        /* --- POPUP PERTAMA KALI DIBUKA --- */
+        #welcomePopup {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+            opacity: 1;
+            transition: opacity 0.4s ease;
+        }
+
+        .popup-content {
+            position: relative;
+            max-width: 90%;
+            max-height: 90%;
+            border: 2px solid var(--accent-color);
+            box-shadow: 0 0 30px rgba(255, 140, 0, 0.4);
+            border-radius: 10px;
+            overflow: hidden;
+            background: #111;
+        }
+
+        .popup-content img {
+            display: block;
+            max-width: 80vw;
+            max-height: 80vh;
+            object-fit: contain;
+        }
+
+        .popup-close {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            background: var(--accent-color);
+            color: black;
+            border: none;
+            font-size: 1.2rem;
+            font-weight: bold;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: 0.3s;
+        }
+
+        .popup-close:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 10px var(--accent-color);
+        }
+
         /* --- LOGIN OVERLAY --- */
         #loginOverlay {
             position: fixed;
@@ -252,6 +310,14 @@
 </head>
 <body>
 
+    <!-- POPUP PERTAMA KALI DIBUKA -->
+    <div id="welcomePopup">
+        <div class="popup-content">
+            <button class="popup-close" onclick="closePopup()">&times;</button>
+            <img src="img/popup.jpeg" alt="Popup Welcome">
+        </div>
+    </div>
+
     <div id="loginOverlay">
         <div class="login-box">
             <div class="login-image">
@@ -313,10 +379,20 @@
         const mainContent = document.getElementById('mainContent');
         const passInput = document.getElementById('passInput');
         const loginError = document.getElementById('loginError');
+        const welcomePopup = document.getElementById('welcomePopup');
         
         const itemFullWidth = 120;
         let currentIndex = 0;
         let isLoggedIn = false;
+
+        // FUNGSI MENUTUP POPUP
+        function closePopup() {
+            welcomePopup.style.opacity = "0";
+            setTimeout(() => {
+                welcomePopup.style.display = "none";
+                passInput.focus(); // Mengarahkan fokus ke input password setelah popup ditutup
+            }, 400);
+        }
 
         // FUNGSI LOGIN
         function checkLogin() {
@@ -374,7 +450,9 @@
         }
 
         window.addEventListener('keydown', (e) => {
-            if (!isLoggedIn) return; // Kunci kontrol jika belum login
+            // Abaikan navigasi menu jika popup masih aktif
+            if (welcomePopup.style.display !== "none") return;
+            if (!isLoggedIn) return; 
             
             if (e.key === 'ArrowRight' && currentIndex < items.length - 1) {
                 currentIndex++;
@@ -389,6 +467,7 @@
 
         items.forEach((item, index) => {
             item.addEventListener('click', () => {
+                if (welcomePopup.style.display !== "none") return;
                 if (!isLoggedIn) return;
                 if (currentIndex === index) {
                     navigateToPage();
