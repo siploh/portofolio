@@ -3,258 +3,341 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Halaman Tidak Ditemukan</title>
+    <title>404: Data Stream Runner</title>
     <style>
-        /* --- Reset dan Dasar --- */
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
         }
-
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            background-color: #ffffff;
-            color: #1a237e; /* Warna teks utama */
+            background-color: #050505; /* Latar belakang gelap total */
+            color: #ffffff;
+            font-family: 'Courier New', Courier, monospace; /* Font bergaya terminal */
             display: flex;
             flex-direction: column;
-            min-height: 100vh;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            overflow: hidden;
         }
-
-        /* --- Menu Navigasi (Hamburger) --- */
-        .nav-header {
-            padding: 30px;
+        .container {
+            text-align: center;
+            position: relative;
         }
-
-        .menu-icon {
-            font-size: 24px;
-            cursor: pointer;
-            color: #1a237e;
+        h1 {
+            font-size: 7rem;
+            color: #00e676; /* Hijau neon terang */
+            margin-bottom: -10px;
+            text-shadow: 0 0 15px rgba(0, 230, 118, 0.7);
             font-weight: bold;
         }
-
-        /* --- Konten Utama (Flexbox) --- */
-        .main-container {
-            flex: 1; /* Mengisi sisa ruang vertikal */
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 80px; /* Jarak antara ilustrasi dan teks */
-            padding: 0 50px;
-            margin-bottom: 100px; /* Sedikit ruang di bagian bawah */
+        h1 span {
+            color: #fff; /* Warna untuk angka '0' di tengah */
+            text-shadow: 0 0 15px rgba(255, 255, 255, 0.7);
         }
-
-        /* --- Bagian Ilustrasi (Kabel Terputus) --- */
-        .illustration-container {
-            position: relative;
-            width: 300px;
-            height: 300px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+        p {
+            color: #b0b0b0;
+            margin-bottom: 25px;
+            font-size: 1.1rem;
         }
-
-        .circle-bg {
-            position: absolute;
-            width: 240px;
-            height: 240px;
-            background-color: #f7f7f9; /* Warna latar abu-abu muda */
-            border-radius: 50%;
-            z-index: 1;
+        canvas {
+            background: #080808;
+            /* Border futuristik */
+            border: 2px solid #333;
+            border-radius: 4px;
+            box-shadow: 0 0 30px rgba(0, 230, 118, 0.15);
+            /* Mencegah seleksi teks saat main */
+            user-select: none; 
         }
-
-        .cords-wrapper {
-            position: relative;
-            z-index: 2;
-            width: 60px; /* Lebar area kabel */
-            height: 200px; /* Tinggi area kabel */
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            align-items: center;
+        .instructions {
+            margin-top: 20px;
+            font-size: 0.9rem;
+            color: #666;
+            animation: blink 1.5s infinite;
         }
-
-        /* Gaya umum untuk ikon steker */
-        .plug-icon {
-            width: 50px;
-            height: auto;
-            fill: #1a237e;
-        }
-
-        /* Membuat garis kabel dengan CSS */
-        .cord-line {
-            position: absolute;
-            width: 3px;
-            background-color: #1a237e;
-        }
-
-        /* Kabel Atas */
-        .cord-line.top {
-            height: 110px;
-            top: -113px; /* Panjang ke atas */
-            left: 28px;
-        }
-        .cord-line.top::after {
-            content: '';
-            position: absolute;
-            width: 120px;
-            height: 3px;
-            background-color: #1a237e;
-            left: 0;
-            top: 0;
-        }
-
-        /* Kabel Bawah */
-        .cord-line.bottom {
-            height: 110px;
-            bottom: -113px; /* Panjang ke bawah */
-            right: 28px;
-        }
-        .cord-line.bottom::after {
-            content: '';
-            position: absolute;
-            width: 120px;
-            height: 3px;
-            background-color: #1a237e;
-            right: 0;
-            bottom: 0;
-        }
-
-        /* Efek Percikan Api Kecil (Sparks) */
-        .spark {
-            position: absolute;
-            width: 6px;
-            height: 2px;
-            background-color: #1a237e;
-            border-radius: 2px;
-        }
-        /* Percikan Atas */
-        .spark.t1 { top: 40px; left: -15px; transform: rotate(45deg); }
-        .spark.t2 { top: 30px; left: -8px; }
-        .spark.t3 { top: 50px; left: -8px; transform: rotate(-45deg); }
-        /* Percikan Bawah */
-        .spark.b1 { bottom: 40px; right: -15px; transform: rotate(-45deg); }
-        .spark.b2 { bottom: 30px; right: -8px; }
-        .spark.b3 { bottom: 50px; right: -8px; transform: rotate(45deg); }
-
-        /* --- Bagian Teks --- */
-        .text-container {
-            max-width: 450px;
-            text-align: left;
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
-
-        h1.error-code {
-            font-size: 110px;
-            font-weight: 800;
-            line-height: 1;
-            margin-bottom: -5px;
-        }
-
-        h2.error-title {
-            font-size: 36px;
-            font-weight: 700;
-        }
-
-        p.error-description {
-            font-size: 16px;
-            color: #757575; /* Warna abu-abu untuk deskripsi */
-            line-height: 1.6;
-            margin-bottom: 15px;
-        }
-
-        .home-button {
-            display: inline-block;
-            padding: 14px 30px;
-            background-color: #1a237e; /* Warna tombol biru tua */
-            color: #ffffff;
-            text-decoration: none;
-            border-radius: 5px;
-            font-weight: 600;
-            font-size: 15px;
-            transition: background-color 0.2s ease;
-            align-self: flex-start; /* Tombol rata kiri */
-        }
-
-        .home-button:hover {
-            background-color: #303f9f; /* Warna tombol saat dihover */
-        }
-
-        /* --- Responsivitas Mobile --- */
-        @media (max-width: 768px) {
-            .main-container {
-                flex-direction: column; /* Mengubah tata letak menjadi vertikal */
-                gap: 40px;
-                padding: 20px;
-                margin-bottom: 50px;
-            }
-
-            .text-container {
-                text-align: center; /* Teks menjadi rata tengah di mobile */
-                align-items: center;
-            }
-
-            h1.error-code {
-                font-size: 80px;
-            }
-
-            h2.error-title {
-                font-size: 28px;
-            }
-
-            .home-button {
-                align-self: center; /* Tombol rata tengah di mobile */
-            }
-            
-            /* Menyesuaikan kabel untuk tampilan vertikal */
-            .cord-line.top, .cord-line.bottom { display: none; }
-            .illustration-container { width: 200px; height: 200px; }
-            .circle-bg { width: 160px; height: 160px; }
+        @keyframes blink {
+            50% { opacity: 0.3; }
         }
     </style>
 </head>
 <body>
 
-    <!-- Header dengan Ikon Menu -->
-    <header class="nav-header">
-        <div class="menu-icon">&#9776;</div> <!-- Kode HTML untuk ikon hamburger (☰) -->
-    </header>
-
-    <!-- Konten Utama 404 -->
-    <main class="main-container">
+    <div class="container">
+        <h1>4<span>0</span>4</h1>
+        <p>Halaman Yang Anda Masukan Tidak Ditemukan.</p>
         
-        <!-- Bagian Ilustrasi -->
-        <div class="illustration-container">
-            <div class="circle-bg"></div>
-            <div class="cords-wrapper">
-                <!-- Steker Atas (Socket) -->
-                <svg class="plug-icon" viewBox="0 0 24 24"><path d="M15 7V4c0-1.1-.9-2-2-2h-2c-1.1 0-2 .9-2 2v3H6v6l3 3v3c0 .55.45 1 1 1h4c.55 0 1-.45 1-1v-3l3-3V7h-3zm-1 5.14v3.86h-4v-3.86l-1-1V9h6v2.14l-1 1z"/></svg>
-                <div class="cord-line top"></div>
+        <canvas id="gameCanvas" width="700" height="250"></canvas>
+        
+        <div class="instructions">
+            Tekan <strong>SPASI</strong> untuk melakukan lompatan taktis.
+        </div>
+    </div>
+
+    <script>
+        const canvas = document.getElementById("gameCanvas");
+        const ctx = canvas.getContext("2d");
+
+        // --- Konfigurasi Game yang Diperbarui ---
+        let score = 0;
+        let isGameOver = false;
+        let gameSpeed = 6;
+        let highScore = localStorage.getItem('404highScore') || 0;
+
+        // Latar belakang bintang
+        let stars = [];
+        for(let i = 0; i < 50; i++) {
+            stars.push({
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height,
+                size: Math.random() * 2,
+                speed: Math.random() * 0.5 + 0.2
+            });
+        }
+
+        // Karakter (Hacker Pixel)
+        const player = {
+            x: 80,
+            y: 170, // Disesuaikan dengan tinggi baru
+            width: 35,
+            height: 45,
+            dy: 0,
+            jumpForce: -13, // Lompatan lebih tinggi sedikit
+            gravity: 0.7,
+            grounded: false,
+            color: "#00e676", // Hijau neon
+            particles: []
+        };
+
+        // Rintangan (Firewall)
+        let obstacles = [];
+        let obstacleTimer = 0;
+        let nextObstacleTime = 90;
+
+        // --- Input Handler ---
+        document.addEventListener("keydown", function(e) {
+            if ((e.code === "Space" || e.code === "ArrowUp") && player.grounded) {
+                player.dy = player.jumpForce;
+                player.grounded = false;
+                e.preventDefault();
+            }
+            if (e.code === "Space" && isGameOver) {
+                resetGame();
+            }
+        });
+
+        function resetGame() {
+            if(score > highScore) {
+                highScore = score;
+                localStorage.setItem('404highScore', highScore);
+            }
+            score = 0;
+            isGameOver = false;
+            obstacles = [];
+            gameSpeed = 6;
+            player.y = 170;
+            player.dy = 0;
+            nextObstacleTime = 90;
+        }
+
+        function spawnObstacle() {
+            const type = Math.random();
+            let height, width;
+            if (type < 0.7) {
+                // Kotak biasa
+                width = 30;
+                height = 30 + Math.random() * 40;
+            } else {
+                // Rintangan tinggi (harus melompat sempurna)
+                width = 20;
+                height = 100 + Math.random() * 20;
+            }
+            
+            obstacles.push({
+                x: canvas.width,
+                y: 215 - height, // Dasar lantai di 215
+                width: width,
+                height: height,
+                color: "#ff5252", // Merah peringatan
+                passed: false // Untuk cek skor
+            });
+        }
+
+        function createParticles() {
+            if (player.grounded && Math.random() > 0.5) {
+                player.particles.push({
+                    x: player.x + 10,
+                    y: player.y + player.height - 5,
+                    size: Math.random() * 3 + 1,
+                    speedX: -gameSpeed - 1,
+                    life: 20
+                });
+            }
+            // Update dan gambar partikel
+            for (let i = 0; i < player.particles.length; i++) {
+                const p = player.particles[i];
+                p.x += p.speedX;
+                p.life--;
+                ctx.fillStyle = `rgba(0, 230, 118, ${p.life / 30})`;
+                ctx.fillRect(p.x, p.y, p.size, p.size);
                 
-                <!-- Percikan Api -->
-                <div class="spark t1"></div><div class="spark t2"></div><div class="spark t3"></div>
-                <div class="spark b1"></div><div class="spark b2"></div><div class="spark b3"></div>
+                if (p.life <= 0) {
+                    player.particles.splice(i, 1);
+                    i--;
+                }
+            }
+        }
 
-                <!-- Steker Bawah (Plug) -->
-                <svg class="plug-icon" viewBox="0 0 24 24"><path d="M18.07 7.17c-.22-.42-.65-.67-1.11-.67h-1.96V4c0-1.1-.9-2-2-2h-2c-1.1 0-2 .9-2 2v2.5H7.04c-.46 0-.89.25-1.11.67L3 12.14v7.86c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2v-7.86l-3.93-4.97zM9 15v-2h6v2H9zm3 6l-3-3v-3h6v3l-3 3z"/></svg>
-                <div class="cord-line bottom"></div>
-            </div>
-        </div>
+        function update() {
+            if (isGameOver) return;
 
-        <!-- Bagian Teks -->
-        <div class="text-container">
-            <h1 class="error-code">404</h1>
-            <h2 class="error-title">Laman Hana Meuteumeung </h2>
-            <p class="error-description">
-                Kamoe meulakee meuah, tapi halaman nyang droeneuh mita hana meuteumeung.
-Neugisa lom bak halaman utama.
-            </p>
-            <a href="#" class="home-button">Neuwoe u rumoh</a>
-        </div>
+            // Update Latar Belakang Bintang
+            for(let star of stars) {
+                star.x -= star.speed;
+                if(star.x < 0) star.x = canvas.width;
+            }
 
-    </main>
+            // Gravitasi Player & Partikel
+            player.dy += player.gravity;
+            player.y += player.dy;
 
+            // Batas Tanah (Disesuaikan)
+            if (player.y > 215 - player.height) {
+                player.y = 215 - player.height;
+                player.dy = 0;
+                player.grounded = true;
+            }
+
+            // Kelola Rintangan
+            obstacleTimer++;
+            if (obstacleTimer >= nextObstacleTime) {
+                spawnObstacle();
+                obstacleTimer = 0;
+                nextObstacleTime = Math.floor(Math.random() * 50) + 80; // Jarak lebih bervariasi
+            }
+
+            for (let i = obstacles.length - 1; i >= 0; i--) {
+                let obs = obstacles[i];
+                obs.x -= gameSpeed;
+
+                // Deteksi Tabrakan (Hitbox lebih presisi sedikit)
+                if (
+                    player.x < obs.x + obs.width - 5 &&
+                    player.x + player.width > obs.x + 5 &&
+                    player.y < obs.y + obs.height &&
+                    player.y + player.height > obs.y
+                ) {
+                    isGameOver = true;
+                }
+
+                // Tambah Skor saat melewati rintangan
+                if (obs.x + obs.width < player.x && !obs.passed) {
+                    score += 10;
+                    obs.passed = true;
+                    // Akselerasi lebih terasa
+                    if (score % 100 === 0) {
+                        gameSpeed += 0.8; 
+                    }
+                }
+
+                // Hapus rintangan keluar layar
+                if (obs.x + obs.width < 0) {
+                    obstacles.splice(i, 1);
+                }
+            }
+        }
+
+        function draw() {
+            // Bersihkan Layar dengan efek motion blur tipis (opsional, dimatikan untuk performa)
+            ctx.fillStyle = "#050505";
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            // Gambar Bintang
+            ctx.fillStyle = "#fff";
+            for(let star of stars) {
+                ctx.fillRect(star.x, star.y, star.size, star.size);
+            }
+
+            // Gambar "Garis Tanah Data"
+            ctx.strokeStyle = "#00e676";
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+            ctx.moveTo(0, 215);
+            ctx.lineTo(canvas.width, 215);
+            ctx.stroke();
+            
+            // Efek garis scanline di background (tipis)
+            ctx.fillStyle = "rgba(0, 255, 0, 0.03)";
+            for(let i = 0; i < canvas.height; i += 4) {
+                ctx.fillRect(0, i, canvas.width, 1);
+            }
+
+            // Gambar Partikel Player
+            createParticles();
+
+            // Gambar Player (Bentuk kotak dengan sedikit detail)
+            ctx.fillStyle = player.color;
+            ctx.fillRect(player.x, player.y, player.width, player.height);
+            // Mata/Detail kecil
+            ctx.fillStyle = "#050505";
+            ctx.fillRect(player.x + 8, player.y + 10, 5, 5);
+            ctx.fillRect(player.x + 22, player.y + 10, 5, 5);
+
+            // Gambar Rintangan (Gaya Firewall/Blok Data)
+            for (let i = 0; i < obstacles.length; i++) {
+                let obs = obstacles[i];
+                // Gradient warna merah
+                let gradient = ctx.createLinearGradient(obs.x, obs.y, obs.x, obs.y + obs.height);
+                gradient.addColorStop(0, "#ff5252");
+                gradient.addColorStop(1, "#b71c1c");
+                ctx.fillStyle = gradient;
+                ctx.fillRect(obs.x, obs.y, obs.width, obs.height);
+                
+                // Detail garis-garis pada firewall
+                ctx.fillStyle = "rgba(255,255,255,0.3)";
+                for(let j = obs.y + 5; j < obs.y + obs.height; j += 8) {
+                     ctx.fillRect(obs.x + 2, j, obs.width - 4, 2);
+                }
+            }
+
+            // Tampilkan Skor & High Score
+            ctx.fillStyle = "#ffffff";
+            ctx.font = "bold 18px 'Courier New', monospace";
+            ctx.textAlign = "right";
+            ctx.fillText("SCORE: " + score, canvas.width - 20, 30);
+            ctx.font = "12px 'Courier New', monospace";
+            ctx.fillText("HI-SCORE: " + highScore, canvas.width - 20, 50);
+            ctx.textAlign = "left";
+
+            // Tampilan Game Over
+            if (isGameOver) {
+                ctx.fillStyle = "rgba(0, 0, 0, 0.85)";
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+                ctx.fillStyle = "#ff5252";
+                ctx.font = "bold 50px 'Courier New', monospace";
+                ctx.textAlign = "center";
+                ctx.fillText("SYSTEM FAILURE", canvas.width / 2, canvas.height / 2 - 10);
+                
+                ctx.font = "18px 'Courier New', monospace";
+                ctx.fillStyle = "#ffffff";
+                ctx.fillText("Skor Akhir: " + score, canvas.width / 2, canvas.height / 2 + 25);
+                
+                ctx.font = "14px 'Courier New', monospace";
+                ctx.fillStyle = "#b0b0b0";
+                ctx.fillText("[Tekan SPASI untuk Reboot]", canvas.width / 2, canvas.height / 2 + 55);
+                ctx.textAlign = "left";
+            }
+        }
+
+        function loop() {
+            update();
+            draw();
+            requestAnimationFrame(loop);
+        }
+
+        // Mulai Game
+        loop();
+    </script>
 </body>
 </html>
