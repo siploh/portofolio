@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Katalog Tissue - 7 Kolom</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #f4f4f4;
+            padding: 10px;
+            width: 100vw;
+            overflow-x: hidden;
+        }
+
+        .header {
+            width: 100%;
+            background: white;
+            padding: 15px;
+            text-align: center;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .header h1 {
+            font-size: 1.8em;
+            color: #333;
+            letter-spacing: 1px;
+        }
+
+        /* Mengatur tepat 7 kolom ke samping */
+        .catalog-container {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr); 
+            gap: 8px; /* Jarak antar kartu dipersempit agar muat */
+            width: 100%;
+        }
+
+        .card {
+            background: #fff;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .image-container {
+            width: 100%;
+            height: 140px; /* Tinggi gambar disesuaikan untuk 7 kolom */
+            padding: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .image-container img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+
+        .details {
+            padding: 10px 5px;
+            text-align: center;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            border-top: 1px solid #f0f0f0;
+        }
+
+        .category {
+            font-size: 9px;
+            font-weight: bold;
+            color: #3498db;
+            margin-bottom: 4px;
+        }
+
+        .product-name {
+            font-size: 11px;
+            font-weight: bold;
+            color: #333;
+            height: 35px;
+            overflow: hidden;
+            line-height: 1.2;
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .price {
+            font-size: 15px;
+            font-weight: 800;
+            color: #e74c3c;
+            margin-top: auto;
+            padding-top: 5px;
+            border-top: 1px dashed #eee;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 10px;
+            color: #aaa;
+        }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <h1>KATALOG PRODUK TISSUE</h1>
+</div>
+
+<div class="catalog-container">
+    <div class="card">
+        <div class="image-container"><img src="https://p16-oec-sg.ibyteimg.com/tos-alisg-i-aphluv4xwc-sg/img/VqbcmM/2023/10/25/70012370-c14f-4909-bf3e-64eb1529fb2a.jpg~tplv-aphluv4xwc-resize-jpeg:700:0.jpg"></div>
+        <div class="details">
+            <span class="category">TESSA</span>
+            <div class="product-name">TISSUE ME PU HIGENIC 200S 2P</div>
+            <div class="price">Rp 15.000</div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="image-container"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTNGmGqP8fPAfY-N2tyVMbx-Lv6Mrarb8jaVg&s"></div>
+        <div class="details">
+            <span class="category">TESSA</span>
+            <div class="product-name">TISSUE MULTI FACIAL RF 600GR 2P</div>
+            <div class="price">Rp 54.000</div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="image-container"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRB9GZUvzpe02FoymYBSaNhtKVYwIo7Yfb_aA&s"></div>
+        <div class="details">
+            <span class="category">TESSA</span>
+            <div class="product-name">TISSUE MULTI FACIAL SP 160S 2P</div>
+            <div class="price">Rp 8.950</div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="image-container"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQj8w38D02QFiRuVh3S5yAUcuKdm5Kq20WgJQ&s"></div>
+        <div class="details">
+            <span class="category">TESSA</span>
+            <div class="product-name">MULTI GT CORELESS SERBAGUNA</div>
+            <div class="price">Rp 9.900</div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="image-container"><img src="https://id-live-01.slatic.net/p/84033eb607822794bfbb1cc990182881.jpg"></div>
+        <div class="details">
+            <span class="category">TESSA</span>
+            <div class="product-name">MULTI GT FACIAL SP 250S 2P</div>
+            <div class="price">Rp 13.500</div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="image-container"><img src="https://www.static-src.com/wcsstore/Indraprastha/images/catalog/full/catalog-image/115/MTA-179084886/multi_tissue_tisu_makan_multi_pop-up_napkin_tissue_mpk-200_isi_200_sheet_full03_o36vxafr.jpg"></div>
+        <div class="details">
+            <span class="category">TESSA</span>
+            <div class="product-name">MULTI GT TOILET 200S 2P</div>
+            <div class="price">Rp 27.000</div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="image-container"><img src="https://img.lazcdn.com/g/p/4069a9cd535792ac75e656a25e7403ac.jpg_720x720q80.jpg"></div>
+        <div class="details">
+            <span class="category">TESSA</span>
+            <div class="product-name">MULTI NAPKIN PU 200S 1P</div>
+            <div class="price">Rp 30.700</div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="image-container"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSgBDGclUDvhRwZupKSbflOpUHUBi6YXjoTUA&s"></div>
+        <div class="details">
+            <span class="category">TESSA</span>
+            <div class="product-name">TESSA FAC HKSTD 10SX6 3P</div>
+            <div class="price">Rp 24.300</div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="image-container"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQuPiDoKE4gJhsI2Vg5zsT2MAHgm0inAQrpaQ&s"></div>
+        <div class="details">
+            <span class="category">TESSA</span>
+            <div class="product-name">TESSA FACIAL SP 200S 2P PA</div>
+            <div class="price">Rp 48.400</div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="image-container"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR2TzPG6jJttnT4cAd1wYtqc9Pzw1cQqU5zXg&s"></div>
+        <div class="details">
+            <span class="category">TESSA</span>
+            <div class="product-name">TESSA FACIAL SP AB 260S 2P</div>
+            <div class="price">Rp 79.400</div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="image-container"><img src="https://www.static-src.com/wcsstore/Indraprastha/images/catalog/full//103/MTA-38466840/tessa_tessa_facial_tissue_travel_pack_tp_11_-_50_sheet-_2_ply-_motif_random_-80_pcs-_karton-_full01_t8oqgdjf.jpg"></div>
+        <div class="details">
+            <span class="category">TESSA</span>
+            <div class="product-name">TESSA FACIAL TV 50S 2P</div>
+            <div class="price">Rp 6.250</div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="image-container"><img src="https://image.astronauts.cloud/product-images/2024/6/23_aacbd4e6-fab1-4539-a1b1-fcefa3a2d04d_900x900.jpg"></div>
+        <div class="details">
+            <span class="category">TESSA</span>
+            <div class="product-name">TESSA FACIAL TV 50S 3P</div>
+            <div class="price">Rp 29.350</div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="image-container"><img src="https://down-id.img.susercontent.com/file/id-11134207-7r98r-lqimolq7x7ioe0"></div>
+        <div class="details">
+            <span class="category">TESSA</span>
+            <div class="product-name">TESSA GT FACIAL SP 250S 2P</div>
+            <div class="price">Rp 46.500</div>
+        </div>
+    </div>
+
+</div>
+
+<footer>
+    © 2026 Digital Catalog Desktop
+</footer>
+
+</body>
+</html>
