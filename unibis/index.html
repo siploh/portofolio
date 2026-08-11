@@ -7,13 +7,13 @@
 
 <!-- PWA Manifest & Meta Tags -->
 <link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#2c3e50">
+<meta name="theme-color" content="#dc2626">
 
 <!-- Favicon -->
 <link rel="icon" type="image/png" href="https://unibis.co.id/wp-content/uploads/2022/07/unibis-logo.png">
 
 <!-- Font & Icon -->
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
 <style>
@@ -22,6 +22,7 @@
   --red-dark: #991b1b;
   --white: #ffffff;
   --dark: #1e293b;
+  --bg-gradient: linear-gradient(135deg, #fef2f2, #f8fafc);
 }
 
 *{box-sizing:border-box}
@@ -29,86 +30,106 @@
 body{
   margin:0;
   font-family:'Poppins',sans-serif;
-  background: linear-gradient(135deg, #fef2f2, #ffffff);
+  background: var(--bg-gradient);
   min-height:100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-/* ===== DASHBOARD ===== */
-.dashboard{
-  max-width:1250px;
-  margin:50px auto;
-  padding:25px;
+/* ===== APP CONTAINER (Responsive Universal) ===== */
+.app-container {
+  width: 100%;
+  max-width: 1100px;
+  min-height: 100vh;
+  margin: 0 auto;
+  padding: 30px 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
-.dashboard h1{
-  font-size:34px;
-  font-weight:700;
-  color:var(--red);
+/* ===== HEADER ===== */
+.app-header {
+  text-align: center;
+  margin-bottom: 35px;
 }
 
-.subtitle{
-  color:#64748b;
-  margin-bottom:40px;
+.app-header h1 {
+  font-size: 30px;
+  font-weight: 700;
+  color: var(--red);
+  margin: 0;
 }
 
-/* ===== GRID ===== */
+.app-header .subtitle {
+  color: #64748b;
+  font-size: 14px;
+  margin-top: 6px;
+}
+
+/* ===== GRID SYSTEM (Universal Adaptif) ===== */
 .menu-grid{
-  display:grid;
-  grid-template-columns:repeat(4,1fr);
-  gap:26px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr); /* Default PC */
+  gap: 20px;
+  width: 100%;
 }
 
 .menu-link{
-  text-decoration:none;
+  text-decoration: none;
   cursor: pointer;
 }
 
 /* ===== CARD ===== */
 .menu-box{
-  position:relative;
-  background:rgba(255,255,255,0.9);
+  background: var(--white);
   border: 1px solid #fee2e2;
-  border-radius:22px;
-  padding:34px 24px;
-  text-align:center;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.05);
-  transition:.45s cubic-bezier(.4,0,.2,1);
-  overflow:hidden;
+  border-radius: 20px;
+  padding: 24px 16px;
+  text-align: center;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.03);
+  transition: all 0.3s cubic-bezier(.4,0,.2,1);
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
-/* Hover motion */
+/* Hover motion untuk Desktop / Tablet */
 .menu-box:hover{
-  transform:translateY(-12px);
-  box-shadow: 0 20px 40px rgba(220, 38, 38, 0.2);
+  transform: translateY(-6px);
+  box-shadow: 0 15px 30px rgba(220, 38, 38, 0.12);
   border-color: var(--red);
+}
+
+/* Touch active motion untuk Handphone */
+.menu-box:active{
+  transform: scale(0.96);
+  background: #fef2f2;
 }
 
 /* ICON */
 .menu-box i{
-  font-size:42px;
-  margin-bottom:16px;
+  font-size: 36px;
+  margin-bottom: 12px;
   color: var(--red);
-  animation:float 4s ease-in-out infinite;
-}
-
-@keyframes float{
-  0%,100%{transform:translateY(0)}
-  50%{transform:translateY(-6px)}
 }
 
 /* TITLE */
 .menu-box h3{
-  margin:0;
-  font-size:19px;
-  font-weight:600;
-  color:var(--dark);
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--dark);
 }
 
 /* DESC */
 .menu-box p{
-  margin-top:6px;
-  font-size:13px;
-  color:#64748b;
+  margin: 6px 0 0 0;
+  font-size: 12px;
+  color: #64748b;
 }
 
 /* ===== POPUP MODAL ===== */
@@ -133,10 +154,10 @@ body{
 
 .modal-content {
   background: var(--white);
-  padding: 35px;
-  border-radius: 22px;
+  padding: 30px;
+  border-radius: 24px;
   width: 90%;
-  max-width: 950px;
+  max-width: 600px;
   box-shadow: 0 20px 40px rgba(0,0,0,0.15);
   position: relative;
   animation: scaleUp 0.3s cubic-bezier(.4,0,.2,1);
@@ -146,34 +167,41 @@ body{
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 26px;
+  margin-bottom: 20px;
 }
 
 .modal-header h3 {
   margin: 0;
   color: var(--dark);
-  font-size: 22px;
+  font-size: 18px;
   font-weight: 700;
 }
 
 .close-btn {
-  background: none;
+  background: #f1f5f9;
   border: none;
-  font-size: 22px;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  font-size: 14px;
   color: #64748b;
   cursor: pointer;
-  transition: color 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s;
 }
 
 .close-btn:hover {
+  background: #fee2e2;
   color: var(--red);
 }
 
-/* Grid khusus di dalam popup (3 kolom) */
-.modal-grid-3 {
+/* Grid di dalam popup */
+.modal-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 26px;
+  gap: 16px;
 }
 
 @keyframes fadeIn {
@@ -186,27 +214,67 @@ body{
   to { transform: scale(1); opacity: 1; }
 }
 
-/* ===== RESPONSIVE ===== */
-@media(max-width:1100px){ 
-  .menu-grid{grid-template-columns:repeat(3,1fr)} 
+/* ===== MEDIA QUERIES (TABLET & MOBILE BREAKPOINTS) ===== */
+@media(max-width: 1024px) {
+  .menu-grid {
+    grid-template-columns: repeat(3, 1fr); /* Tablet: 3 Kolom */
+  }
 }
-@media(max-width:768px){ 
-  .menu-grid{grid-template-columns:repeat(2,1fr)} 
-  .modal-grid-3{grid-template-columns:repeat(2,1fr);}
+
+@media(max-width: 768px) {
+  .app-container {
+    padding: 20px 15px;
+  }
+  .app-header h1 {
+    font-size: 24px;
+  }
+  .menu-grid {
+    grid-template-columns: repeat(2, 1fr); /* Tablet kecil / HP besar: 2 Kolom */
+    gap: 14px;
+  }
+  .modal-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
-@media(max-width:520px){ 
-  .menu-grid{grid-template-columns:1fr} 
-  .modal-grid-3{grid-template-columns:1fr;}
+
+@media(max-width: 480px) {
+  .menu-grid {
+    grid-template-columns: repeat(2, 1fr); /* HP: tetap nyaman dengan 2 kolom */
+    gap: 10px;
+  }
+  .menu-box {
+    padding: 16px 10px;
+  }
+  .menu-box i {
+    font-size: 28px;
+  }
+  .menu-box h3 {
+    font-size: 13px;
+  }
+  .menu-box p {
+    font-size: 10px;
+  }
+  .modal-content {
+    width: 95%;
+    padding: 20px;
+  }
+  .modal-grid {
+    grid-template-columns: 1fr; /* 1 kolom di HP sempit jika diperlukan */
+  }
 }
 </style>
 </head>
 
 <body>
 
-<div class="dashboard">
-  <h1>UNIBIS Langsa</h1>
-  <div class="subtitle">Dashboard Sistem & Aplikasi Perusahaan</div>
+<div class="app-container">
+  <!-- App Header -->
+  <div class="app-header">
+    <h1>UNIBIS Langsa</h1>
+    <div class="subtitle">Dashboard Sistem & Aplikasi Perusahaan</div>
+  </div>
 
+  <!-- Dashboard Content -->
   <div class="menu-grid">
     <!-- Katalog -->
     <a href="katalog.html" class="menu-link">
@@ -240,7 +308,7 @@ body{
       <div class="menu-box">
         <i class="fas fa-plus-circle"></i>
         <h3>Tambah Toko</h3>
-        <p>Tambah/Ubah Daftar Toko</p>
+        <p>Tambah/Ubah Toko</p>
       </div>
     </a>
 
@@ -249,7 +317,7 @@ body{
       <div class="menu-box">
         <i class="fas fa-route"></i>
         <h3>Field Action</h3>
-        <p>Dashboard Field Action</p>
+        <p>Dashboard Lapangan</p>
       </div>
     </a>
 
@@ -258,7 +326,7 @@ body{
       <div class="menu-box">
         <i class="fas fa-bullhorn"></i>
         <h3>Program</h3>
-        <p>Daftar Program Berjalan</p>
+        <p>Program Berjalan</p>
       </div>
     </a>
 
@@ -267,7 +335,7 @@ body{
       <div class="menu-box">
         <i class="fas fa-file-contract"></i>
         <h3>Surat</h3>
-        <p>Daftar Surat dan Aturan</p>
+        <p>Aturan & Surat</p>
       </div>
     </a>
 
@@ -275,10 +343,14 @@ body{
     <a href="kunjungan.html" class="menu-link">
       <div class="menu-box">
         <i class="fas fa-map-marked-alt"></i>
-        <h3>Kunjungan Sales</h3>
+        <h3>Kunjungan</h3>
         <p>Check In Toko</p>
       </div>
     </a>
+  </div>
+
+  <div style="text-align: center; font-size: 11px; color: #94a3b8; margin-top: 30px;">
+    &copy; 2026 UNIBIS Langsa. All rights reserved.
   </div>
 </div>
 
@@ -290,31 +362,28 @@ body{
       <button class="close-btn" id="closeTokoModal"><i class="fas fa-times"></i></button>
     </div>
     
-    <div class="modal-grid-3">
-      <!-- 1. Daftar Toko -->
+    <div class="modal-grid">
       <a href="toko.html" class="menu-link">
         <div class="menu-box">
           <i class="fas fa-list"></i>
           <h3>Daftar Toko</h3>
-          <p>Lihat Seluruh Toko</p>
+          <p>Lihat Seluruh</p>
         </div>
       </a>
       
-      <!-- 2. Toko Program -->
       <a href="tokoprogram.html" class="menu-link">
         <div class="menu-box">
           <i class="fas fa-gift"></i>
           <h3>Toko Program</h3>
-          <p>Program Toko Berjalan</p>
+          <p>Program Berjalan</p>
         </div>
       </a>
       
-      <!-- 3. Tambah Toko -->
       <a href="tambahtoko.html" class="menu-link">
         <div class="menu-box">
           <i class="fas fa-plus-circle"></i>
           <h3>Tambah Toko</h3>
-          <p>Tambah/Ubah Daftar Toko</p>
+          <p>Kelola Toko</p>
         </div>
       </a>
     </div>
@@ -329,31 +398,28 @@ body{
       <button class="close-btn" id="closeFieldActionModal"><i class="fas fa-times"></i></button>
     </div>
     
-    <div class="modal-grid-3">
-      <!-- 1. Kunjungan Sales -->
+    <div class="modal-grid">
       <a href="kunjungan.html" class="menu-link">
         <div class="menu-box">
           <i class="fas fa-map-marked-alt"></i>
-          <h3>Kunjungan Sales</h3>
+          <h3>Kunjungan</h3>
           <p>Check In Toko</p>
         </div>
       </a>
       
-      <!-- 2. JKS Sales -->
       <a href="jks.html" class="menu-link">
         <div class="menu-box">
           <i class="fas fa-clipboard-list"></i>
           <h3>JKS Sales</h3>
-          <p>Jurnal Kunjungan Sales</p>
+          <p>Jurnal Kunjungan</p>
         </div>
       </a>
 
-      <!-- 3. Dashboard Admin -->
       <a href="dash.kunjungan.html" class="menu-link">
         <div class="menu-box">
           <i class="fas fa-user-shield"></i>
-          <h3>Dashboard Admin</h3>
-          <p>Dashboard Kunjungan</p>
+          <h3>Admin Dash</h3>
+          <p>Kunjungan</p>
         </div>
       </a>
     </div>
@@ -362,7 +428,6 @@ body{
 
 <!-- ===== JAVASCRIPT INTERACTIVE ===== -->
 <script>
-  // PWA Service Worker Registration
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
       navigator.serviceWorker.register('sw.js')
