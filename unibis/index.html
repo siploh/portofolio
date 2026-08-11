@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<title>Unibis Langsa</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- PWA Manifest & Meta Tags -->
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#2c3e50">
+
+<!-- Favicon -->
+<link rel="icon" type="image/png" href="https://unibis.co.id/wp-content/uploads/2022/07/unibis-logo.png">
+
+<!-- Font & Icon -->
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<style>
+:root {
+  --red: #dc2626;
+  --red-dark: #991b1b;
+  --white: #ffffff;
+  --dark: #1e293b;
+}
+
+*{box-sizing:border-box}
+
+body{
+  margin:0;
+  font-family:'Poppins',sans-serif;
+  background: linear-gradient(135deg, #fef2f2, #ffffff);
+  min-height:100vh;
+}
+
+/* ===== DASHBOARD ===== */
+.dashboard{
+  max-width:1250px;
+  margin:50px auto;
+  padding:25px;
+}
+
+.dashboard h1{
+  font-size:34px;
+  font-weight:700;
+  color:var(--red);
+}
+
+.subtitle{
+  color:#64748b;
+  margin-bottom:40px;
+}
+
+/* ===== GRID ===== */
+.menu-grid{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:26px;
+}
+
+.menu-link{
+  text-decoration:none;
+  cursor: pointer;
+}
+
+/* ===== CARD ===== */
+.menu-box{
+  position:relative;
+  background:rgba(255,255,255,0.9);
+  border: 1px solid #fee2e2;
+  border-radius:22px;
+  padding:34px 24px;
+  text-align:center;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+  transition:.45s cubic-bezier(.4,0,.2,1);
+  overflow:hidden;
+}
+
+/* Hover motion */
+.menu-box:hover{
+  transform:translateY(-12px);
+  box-shadow: 0 20px 40px rgba(220, 38, 38, 0.2);
+  border-color: var(--red);
+}
+
+/* ICON */
+.menu-box i{
+  font-size:42px;
+  margin-bottom:16px;
+  color: var(--red);
+  animation:float 4s ease-in-out infinite;
+}
+
+@keyframes float{
+  0%,100%{transform:translateY(0)}
+  50%{transform:translateY(-6px)}
+}
+
+/* TITLE */
+.menu-box h3{
+  margin:0;
+  font-size:19px;
+  font-weight:600;
+  color:var(--dark);
+}
+
+/* DESC */
+.menu-box p{
+  margin-top:6px;
+  font-size:13px;
+  color:#64748b;
+}
+
+/* ===== POPUP MODAL ===== */
+.modal-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+  z-index: 1000;
+  justify-content: center;
+  align-items: center;
+  animation: fadeIn 0.3s ease;
+}
+
+.modal-overlay.active {
+  display: flex;
+}
+
+.modal-content {
+  background: var(--white);
+  padding: 35px;
+  border-radius: 22px;
+  width: 90%;
+  max-width: 950px;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+  position: relative;
+  animation: scaleUp 0.3s cubic-bezier(.4,0,.2,1);
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 26px;
+}
+
+.modal-header h3 {
+  margin: 0;
+  color: var(--dark);
+  font-size: 22px;
+  font-weight: 700;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  font-size: 22px;
+  color: #64748b;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.close-btn:hover {
+  color: var(--red);
+}
+
+/* Grid khusus di dalam popup (3 kolom) */
+.modal-grid-3 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 26px;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes scaleUp {
+  from { transform: scale(0.9); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+/* ===== RESPONSIVE ===== */
+@media(max-width:1100px){ 
+  .menu-grid{grid-template-columns:repeat(3,1fr)} 
+}
+@media(max-width:768px){ 
+  .menu-grid{grid-template-columns:repeat(2,1fr)} 
+  .modal-grid-3{grid-template-columns:repeat(2,1fr);}
+}
+@media(max-width:520px){ 
+  .menu-grid{grid-template-columns:1fr} 
+  .modal-grid-3{grid-template-columns:1fr;}
+}
+</style>
+</head>
+
+<body>
+
+<div class="dashboard">
+  <h1>UNIBIS Langsa</h1>
+  <div class="subtitle">Dashboard Sistem & Aplikasi Perusahaan</div>
+
+  <div class="menu-grid">
+    <!-- Katalog -->
+    <a href="katalog.html" class="menu-link">
+      <div class="menu-box">
+        <i class="fas fa-book-open"></i>
+        <h3>Katalog</h3>
+        <p>Daftar Katalog Unibis</p>
+      </div>
+    </a>
+
+    <!-- Toko -->
+    <a class="menu-link" id="toko-menu-trigger">
+      <div class="menu-box">
+        <i class="fas fa-store"></i>
+        <h3>Toko</h3>
+        <p>Daftar Toko</p>
+      </div>
+    </a>
+
+    <!-- Dashboard KPI -->
+    <a href="#" class="menu-link">
+      <div class="menu-box">
+        <i class="fas fa-chart-pie"></i>
+        <h3>Dashboard KPI</h3>
+        <p>Pelaporan Pajak</p>
+      </div>
+    </a>
+
+    <!-- Tambah Toko -->
+    <a href="tambahtoko.html" class="menu-link">
+      <div class="menu-box">
+        <i class="fas fa-plus-circle"></i>
+        <h3>Tambah Toko</h3>
+        <p>Tambah/Ubah Daftar Toko</p>
+      </div>
+    </a>
+
+    <!-- Field Action -->
+    <a class="menu-link" id="fieldaction-menu-trigger">
+      <div class="menu-box">
+        <i class="fas fa-route"></i>
+        <h3>Field Action</h3>
+        <p>Dashboard Field Action</p>
+      </div>
+    </a>
+
+    <!-- Program -->
+    <a href="#" class="menu-link">
+      <div class="menu-box">
+        <i class="fas fa-bullhorn"></i>
+        <h3>Program</h3>
+        <p>Daftar Program Berjalan</p>
+      </div>
+    </a>
+
+    <!-- Surat -->
+    <a href="surat.html" class="menu-link">
+      <div class="menu-box">
+        <i class="fas fa-file-contract"></i>
+        <h3>Surat</h3>
+        <p>Daftar Surat dan Aturan</p>
+      </div>
+    </a>
+
+    <!-- Kunjungan Sales -->
+    <a href="kunjungan.html" class="menu-link">
+      <div class="menu-box">
+        <i class="fas fa-map-marked-alt"></i>
+        <h3>Kunjungan Sales</h3>
+        <p>Check In Toko</p>
+      </div>
+    </a>
+  </div>
+</div>
+
+<!-- ===== POPUP MODAL TOKO ===== -->
+<div class="modal-overlay" id="tokoModal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h3>Menu Toko</h3>
+      <button class="close-btn" id="closeTokoModal"><i class="fas fa-times"></i></button>
+    </div>
+    
+    <div class="modal-grid-3">
+      <!-- 1. Daftar Toko -->
+      <a href="toko.html" class="menu-link">
+        <div class="menu-box">
+          <i class="fas fa-list"></i>
+          <h3>Daftar Toko</h3>
+          <p>Lihat Seluruh Toko</p>
+        </div>
+      </a>
+      
+      <!-- 2. Toko Program -->
+      <a href="tokoprogram.html" class="menu-link">
+        <div class="menu-box">
+          <i class="fas fa-gift"></i>
+          <h3>Toko Program</h3>
+          <p>Program Toko Berjalan</p>
+        </div>
+      </a>
+      
+      <!-- 3. Tambah Toko -->
+      <a href="tambahtoko.html" class="menu-link">
+        <div class="menu-box">
+          <i class="fas fa-plus-circle"></i>
+          <h3>Tambah Toko</h3>
+          <p>Tambah/Ubah Daftar Toko</p>
+        </div>
+      </a>
+    </div>
+  </div>
+</div>
+
+<!-- ===== POPUP MODAL FIELD ACTION ===== -->
+<div class="modal-overlay" id="fieldActionModal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h3>Menu Field Action</h3>
+      <button class="close-btn" id="closeFieldActionModal"><i class="fas fa-times"></i></button>
+    </div>
+    
+    <div class="modal-grid-3">
+      <!-- 1. Kunjungan Sales -->
+      <a href="kunjungan.html" class="menu-link">
+        <div class="menu-box">
+          <i class="fas fa-map-marked-alt"></i>
+          <h3>Kunjungan Sales</h3>
+          <p>Check In Toko</p>
+        </div>
+      </a>
+      
+      <!-- 2. JKS Sales -->
+      <a href="jks.html" class="menu-link">
+        <div class="menu-box">
+          <i class="fas fa-clipboard-list"></i>
+          <h3>JKS Sales</h3>
+          <p>Jurnal Kunjungan Sales</p>
+        </div>
+      </a>
+
+      <!-- 3. Dashboard Admin -->
+      <a href="dash.kunjungan.html" class="menu-link">
+        <div class="menu-box">
+          <i class="fas fa-user-shield"></i>
+          <h3>Dashboard Admin</h3>
+          <p>Dashboard Kunjungan</p>
+        </div>
+      </a>
+    </div>
+  </div>
+</div>
+
+<!-- ===== JAVASCRIPT INTERACTIVE ===== -->
+<script>
+  // PWA Service Worker Registration
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('sw.js')
+        .then(reg => console.log('Service Worker terdaftar:', reg.scope))
+        .catch(err => console.log('Pendaftaran Service Worker gagal:', err));
+    });
+  }
+
+  // Modal Toko
+  const tokoTrigger = document.getElementById('toko-menu-trigger');
+  const tokoModal = document.getElementById('tokoModal');
+  const closeTokoModal = document.getElementById('closeTokoModal');
+
+  tokoTrigger.addEventListener('click', (e) => {
+    e.preventDefault();
+    tokoModal.classList.add('active');
+  });
+
+  closeTokoModal.addEventListener('click', () => {
+    tokoModal.classList.remove('active');
+  });
+
+  tokoModal.addEventListener('click', (e) => {
+    if (e.target === tokoModal) {
+      tokoModal.classList.remove('active');
+    }
+  });
+
+  // Modal Field Action
+  const fieldActionTrigger = document.getElementById('fieldaction-menu-trigger');
+  const fieldActionModal = document.getElementById('fieldActionModal');
+  const closeFieldActionModal = document.getElementById('closeFieldActionModal');
+
+  fieldActionTrigger.addEventListener('click', (e) => {
+    e.preventDefault();
+    fieldActionModal.classList.add('active');
+  });
+
+  closeFieldActionModal.addEventListener('click', () => {
+    fieldActionModal.classList.remove('active');
+  });
+
+  fieldActionModal.addEventListener('click', (e) => {
+    if (e.target === fieldActionModal) {
+      fieldActionModal.classList.remove('active');
+    }
+  });
+</script>
+
+</body>
+</html>
