@@ -1,6 +1,6 @@
 {
-  "name": "Unibis1",
-  "short_name": "Unibis2",
+  "name": "Unibis Langsa",
+  "short_name": "Unibis",
   "start_url": "/unibis/index.html",
   "scope": "/unibis/",
   "display": "standalone",
