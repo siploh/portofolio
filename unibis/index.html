@@ -37,22 +37,127 @@ body{
   align-items: center;
 }
 
-/* ===== APP CONTAINER (Responsive Universal) ===== */
+/* ===== LOGIN CONTAINER ===== */
+.login-container {
+  width: 100%;
+  max-width: 400px;
+  background: var(--white);
+  padding: 40px 30px;
+  border-radius: 24px;
+  box-shadow: 0 15px 35px rgba(0,0,0,0.08);
+  border: 1px solid #fee2e2;
+  text-align: center;
+}
+
+.login-header h1 {
+  font-size: 26px;
+  color: var(--red);
+  margin: 0 0 8px 0;
+}
+
+.login-header p {
+  color: #64748b;
+  font-size: 13px;
+  margin-bottom: 25px;
+}
+
+.form-group {
+  margin-bottom: 18px;
+  text-align: left;
+}
+
+.form-group label {
+  display: block;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--dark);
+  margin-bottom: 6px;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 12px 16px;
+  border: 1px solid #cbd5e1;
+  border-radius: 12px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.form-group input:focus {
+  border-color: var(--red);
+}
+
+.btn-login {
+  width: 100%;
+  background: var(--red);
+  color: var(--white);
+  border: none;
+  padding: 12px;
+  border-radius: 12px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+  margin-top: 10px;
+}
+
+.btn-login:hover {
+  background: var(--red-dark);
+}
+
+.login-error {
+  color: var(--red);
+  font-size: 12px;
+  margin-top: 12px;
+  display: none;
+}
+
+/* ===== APP CONTAINER (Hidden by Default) ===== */
 .app-container {
   width: 100%;
   max-width: 1100px;
   min-height: 100vh;
   margin: 0 auto;
   padding: 30px 20px;
-  display: flex;
+  display: none;
   flex-direction: column;
   justify-content: space-between;
 }
 
-/* ===== HEADER ===== */
+/* ===== HEADER & MENU STYLES ===== */
 .app-header {
   text-align: center;
   margin-bottom: 35px;
+  position: relative;
+}
+
+.logout-btn-container {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 10px;
+}
+
+.btn-logout {
+  background: transparent;
+  border: 1px solid var(--red);
+  color: var(--red);
+  padding: 6px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 600;
+  font-family: 'Poppins', sans-serif;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.btn-logout:hover {
+  background: var(--red);
+  color: var(--white);
 }
 
 .app-header h1 {
@@ -68,10 +173,9 @@ body{
   margin-top: 6px;
 }
 
-/* ===== GRID SYSTEM (Universal Adaptif) ===== */
 .menu-grid{
   display: grid;
-  grid-template-columns: repeat(4, 1fr); /* Default PC */
+  grid-template-columns: repeat(4, 1fr);
   gap: 20px;
   width: 100%;
 }
@@ -81,7 +185,6 @@ body{
   cursor: pointer;
 }
 
-/* ===== CARD ===== */
 .menu-box{
   background: var(--white);
   border: 1px solid #fee2e2;
@@ -97,27 +200,18 @@ body{
   align-items: center;
 }
 
-/* Hover motion untuk Desktop / Tablet */
 .menu-box:hover{
   transform: translateY(-6px);
   box-shadow: 0 15px 30px rgba(220, 38, 38, 0.12);
   border-color: var(--red);
 }
 
-/* Touch active motion untuk Handphone */
-.menu-box:active{
-  transform: scale(0.96);
-  background: #fef2f2;
-}
-
-/* ICON */
 .menu-box i{
   font-size: 36px;
   margin-bottom: 12px;
   color: var(--red);
 }
 
-/* TITLE */
 .menu-box h3{
   margin: 0;
   font-size: 16px;
@@ -125,7 +219,6 @@ body{
   color: var(--dark);
 }
 
-/* DESC */
 .menu-box p{
   margin: 6px 0 0 0;
   font-size: 12px;
@@ -145,7 +238,6 @@ body{
   z-index: 1000;
   justify-content: center;
   align-items: center;
-  animation: fadeIn 0.3s ease;
 }
 
 .modal-overlay.active {
@@ -160,7 +252,6 @@ body{
   max-width: 600px;
   box-shadow: 0 20px 40px rgba(0,0,0,0.15);
   position: relative;
-  animation: scaleUp 0.3s cubic-bezier(.4,0,.2,1);
 }
 
 .modal-header {
@@ -189,7 +280,6 @@ body{
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: background 0.2s;
 }
 
 .close-btn:hover {
@@ -197,86 +287,65 @@ body{
   color: var(--red);
 }
 
-/* Grid di dalam popup */
 .modal-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 16px;
 }
 
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-
-@keyframes scaleUp {
-  from { transform: scale(0.9); opacity: 0; }
-  to { transform: scale(1); opacity: 1; }
-}
-
-/* ===== MEDIA QUERIES (TABLET & MOBILE BREAKPOINTS) ===== */
 @media(max-width: 1024px) {
-  .menu-grid {
-    grid-template-columns: repeat(3, 1fr); /* Tablet: 3 Kolom */
-  }
+  .menu-grid { grid-template-columns: repeat(3, 1fr); }
 }
-
 @media(max-width: 768px) {
-  .app-container {
-    padding: 20px 15px;
-  }
-  .app-header h1 {
-    font-size: 24px;
-  }
-  .menu-grid {
-    grid-template-columns: repeat(2, 1fr); /* Tablet kecil / HP besar: 2 Kolom */
-    gap: 14px;
-  }
-  .modal-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
+  .app-container { padding: 20px 15px; }
+  .menu-grid { grid-template-columns: repeat(2, 1fr); gap: 14px; }
+  .modal-grid { grid-template-columns: repeat(2, 1fr); }
 }
-
 @media(max-width: 480px) {
-  .menu-grid {
-    grid-template-columns: repeat(2, 1fr); /* HP: tetap nyaman dengan 2 kolom */
-    gap: 10px;
-  }
-  .menu-box {
-    padding: 16px 10px;
-  }
-  .menu-box i {
-    font-size: 28px;
-  }
-  .menu-box h3 {
-    font-size: 13px;
-  }
-  .menu-box p {
-    font-size: 10px;
-  }
-  .modal-content {
-    width: 95%;
-    padding: 20px;
-  }
-  .modal-grid {
-    grid-template-columns: 1fr; /* 1 kolom di HP sempit jika diperlukan */
-  }
+  .menu-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+  .modal-content { width: 95%; padding: 20px; }
+  .modal-grid { grid-template-columns: 1fr; }
 }
 </style>
 </head>
 
 <body>
 
-<div class="app-container">
+<!-- ===== FORM LOGIN ===== -->
+<div class="login-container" id="loginCard">
+  <div class="login-header">
+    <h1>UNIBIS Langsa</h1>
+    <p>Silakan login untuk mengakses sistem</p>
+  </div>
+  <form id="loginForm">
+    <div class="form-group">
+      <label>Username</label>
+      <input type="text" id="username" required placeholder="Masukkan username">
+    </div>
+    <div class="form-group">
+      <label>Password</label>
+      <input type="password" id="password" required placeholder="Masukkan password">
+    </div>
+    <button type="submit" class="btn-login" id="loginBtn">Masuk</button>
+    <div class="login-error" id="loginError">Username atau password salah!</div>
+  </form>
+</div>
+
+<!-- ===== APP CONTAINER (DASHBOARD) ===== -->
+<div class="app-container" id="appContainer">
   <!-- App Header -->
   <div class="app-header">
+    <div class="logout-btn-container">
+      <button class="btn-logout" id="logoutBtn">
+        <i class="fas fa-sign-out-alt"></i> Keluar
+      </button>
+    </div>
     <h1>UNIBIS Langsa</h1>
-    <div class="subtitle">Dashboard Sistem & Aplikasi Perusahaan</div>
+    <div class="subtitle">Selamat Datang (<span id="userWelcome"></span>)</div>
   </div>
 
   <!-- Dashboard Content -->
   <div class="menu-grid">
-    <!-- Katalog -->
     <a href="katalog.html" class="menu-link">
       <div class="menu-box">
         <i class="fas fa-book-open"></i>
@@ -285,7 +354,6 @@ body{
       </div>
     </a>
 
-    <!-- Toko -->
     <a class="menu-link" id="toko-menu-trigger">
       <div class="menu-box">
         <i class="fas fa-store"></i>
@@ -294,16 +362,14 @@ body{
       </div>
     </a>
 
-    <!-- Dashboard KPI -->
     <a href="#" class="menu-link">
       <div class="menu-box">
         <i class="fas fa-chart-pie"></i>
         <h3>Dashboard KPI</h3>
-        <p>Pelaporan Pajak</p>
+        <p>KPI Monitoring</p>
       </div>
     </a>
 
-    <!-- Tambah Toko -->
     <a href="tambahtoko.html" class="menu-link">
       <div class="menu-box">
         <i class="fas fa-plus-circle"></i>
@@ -312,7 +378,6 @@ body{
       </div>
     </a>
 
-    <!-- Field Action -->
     <a class="menu-link" id="fieldaction-menu-trigger">
       <div class="menu-box">
         <i class="fas fa-route"></i>
@@ -321,7 +386,6 @@ body{
       </div>
     </a>
 
-    <!-- Program -->
     <a href="#" class="menu-link">
       <div class="menu-box">
         <i class="fas fa-bullhorn"></i>
@@ -330,7 +394,6 @@ body{
       </div>
     </a>
 
-    <!-- Surat -->
     <a href="surat.html" class="menu-link">
       <div class="menu-box">
         <i class="fas fa-file-contract"></i>
@@ -339,7 +402,6 @@ body{
       </div>
     </a>
 
-    <!-- Kunjungan Sales -->
     <a href="kunjungan.html" class="menu-link">
       <div class="menu-box">
         <i class="fas fa-map-marked-alt"></i>
@@ -361,7 +423,6 @@ body{
       <h3>Menu Toko</h3>
       <button class="close-btn" id="closeTokoModal"><i class="fas fa-times"></i></button>
     </div>
-    
     <div class="modal-grid">
       <a href="toko.html" class="menu-link">
         <div class="menu-box">
@@ -370,7 +431,6 @@ body{
           <p>Lihat Seluruh</p>
         </div>
       </a>
-      
       <a href="tokoprogram.html" class="menu-link">
         <div class="menu-box">
           <i class="fas fa-gift"></i>
@@ -378,7 +438,6 @@ body{
           <p>Program Berjalan</p>
         </div>
       </a>
-      
       <a href="tambahtoko.html" class="menu-link">
         <div class="menu-box">
           <i class="fas fa-plus-circle"></i>
@@ -397,7 +456,6 @@ body{
       <h3>Menu Field Action</h3>
       <button class="close-btn" id="closeFieldActionModal"><i class="fas fa-times"></i></button>
     </div>
-    
     <div class="modal-grid">
       <a href="kunjungan.html" class="menu-link">
         <div class="menu-box">
@@ -406,7 +464,6 @@ body{
           <p>Check In Toko</p>
         </div>
       </a>
-      
       <a href="jks.html" class="menu-link">
         <div class="menu-box">
           <i class="fas fa-clipboard-list"></i>
@@ -414,7 +471,6 @@ body{
           <p>Jurnal Kunjungan</p>
         </div>
       </a>
-
       <a href="dash.kunjungan.html" class="menu-link">
         <div class="menu-box">
           <i class="fas fa-user-shield"></i>
@@ -426,15 +482,75 @@ body{
   </div>
 </div>
 
-<!-- ===== JAVASCRIPT INTERACTIVE ===== -->
+<!-- ===== JAVASCRIPT ===== -->
 <script>
-  if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-      navigator.serviceWorker.register('sw.js')
-        .then(reg => console.log('Service Worker terdaftar:', reg.scope))
-        .catch(err => console.log('Pendaftaran Service Worker gagal:', err));
-    });
+  // Ganti URL di bawah dengan Web App URL dari Google Apps Script Anda
+  const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz6DqTa8nCNcIjoT2QSCbEELdAKcRlEn3g73J59HXSYxSayp6ahQpQsDtGzRW4U4OmklQ/exec';
+
+  const loginCard = document.getElementById('loginCard');
+  const appContainer = document.getElementById('appContainer');
+  const loginForm = document.getElementById('loginForm');
+  const loginBtn = document.getElementById('loginBtn');
+  const loginError = document.getElementById('loginError');
+  const userWelcome = document.getElementById('userWelcome');
+  const logoutBtn = document.getElementById('logoutBtn');
+
+  // Cek apakah sudah login sebelumnya (menggunakan Session Storage)
+  if (sessionStorage.getItem('unibis_logged_in') === 'true') {
+    loginCard.style.display = 'none';
+    appContainer.style.display = 'flex';
+    userWelcome.innerText = sessionStorage.getItem('unibis_nama') || 'User';
   }
+
+  // Proses Login
+  loginForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const username = document.getElementById('username').value;
+    const password = document.getElementById('password').value;
+
+    loginBtn.innerText = 'Memproses...';
+    loginBtn.disabled = true;
+    loginError.style.display = 'none';
+
+    fetch(SCRIPT_URL, {
+      method: 'POST',
+      body: JSON.stringify({ action: 'login', username: username, password: password })
+    })
+    .then(res => res.json())
+    .then(data => {
+      if (data.status === 'success') {
+        sessionStorage.setItem('unibis_logged_in', 'true');
+        sessionStorage.setItem('unibis_nama', data.nama);
+        
+        loginCard.style.display = 'none';
+        appContainer.style.display = 'flex';
+        userWelcome.innerText = data.nama;
+      } else {
+        loginError.innerText = data.message;
+        loginError.style.display = 'block';
+      }
+    })
+    .catch(err => {
+      loginError.innerText = 'Gagal terhubung ke server database.';
+      loginError.style.display = 'block';
+    })
+    .finally(() => {
+      loginBtn.innerText = 'Masuk';
+      loginBtn.disabled = false;
+    });
+  });
+
+  // Proses Logout
+  logoutBtn.addEventListener('click', () => {
+    sessionStorage.removeItem('unibis_logged_in');
+    sessionStorage.removeItem('unibis_nama');
+    
+    appContainer.style.display = 'none';
+    loginCard.style.display = 'block';
+    
+    document.getElementById('username').value = '';
+    document.getElementById('password').value = '';
+  });
 
   // Modal Toko
   const tokoTrigger = document.getElementById('toko-menu-trigger');
