@@ -230,29 +230,6 @@ body{
   display: none !important;
 }
 
-/* ===== TOAST NOTIFIKASI BACK HP ===== */
-.back-toast {
-  position: fixed;
-  bottom: 30px;
-  left: 50%;
-  transform: translateX(-50%) translateY(100px);
-  background: var(--dark);
-  color: var(--white);
-  padding: 12px 24px;
-  border-radius: 30px;
-  font-size: 14px;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-  z-index: 2000;
-  transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.back-toast.show {
-  transform: translateX(-50%) translateY(0);
-}
-
 /* ===== POPUP MODAL ===== */
 .modal-overlay {
   display: none;
@@ -595,11 +572,6 @@ body{
   </div>
 </div>
 
-<!-- Toast Notifikasi Back HP -->
-<div class="back-toast" id="backToast">
-  <i class="fas fa-info-circle"></i> <span>Tekan sekali lagi untuk keluar</span>
-</div>
-
 <!-- ===== JAVASCRIPT ===== -->
 <script>
   // Ganti URL di bawah dengan Web App URL dari Google Apps Script Anda
@@ -616,7 +588,6 @@ body{
   const logoutConfirmModal = document.getElementById('logoutConfirmModal');
   const cancelLogoutBtn = document.getElementById('cancelLogoutBtn');
   const confirmLogoutBtn = document.getElementById('confirmLogoutBtn');
-  const backToast = document.getElementById('backToast');
 
   // Fungsi untuk mengatur visibilitas menu berdasarkan role user
   function applyRolePermissions(role) {
@@ -644,7 +615,7 @@ body{
     userWelcome.innerText = savedName;
     userRoleText.innerText = savedRole;
     applyRolePermissions(savedRole);
-    setupDoubleBackToExit();
+    setupBackToExit();
   }
 
   // Proses Login
@@ -664,7 +635,6 @@ body{
     .then(res => res.json())
     .then(data => {
       if (data.status === 'success') {
-        // Pastikan Google Apps Script mengirimkan data 'role' (admin / sales / toko)
         const userRole = data.role ? data.role.toLowerCase() : 'toko';
 
         sessionStorage.setItem('unibis_logged_in', 'true');
@@ -677,7 +647,7 @@ body{
         userRoleText.innerText = userRole;
         
         applyRolePermissions(userRole);
-        setupDoubleBackToExit();
+        setupBackToExit();
       } else {
         loginError.innerText = data.message;
         loginError.style.display = 'block';
@@ -710,8 +680,8 @@ body{
     }
   });
 
-  // Jika tombol "Ya" diklik -> Lakukan logout dan kembali ke halaman login
-  confirmLogoutBtn.addEventListener('click', () => {
+  // Fungsi Logika Aksi Logout (Ya)
+  function executeLogout() {
     logoutConfirmModal.classList.remove('active');
     sessionStorage.removeItem('unibis_logged_in');
     sessionStorage.removeItem('unibis_nama');
@@ -722,48 +692,41 @@ body{
     
     document.getElementById('username').value = '';
     document.getElementById('password').value = '';
+  }
+
+  // Jika tombol "Ya" diklik di modal konfirmasi
+  confirmLogoutBtn.addEventListener('click', () => {
+    executeLogout();
   });
 
-  // ===== LOGIKA TOMBOL BACK HP (DOUBLE BACK TO EXIT) =====
-  function setupDoubleBackToExit() {
-    let backPressCount = 0;
-    let backTimer = null;
-
+  // ===== LOGIKA TOMBOL BACK HP (LANGSUNG MUNCUL POP-UP KELUAR) =====
+  function setupBackToExit() {
     history.pushState(null, null, window.location.href);
 
     window.addEventListener('popstate', function (event) {
+      // Jika ada modal lain yang aktif (misal modal toko/field action), tutup itu dulu
       const activeModal = document.querySelector('.modal-overlay.active');
-      if (activeModal) {
+      if (activeModal && activeModal !== logoutConfirmModal) {
         activeModal.classList.remove('active');
         history.pushState(null, null, window.location.href);
         return;
       }
 
-      backPressCount++;
-
-      if (backPressCount === 1) {
-        backToast.classList.add('show');
-        history.pushState(null, null, window.location.href);
-
-        backTimer = setTimeout(() => {
-          backPressCount = 0;
-          backToast.classList.remove('show');
-        }, 2000);
-
-      } else if (backPressCount >= 2) {
-        clearTimeout(backTimer);
-        backToast.classList.remove('show');
-        
-        sessionStorage.removeItem('unibis_logged_in');
-        sessionStorage.removeItem('unibis_nama');
-        sessionStorage.removeItem('unibis_role');
-
-        try {
-          window.close();
-        } catch (e) {}
-        window.location.href = "about:blank";
-      }
+      // Jika tombol back ditekan, langsung tampilkan modal konfirmasi keluar
+      logoutConfirmModal.classList.add('active');
+      history.pushState(null, null, window.location.href);
     });
+
+    // Sesuaikan tombol "Tidak" di modal agar mengembalikan history state supaya tombol back siap lagi
+    cancelLogoutBtn.onclick = () => {
+      logoutConfirmModal.classList.remove('active');
+      history.pushState(null, null, window.location.href);
+    };
+
+    // Sesuaikan tombol "Ya" di modal agar melakukan logout bersih
+    confirmLogoutBtn.onclick = () => {
+      executeLogout();
+    };
   }
 
   // Modal Toko
