@@ -225,6 +225,34 @@ body{
   color: #64748b;
 }
 
+/* Kelas untuk menyembunyikan menu berdasarkan role */
+.menu-hidden {
+  display: none !important;
+}
+
+/* ===== TOAST NOTIFIKASI BACK HP ===== */
+.back-toast {
+  position: fixed;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%) translateY(100px);
+  background: var(--dark);
+  color: var(--white);
+  padding: 12px 24px;
+  border-radius: 30px;
+  font-size: 14px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+  z-index: 2000;
+  transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.back-toast.show {
+  transform: translateX(-50%) translateY(0);
+}
+
 /* ===== POPUP MODAL ===== */
 .modal-overlay {
   display: none;
@@ -293,6 +321,70 @@ body{
   gap: 16px;
 }
 
+/* ===== MODAL KONFIRMASI KELUAR ===== */
+.logout-modal-content {
+  background: var(--white);
+  padding: 30px;
+  border-radius: 20px;
+  width: 90%;
+  max-width: 380px;
+  text-align: center;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+}
+
+.logout-modal-content i {
+  font-size: 45px;
+  color: var(--red);
+  margin-bottom: 15px;
+}
+
+.logout-modal-content h3 {
+  margin: 0 0 10px 0;
+  color: var(--dark);
+  font-size: 18px;
+}
+
+.logout-modal-content p {
+  color: #64748b;
+  font-size: 14px;
+  margin-bottom: 25px;
+}
+
+.logout-modal-actions {
+  display: flex;
+  gap: 12px;
+}
+
+.btn-modal-no, .btn-modal-yes {
+  flex: 1;
+  padding: 10px;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  font-family: 'Poppins', sans-serif;
+  transition: all 0.2s;
+}
+
+.btn-modal-no {
+  background: #f1f5f9;
+  color: #64748b;
+}
+
+.btn-modal-no:hover {
+  background: #e2e8f0;
+}
+
+.btn-modal-yes {
+  background: var(--red);
+  color: var(--white);
+}
+
+.btn-modal-yes:hover {
+  background: var(--red-dark);
+}
+
 @media(max-width: 1024px) {
   .menu-grid { grid-template-columns: repeat(3, 1fr); }
 }
@@ -341,12 +433,13 @@ body{
       </button>
     </div>
     <h1>UNIBIS Langsa</h1>
-    <div class="subtitle">Selamat Datang (<span id="userWelcome"></span>)</div>
+    <div class="subtitle">Selamat Datang (<span id="userWelcome"></span>) - <span id="userRoleText" style="text-transform: capitalize; font-weight: 600;"></span></div>
   </div>
 
   <!-- Dashboard Content -->
   <div class="menu-grid">
-    <a href="katalog.html" class="menu-link">
+    <!-- Katalog (Admin, Sales, Toko) -->
+    <a href="katalog.html" class="menu-link" data-role="admin,sales,toko">
       <div class="menu-box">
         <i class="fas fa-book-open"></i>
         <h3>Katalog</h3>
@@ -354,7 +447,8 @@ body{
       </div>
     </a>
 
-    <a class="menu-link" id="toko-menu-trigger">
+    <!-- Toko (Admin, Sales) -->
+    <a class="menu-link" id="toko-menu-trigger" data-role="admin,sales">
       <div class="menu-box">
         <i class="fas fa-store"></i>
         <h3>Toko</h3>
@@ -362,7 +456,8 @@ body{
       </div>
     </a>
 
-    <a href="#" class="menu-link">
+    <!-- Dashboard KPI (Admin, Sales) -->
+    <a href="#" class="menu-link" data-role="admin,sales">
       <div class="menu-box">
         <i class="fas fa-chart-pie"></i>
         <h3>Dashboard KPI</h3>
@@ -370,7 +465,8 @@ body{
       </div>
     </a>
 
-    <a href="tambahtoko.html" class="menu-link">
+    <!-- Tambah Toko (Hanya Admin) -->
+    <a href="tambahtoko.html" class="menu-link" data-role="admin">
       <div class="menu-box">
         <i class="fas fa-plus-circle"></i>
         <h3>Tambah Toko</h3>
@@ -378,7 +474,8 @@ body{
       </div>
     </a>
 
-    <a class="menu-link" id="fieldaction-menu-trigger">
+    <!-- Field Action (Hanya Admin) -->
+    <a class="menu-link" id="fieldaction-menu-trigger" data-role="admin">
       <div class="menu-box">
         <i class="fas fa-route"></i>
         <h3>Field Action</h3>
@@ -386,7 +483,8 @@ body{
       </div>
     </a>
 
-    <a href="#" class="menu-link">
+    <!-- Program (Admin, Sales) -->
+    <a href="#" class="menu-link" data-role="admin,sales">
       <div class="menu-box">
         <i class="fas fa-bullhorn"></i>
         <h3>Program</h3>
@@ -394,7 +492,8 @@ body{
       </div>
     </a>
 
-    <a href="surat.html" class="menu-link">
+    <!-- Surat (Hanya Admin) -->
+    <a href="surat.html" class="menu-link" data-role="admin">
       <div class="menu-box">
         <i class="fas fa-file-contract"></i>
         <h3>Surat</h3>
@@ -402,7 +501,8 @@ body{
       </div>
     </a>
 
-    <a href="kunjungan.html" class="menu-link">
+    <!-- Kunjungan (Admin, Sales) -->
+    <a href="kunjungan.html" class="menu-link" data-role="admin,sales">
       <div class="menu-box">
         <i class="fas fa-map-marked-alt"></i>
         <h3>Kunjungan</h3>
@@ -482,10 +582,28 @@ body{
   </div>
 </div>
 
+<!-- ===== POPUP MODAL KONFIRMASI KELUAR ===== -->
+<div class="modal-overlay" id="logoutConfirmModal">
+  <div class="logout-modal-content">
+    <i class="fas fa-question-circle"></i>
+    <h3>Konfirmasi Keluar</h3>
+    <p>Apakah Anda ingin keluar?</p>
+    <div class="logout-modal-actions">
+      <button class="btn-modal-no" id="cancelLogoutBtn">Tidak</button>
+      <button class="btn-modal-yes" id="confirmLogoutBtn">Ya</button>
+    </div>
+  </div>
+</div>
+
+<!-- Toast Notifikasi Back HP -->
+<div class="back-toast" id="backToast">
+  <i class="fas fa-info-circle"></i> <span>Tekan sekali lagi untuk keluar</span>
+</div>
+
 <!-- ===== JAVASCRIPT ===== -->
 <script>
   // Ganti URL di bawah dengan Web App URL dari Google Apps Script Anda
-  const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz6DqTa8nCNcIjoT2QSCbEELdAKcRlEn3g73J59HXSYxSayp6ahQpQsDtGzRW4U4OmklQ/exec';
+  const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwGuq78y2V6I0PrFf9X2wE-hsUdwAt_IN5BbBq8FB4awFvYDT8EW9fmsE37Pvj69hgLQQ/exec';
 
   const loginCard = document.getElementById('loginCard');
   const appContainer = document.getElementById('appContainer');
@@ -493,13 +611,40 @@ body{
   const loginBtn = document.getElementById('loginBtn');
   const loginError = document.getElementById('loginError');
   const userWelcome = document.getElementById('userWelcome');
+  const userRoleText = document.getElementById('userRoleText');
   const logoutBtn = document.getElementById('logoutBtn');
+  const logoutConfirmModal = document.getElementById('logoutConfirmModal');
+  const cancelLogoutBtn = document.getElementById('cancelLogoutBtn');
+  const confirmLogoutBtn = document.getElementById('confirmLogoutBtn');
+  const backToast = document.getElementById('backToast');
+
+  // Fungsi untuk mengatur visibilitas menu berdasarkan role user
+  function applyRolePermissions(role) {
+    const menuLinks = document.querySelectorAll('.menu-grid .menu-link');
+    menuLinks.forEach(link => {
+      const allowedRoles = link.getAttribute('data-role');
+      if (allowedRoles) {
+        const rolesArray = allowedRoles.split(',');
+        if (rolesArray.includes(role)) {
+          link.classList.remove('menu-hidden');
+        } else {
+          link.classList.add('menu-hidden');
+        }
+      }
+    });
+  }
 
   // Cek apakah sudah login sebelumnya (menggunakan Session Storage)
   if (sessionStorage.getItem('unibis_logged_in') === 'true') {
     loginCard.style.display = 'none';
     appContainer.style.display = 'flex';
-    userWelcome.innerText = sessionStorage.getItem('unibis_nama') || 'User';
+    const savedName = sessionStorage.getItem('unibis_nama') || 'User';
+    const savedRole = sessionStorage.getItem('unibis_role') || 'admin';
+    
+    userWelcome.innerText = savedName;
+    userRoleText.innerText = savedRole;
+    applyRolePermissions(savedRole);
+    setupDoubleBackToExit();
   }
 
   // Proses Login
@@ -519,12 +664,20 @@ body{
     .then(res => res.json())
     .then(data => {
       if (data.status === 'success') {
+        // Pastikan Google Apps Script mengirimkan data 'role' (admin / sales / toko)
+        const userRole = data.role ? data.role.toLowerCase() : 'toko';
+
         sessionStorage.setItem('unibis_logged_in', 'true');
         sessionStorage.setItem('unibis_nama', data.nama);
+        sessionStorage.setItem('unibis_role', userRole);
         
         loginCard.style.display = 'none';
         appContainer.style.display = 'flex';
         userWelcome.innerText = data.nama;
+        userRoleText.innerText = userRole;
+        
+        applyRolePermissions(userRole);
+        setupDoubleBackToExit();
       } else {
         loginError.innerText = data.message;
         loginError.style.display = 'block';
@@ -540,10 +693,29 @@ body{
     });
   });
 
-  // Proses Logout
+  // Saat tombol "Keluar" di header diklik -> Tampilkan modal konfirmasi
   logoutBtn.addEventListener('click', () => {
+    logoutConfirmModal.classList.add('active');
+  });
+
+  // Jika tombol "Tidak" diklik -> Tutup modal, kembali ke menu
+  cancelLogoutBtn.addEventListener('click', () => {
+    logoutConfirmModal.classList.remove('active');
+  });
+
+  // Klik di luar kotak modal juga menutup modal
+  logoutConfirmModal.addEventListener('click', (e) => {
+    if (e.target === logoutConfirmModal) {
+      logoutConfirmModal.classList.remove('active');
+    }
+  });
+
+  // Jika tombol "Ya" diklik -> Lakukan logout dan kembali ke halaman login
+  confirmLogoutBtn.addEventListener('click', () => {
+    logoutConfirmModal.classList.remove('active');
     sessionStorage.removeItem('unibis_logged_in');
     sessionStorage.removeItem('unibis_nama');
+    sessionStorage.removeItem('unibis_role');
     
     appContainer.style.display = 'none';
     loginCard.style.display = 'block';
@@ -551,6 +723,48 @@ body{
     document.getElementById('username').value = '';
     document.getElementById('password').value = '';
   });
+
+  // ===== LOGIKA TOMBOL BACK HP (DOUBLE BACK TO EXIT) =====
+  function setupDoubleBackToExit() {
+    let backPressCount = 0;
+    let backTimer = null;
+
+    history.pushState(null, null, window.location.href);
+
+    window.addEventListener('popstate', function (event) {
+      const activeModal = document.querySelector('.modal-overlay.active');
+      if (activeModal) {
+        activeModal.classList.remove('active');
+        history.pushState(null, null, window.location.href);
+        return;
+      }
+
+      backPressCount++;
+
+      if (backPressCount === 1) {
+        backToast.classList.add('show');
+        history.pushState(null, null, window.location.href);
+
+        backTimer = setTimeout(() => {
+          backPressCount = 0;
+          backToast.classList.remove('show');
+        }, 2000);
+
+      } else if (backPressCount >= 2) {
+        clearTimeout(backTimer);
+        backToast.classList.remove('show');
+        
+        sessionStorage.removeItem('unibis_logged_in');
+        sessionStorage.removeItem('unibis_nama');
+        sessionStorage.removeItem('unibis_role');
+
+        try {
+          window.close();
+        } catch (e) {}
+        window.location.href = "about:blank";
+      }
+    });
+  }
 
   // Modal Toko
   const tokoTrigger = document.getElementById('toko-menu-trigger');
