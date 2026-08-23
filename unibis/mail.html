@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Mengarahkan ke Email...</title>
+  <link rel="icon" href="img/logo.png" />
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f6f8;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      color: #333;
+    }
+    .loader-container {
+      text-align: center;
+      background: #fff;
+      padding: 30px;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    .btn {
+      display: inline-block;
+      margin-top: 15px;
+      padding: 10px 20px;
+      background-color: #0066ff;
+      color: white;
+      text-decoration: none;
+      border-radius: 4px;
+      font-weight: bold;
+    }
+    .btn:hover {
+      background-color: #0052cc;
+    }
+  </style>
+  
+  <!-- Opsi 1: Otomatis redirect setelah halaman dimuat -->
+  <script>
+    window.location.replace("https://mail.hostinger.com");
+  </script>
+</head>
+<body>
+  <div class="loader-container">
+    <h2>Mengarahkan ke Hostinger Mail...</h2>
+    <p>Jika Anda tidak otomatis diarahkan, silakan klik tombol di bawah ini:</p>
+    <a href="https://mail.hostinger.com" class="btn">Buka Email Sekarang</a>
+  </div>
+</body>
+</html>
