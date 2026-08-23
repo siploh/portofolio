@@ -410,98 +410,100 @@ body{
 <!-- ===== APP CONTAINER (DASHBOARD) ===== -->
 <div class="app-container" id="appContainer">
   <!-- App Header -->
-  <div class="app-header">
-    <div class="logout-btn-container">
-      <button class="btn-logout" id="logoutBtn">
-        <i class="fas fa-sign-out-alt"></i> Keluar
-      </button>
+  <div>
+    <div class="app-header">
+      <div class="logout-btn-container">
+        <button class="btn-logout" id="logoutBtn">
+          <i class="fas fa-sign-out-alt"></i> Keluar
+        </button>
+      </div>
+      <h1>UNIBIS Langsa</h1>
+      <div class="subtitle">Selamat Datang (<span id="userWelcome"></span>) - <span id="userRoleText" style="text-transform: capitalize; font-weight: 600;"></span></div>
     </div>
-    <h1>UNIBIS Langsa</h1>
-    <div class="subtitle">Selamat Datang (<span id="userWelcome"></span>) - <span id="userRoleText" style="text-transform: capitalize; font-weight: 600;"></span></div>
-  </div>
 
-  <!-- Dashboard Content -->
-  <div class="menu-grid">
-    <!-- Katalog (Admin, Sales, Toko, Manager, Supervisor) -->
-    <a href="katalog.html" class="menu-link" data-role="admin,sales,toko,manager,supervisor">
-      <div class="menu-box">
-        <i class="fas fa-book-open"></i>
-        <h3>Katalog</h3>
-        <p>Daftar Katalog Unibis</p>
-      </div>
-    </a>
+    <!-- Dashboard Content -->
+    <div class="menu-grid">
+      <!-- Katalog (Admin, Sales, Toko, Manager, Supervisor) -->
+      <a href="katalog.html" class="menu-link" data-role="admin,sales,toko,manager,supervisor">
+        <div class="menu-box">
+          <i class="fas fa-book-open"></i>
+          <h3>Katalog</h3>
+          <p>Daftar Katalog Unibis</p>
+        </div>
+      </a>
 
-    <!-- Toko (Admin, Sales, Manager, Supervisor) -->
-    <a class="menu-link" id="toko-menu-trigger" data-role="admin,sales,manager,supervisor">
-      <div class="menu-box">
-        <i class="fas fa-store"></i>
-        <h3>Toko</h3>
-        <p>Daftar Toko</p>
-      </div>
-    </a>
+      <!-- Toko (Admin, Sales, Manager, Supervisor) -->
+      <a class="menu-link" id="toko-menu-trigger" data-role="admin,sales,manager,supervisor">
+        <div class="menu-box">
+          <i class="fas fa-store"></i>
+          <h3>Toko</h3>
+          <p>Daftar Toko</p>
+        </div>
+      </a>
 
-    <!-- Dashboard KPI (Admin, Sales, Manager, Supervisor) -->
-    <a class="menu-link" id="dashboard-menu-trigger" data-role="admin,sales,manager,supervisor">
-      <div class="menu-box">
-        <i class="fas fa-chart-pie"></i>
-        <h3>Dashboard</h3>
-        <p>KPI Monitoring</p>
-      </div>
-    </a>
+      <!-- Dashboard KPI (Admin, Sales, Manager, Supervisor) -->
+      <a class="menu-link" id="dashboard-menu-trigger" data-role="admin,sales,manager,supervisor">
+        <div class="menu-box">
+          <i class="fas fa-chart-pie"></i>
+          <h3>Dashboard</h3>
+          <p>KPI Monitoring</p>
+        </div>
+      </a>
 
-    <!-- Tambah Toko (Hanya Admin) -->
-    <a href="tambahtoko.html" class="menu-link" data-role="admin">
-      <div class="menu-box">
-        <i class="fas fa-plus-circle"></i>
-        <h3>Tambah Toko</h3>
-        <p>Tambah/Ubah Toko</p>
-      </div>
-    </a>
+      <!-- Tambah Toko (Hanya Admin) -->
+      <a href="tambahtoko.html" class="menu-link" data-role="admin">
+        <div class="menu-box">
+          <i class="fas fa-plus-circle"></i>
+          <h3>Tambah Toko</h3>
+          <p>Tambah/Ubah Toko</p>
+        </div>
+      </a>
 
-    <!-- Field Action (Admin, Manager, Supervisor) -->
-    <a class="menu-link" id="fieldaction-menu-trigger" data-role="admin,manager,supervisor">
-      <div class="menu-box">
-        <i class="fas fa-route"></i>
-        <h3>Field Action</h3>
-        <p>Dashboard Lapangan</p>
-      </div>
-    </a>
+      <!-- Field Action (Admin, Manager, Supervisor) -->
+      <a class="menu-link" id="fieldaction-menu-trigger" data-role="admin,manager,supervisor">
+        <div class="menu-box">
+          <i class="fas fa-route"></i>
+          <h3>Field Action</h3>
+          <p>Dashboard Lapangan</p>
+        </div>
+      </a>
 
-    <!-- Program (Admin, Sales, Manager, Supervisor) -->
-    <a href="#" class="menu-link" data-role="admin,sales,manager,supervisor">
-      <div class="menu-box">
-        <i class="fas fa-bullhorn"></i>
-        <h3>Program</h3>
-        <p>Program Berjalan</p>
-      </div>
-    </a>
+      <!-- Program (Admin, Sales, Manager, Supervisor) -->
+      <a href="#" class="menu-link" data-role="admin,sales,manager,supervisor">
+        <div class="menu-box">
+          <i class="fas fa-bullhorn"></i>
+          <h3>Program</h3>
+          <p>Program Berjalan</p>
+        </div>
+      </a>
 
-    <!-- Surat (Admin, Manager, Supervisor) -->
-    <a href="surat.html" class="menu-link" data-role="admin,manager,supervisor">
-      <div class="menu-box">
-        <i class="fas fa-file-contract"></i>
-        <h3>Surat</h3>
-        <p>Aturan & Surat</p>
-      </div>
-    </a>
+      <!-- Surat (Admin, Manager, Supervisor) -->
+      <a href="surat.html" class="menu-link" data-role="admin,manager,supervisor">
+        <div class="menu-box">
+          <i class="fas fa-file-contract"></i>
+          <h3>Surat</h3>
+          <p>Aturan & Surat</p>
+        </div>
+      </a>
 
-    <!-- Kunjungan (Admin, Sales) -->
-    <a href="kunjungan.html" class="menu-link" data-role="admin,sales">
-      <div class="menu-box">
-        <i class="fas fa-map-marked-alt"></i>
-        <h3>Kunjungan</h3>
-        <p>Check In Toko</p>
-      </div>
-    </a>
+      <!-- Kunjungan (Admin, Sales) -->
+      <a href="kunjungan.html" class="menu-link" data-role="admin,sales">
+        <div class="menu-box">
+          <i class="fas fa-map-marked-alt"></i>
+          <h3>Kunjungan</h3>
+          <p>Check In Toko</p>
+        </div>
+      </a>
 
-    <!-- Email (Admin, Supervisor, Manager) -->
-    <a href="mail.html" class="menu-link" data-role="admin,manager,supervisor">
-      <div class="menu-box">
-        <i class="fas fa-file-contract"></i>
-        <h3>Email</h3>
-        <p>Hostinger Webmail</p>
-      </div>
-    </a>
+      <!-- Email (Admin, Supervisor, Manager) -->
+      <a href="mail.html" class="menu-link" data-role="admin,manager,supervisor">
+        <div class="menu-box">
+          <i class="fas fa-envelope"></i>
+          <h3>Email</h3>
+          <p>Kotak Masuk</p>
+        </div>
+      </a>
+    </div>
   </div>
 
   <div style="text-align: center; font-size: 11px; color: #94a3b8; margin-top: 30px;">
