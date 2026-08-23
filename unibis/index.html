@@ -298,6 +298,13 @@ body{
   gap: 16px;
 }
 
+/* Khusus Modal Dashboard (2 menu, biar posisinya pas) */
+.modal-grid-2 {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+
 /* ===== MODAL KONFIRMASI KELUAR ===== */
 .logout-modal-content {
   background: var(--white);
@@ -373,7 +380,7 @@ body{
 @media(max-width: 480px) {
   .menu-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
   .modal-content { width: 95%; padding: 20px; }
-  .modal-grid { grid-template-columns: 1fr; }
+  .modal-grid, .modal-grid-2 { grid-template-columns: 1fr; }
 }
 </style>
 </head>
@@ -433,8 +440,8 @@ body{
       </div>
     </a>
 
-    <!-- Dashboard KPI (Admin, Sales) -->
-    <a href="Dashboard.html" class="menu-link" data-role="admin,sales">
+    <!-- Dashboard KPI (Admin, Sales) - Diubah menjadi Trigger Pop-up -->
+    <a class="menu-link" id="dashboard-menu-trigger" data-role="admin,sales">
       <div class="menu-box">
         <i class="fas fa-chart-pie"></i>
         <h3>Dashboard</h3>
@@ -520,6 +527,32 @@ body{
           <i class="fas fa-plus-circle"></i>
           <h3>Tambah Toko</h3>
           <p>Kelola Toko</p>
+        </div>
+      </a>
+    </div>
+  </div>
+</div>
+
+<!-- ===== POPUP MODAL DASHBOARD (BARU) ===== -->
+<div class="modal-overlay" id="dashboardModal">
+  <div class="modal-content" style="max-width: 450px;">
+    <div class="modal-header">
+      <h3>Menu Dashboard</h3>
+      <button class="close-btn" id="closeDashboardModal"><i class="fas fa-times"></i></button>
+    </div>
+    <div class="modal-grid-2">
+      <a href="Dashboard.html" class="menu-link">
+        <div class="menu-box">
+          <i class="fas fa-chart-line"></i>
+          <h3>Dashboard Sales</h3>
+          <p>Monitor Penjualan</p>
+        </div>
+      </a>
+      <a href="ikattarget.html" class="menu-link">
+        <div class="menu-box">
+          <i class="fas fa-bullseye"></i>
+          <h3>Ikat Target</h3>
+          <p>Pencapaian Target</p>
         </div>
       </a>
     </div>
@@ -704,7 +737,7 @@ body{
     history.pushState(null, null, window.location.href);
 
     window.addEventListener('popstate', function (event) {
-      // Jika ada modal lain yang aktif (misal modal toko/field action), tutup itu dulu
+      // Jika ada modal lain yang aktif (misal modal toko/field action/dashboard), tutup itu dulu
       const activeModal = document.querySelector('.modal-overlay.active');
       if (activeModal && activeModal !== logoutConfirmModal) {
         activeModal.classList.remove('active');
@@ -717,13 +750,11 @@ body{
       history.pushState(null, null, window.location.href);
     });
 
-    // Sesuaikan tombol "Tidak" di modal agar mengembalikan history state supaya tombol back siap lagi
     cancelLogoutBtn.onclick = () => {
       logoutConfirmModal.classList.remove('active');
       history.pushState(null, null, window.location.href);
     };
 
-    // Sesuaikan tombol "Ya" di modal agar melakukan logout bersih
     confirmLogoutBtn.onclick = () => {
       executeLogout();
     };
@@ -746,6 +777,26 @@ body{
   tokoModal.addEventListener('click', (e) => {
     if (e.target === tokoModal) {
       tokoModal.classList.remove('active');
+    }
+  });
+
+  // Modal Dashboard (BARU)
+  const dashboardTrigger = document.getElementById('dashboard-menu-trigger');
+  const dashboardModal = document.getElementById('dashboardModal');
+  const closeDashboardModal = document.getElementById('closeDashboardModal');
+
+  dashboardTrigger.addEventListener('click', (e) => {
+    e.preventDefault();
+    dashboardModal.classList.add('active');
+  });
+
+  closeDashboardModal.addEventListener('click', () => {
+    dashboardModal.classList.remove('active');
+  });
+
+  dashboardModal.addEventListener('click', (e) => {
+    if (e.target === dashboardModal) {
+      dashboardModal.classList.remove('active');
     }
   });
 
