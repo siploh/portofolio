@@ -422,8 +422,8 @@ body{
 
   <!-- Dashboard Content -->
   <div class="menu-grid">
-    <!-- Katalog (Admin, Sales, Toko) -->
-    <a href="katalog.html" class="menu-link" data-role="admin,sales,toko">
+    <!-- Katalog (Admin, Sales, Toko, Manager, Supervisor) -->
+    <a href="katalog.html" class="menu-link" data-role="admin,sales,toko,manager,supervisor">
       <div class="menu-box">
         <i class="fas fa-book-open"></i>
         <h3>Katalog</h3>
@@ -431,8 +431,8 @@ body{
       </div>
     </a>
 
-    <!-- Toko (Admin, Sales) -->
-    <a class="menu-link" id="toko-menu-trigger" data-role="admin,sales">
+    <!-- Toko (Admin, Sales, Manager, Supervisor) -->
+    <a class="menu-link" id="toko-menu-trigger" data-role="admin,sales,manager,supervisor">
       <div class="menu-box">
         <i class="fas fa-store"></i>
         <h3>Toko</h3>
@@ -440,8 +440,8 @@ body{
       </div>
     </a>
 
-    <!-- Dashboard KPI (Admin, Sales) - Diubah menjadi Trigger Pop-up -->
-    <a class="menu-link" id="dashboard-menu-trigger" data-role="admin,sales">
+    <!-- Dashboard KPI (Admin, Sales, Manager, Supervisor) -->
+    <a class="menu-link" id="dashboard-menu-trigger" data-role="admin,sales,manager,supervisor">
       <div class="menu-box">
         <i class="fas fa-chart-pie"></i>
         <h3>Dashboard</h3>
@@ -458,8 +458,8 @@ body{
       </div>
     </a>
 
-    <!-- Field Action (Hanya Admin) -->
-    <a class="menu-link" id="fieldaction-menu-trigger" data-role="admin">
+    <!-- Field Action (Admin, Manager, Supervisor) -->
+    <a class="menu-link" id="fieldaction-menu-trigger" data-role="admin,manager,supervisor">
       <div class="menu-box">
         <i class="fas fa-route"></i>
         <h3>Field Action</h3>
@@ -467,8 +467,8 @@ body{
       </div>
     </a>
 
-    <!-- Program (Admin, Sales) -->
-    <a href="#" class="menu-link" data-role="admin,sales">
+    <!-- Program (Admin, Sales, Manager, Supervisor) -->
+    <a href="#" class="menu-link" data-role="admin,sales,manager,supervisor">
       <div class="menu-box">
         <i class="fas fa-bullhorn"></i>
         <h3>Program</h3>
@@ -476,8 +476,8 @@ body{
       </div>
     </a>
 
-    <!-- Surat (Hanya Admin) -->
-    <a href="surat.html" class="menu-link" data-role="admin">
+    <!-- Surat (Admin, Manager, Supervisor) -->
+    <a href="surat.html" class="menu-link" data-role="admin,manager,supervisor">
       <div class="menu-box">
         <i class="fas fa-file-contract"></i>
         <h3>Surat</h3>
@@ -533,7 +533,7 @@ body{
   </div>
 </div>
 
-<!-- ===== POPUP MODAL DASHBOARD (BARU) ===== -->
+<!-- ===== POPUP MODAL DASHBOARD ===== -->
 <div class="modal-overlay" id="dashboardModal">
   <div class="modal-content" style="max-width: 450px;">
     <div class="modal-header">
@@ -607,7 +607,6 @@ body{
 
 <!-- ===== JAVASCRIPT ===== -->
 <script>
-  // Ganti URL di bawah dengan Web App URL dari Google Apps Script Anda
   const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwGuq78y2V6I0PrFf9X2wE-hsUdwAt_IN5BbBq8FB4awFvYDT8EW9fmsE37Pvj69hgLQQ/exec';
 
   const loginCard = document.getElementById('loginCard');
@@ -622,7 +621,6 @@ body{
   const cancelLogoutBtn = document.getElementById('cancelLogoutBtn');
   const confirmLogoutBtn = document.getElementById('confirmLogoutBtn');
 
-  // Fungsi untuk mengatur visibilitas menu berdasarkan role user
   function applyRolePermissions(role) {
     const menuLinks = document.querySelectorAll('.menu-grid .menu-link');
     menuLinks.forEach(link => {
@@ -638,7 +636,6 @@ body{
     });
   }
 
-  // Cek apakah sudah login sebelumnya (menggunakan Session Storage)
   if (sessionStorage.getItem('unibis_logged_in') === 'true') {
     loginCard.style.display = 'none';
     appContainer.style.display = 'flex';
@@ -651,7 +648,6 @@ body{
     setupBackToExit();
   }
 
-  // Proses Login
   loginForm.addEventListener('submit', (e) => {
     e.preventDefault();
     const username = document.getElementById('username').value;
@@ -696,24 +692,20 @@ body{
     });
   });
 
-  // Saat tombol "Keluar" di header diklik -> Tampilkan modal konfirmasi
   logoutBtn.addEventListener('click', () => {
     logoutConfirmModal.classList.add('active');
   });
 
-  // Jika tombol "Tidak" diklik -> Tutup modal, kembali ke menu
   cancelLogoutBtn.addEventListener('click', () => {
     logoutConfirmModal.classList.remove('active');
   });
 
-  // Klik di luar kotak modal juga menutup modal
   logoutConfirmModal.addEventListener('click', (e) => {
     if (e.target === logoutConfirmModal) {
       logoutConfirmModal.classList.remove('active');
     }
   });
 
-  // Fungsi Logika Aksi Logout (Ya)
   function executeLogout() {
     logoutConfirmModal.classList.remove('active');
     sessionStorage.removeItem('unibis_logged_in');
@@ -727,17 +719,14 @@ body{
     document.getElementById('password').value = '';
   }
 
-  // Jika tombol "Ya" diklik di modal konfirmasi
   confirmLogoutBtn.addEventListener('click', () => {
     executeLogout();
   });
 
-  // ===== LOGIKA TOMBOL BACK HP (LANGSUNG MUNCUL POP-UP KELUAR) =====
   function setupBackToExit() {
     history.pushState(null, null, window.location.href);
 
     window.addEventListener('popstate', function (event) {
-      // Jika ada modal lain yang aktif (misal modal toko/field action/dashboard), tutup itu dulu
       const activeModal = document.querySelector('.modal-overlay.active');
       if (activeModal && activeModal !== logoutConfirmModal) {
         activeModal.classList.remove('active');
@@ -745,7 +734,6 @@ body{
         return;
       }
 
-      // Jika tombol back ditekan, langsung tampilkan modal konfirmasi keluar
       logoutConfirmModal.classList.add('active');
       history.pushState(null, null, window.location.href);
     });
@@ -760,7 +748,6 @@ body{
     };
   }
 
-  // Modal Toko
   const tokoTrigger = document.getElementById('toko-menu-trigger');
   const tokoModal = document.getElementById('tokoModal');
   const closeTokoModal = document.getElementById('closeTokoModal');
@@ -780,7 +767,6 @@ body{
     }
   });
 
-  // Modal Dashboard (BARU)
   const dashboardTrigger = document.getElementById('dashboard-menu-trigger');
   const dashboardModal = document.getElementById('dashboardModal');
   const closeDashboardModal = document.getElementById('closeDashboardModal');
@@ -800,7 +786,6 @@ body{
     }
   });
 
-  // Modal Field Action
   const fieldActionTrigger = document.getElementById('fieldaction-menu-trigger');
   const fieldActionModal = document.getElementById('fieldActionModal');
   const closeFieldActionModal = document.getElementById('closeFieldActionModal');
