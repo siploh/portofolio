@@ -1,1374 +1,185 @@
 <!DOCTYPE html>
 <html lang="id">
-
 <head>
-
   <meta charset="UTF-8">
-
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
-  >
-
-  <title>Field Action | Admin Dashboard</title>
-
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <title>Field Action</title>
   <script src="https://cdn.tailwindcss.com"></script>
-
-
   <style>
-
-    .loading-spin {
-      border: 3px solid #f3f3f3;
-      border-top: 3px solid #ef4444;
-      border-radius: 50%;
-      width: 30px;
-      height: 30px;
-      animation: spin 1s linear infinite;
-    }
-
-    @keyframes spin {
-      0% {
-        transform: rotate(0deg);
-      }
-
-      100% {
-        transform: rotate(360deg);
-      }
-    }
-
-
-    .scrollbar-hide::-webkit-scrollbar {
-      display: none;
-    }
-
-
-    .tr-hover:hover {
-      background-color: #f8fafc;
-      transition: all 0.2s;
-    }
-
-
-    input[type="date"]::-webkit-calendar-picker-indicator {
-      cursor: pointer;
-      filter: invert(0.5);
-    }
-
-
-    .modal-active {
-      opacity: 1;
-      pointer-events: auto;
-      transform: scale(1);
-      visibility: visible;
-    }
-
-
-    .modal-inactive {
-      opacity: 0;
-      pointer-events: none;
-      transform: scale(0.95);
-      visibility: hidden;
-    }
-
+    body { -webkit-tap-highlight-color: transparent; }
+    #video { width: 100%; border-radius: 1.5rem; background: #000; aspect-ratio: 4/3; object-fit: cover; }
+    .loading-spin { border: 2px solid #f3f3f3; border-top: 2px solid #ef4444; border-radius: 50%; width: 16px; height: 16px; animation: spin 1s linear infinite; display: inline-block; }
+    @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
   </style>
-
 </head>
+<body class="bg-slate-50 min-h-screen font-sans">
 
-
-<body
-  class="bg-slate-50 min-h-screen font-sans text-slate-900 overflow-x-hidden"
->
-
-
-  <!-- ======================================================
-       PHOTO MODAL
-  ======================================================= -->
-
-  <div
-    id="photoModal"
-    class="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-900/90 backdrop-blur-sm transition-all duration-300 modal-inactive"
-  >
-
-    <div
-      class="relative max-w-2xl w-full bg-white rounded-[2.5rem] overflow-hidden shadow-2xl"
-    >
-
-      <div
-        class="p-6 border-b border-slate-100 flex justify-between items-center"
-      >
-
-        <h3
-          id="modalTitle"
-          class="text-xs font-black uppercase text-slate-800 tracking-widest italic"
-        >
-          Detail Foto Bukti
-        </h3>
-
-
-        <button
-          onclick="closePhotoModal()"
-          class="bg-slate-100 hover:bg-red-50 text-slate-400 hover:text-red-600 p-2 rounded-xl"
-        >
-
-          ✕
-
-        </button>
-
-      </div>
-
-
-      <div
-        class="p-4 bg-slate-50 flex justify-center items-center min-h-[300px]"
-      >
-
-        <img
-          id="modalImg"
-          src=""
-          alt="Bukti Kunjungan"
-          class="max-h-[70vh] rounded-2xl shadow-lg border-4 border-white object-contain"
-        >
-
-      </div>
-
+  <div id="loginPanel" class="max-w-md mx-auto p-6 pt-20">
+    <div class="bg-white rounded-[2rem] shadow-xl p-8 text-center">
+      <h1 class="text-3xl font-black mb-6">Field Action</h1>
+      <input type="text" id="inputId" placeholder="ID Sales" class="w-full p-4 bg-slate-100 rounded-xl font-bold mb-4 outline-none focus:ring-2 focus:ring-red-500">
+      <button onclick="auth()" id="btnLogin" class="w-full bg-red-600 text-white font-bold py-4 rounded-xl shadow-lg active:scale-95">MASUK</button>
+      <p id="loginError" class="text-red-500 text-xs font-bold mt-4"></p>
     </div>
-
   </div>
 
+  <div id="appPanel" class="max-w-md mx-auto p-4 hidden">
+    <div class="bg-white rounded-[2rem] shadow-2xl overflow-hidden">
+      <div class="bg-slate-900 p-6 flex justify-between items-center text-white">
+        <div><h2 id="displayNama" class="font-bold text-lg">---</h2><p class="text-[10px] text-slate-400">SALES REPRESENTATIVE</p></div>
+        <button onclick="location.reload()" class="bg-red-600 text-[10px] font-bold px-3 py-2 rounded-lg">LOGOUT</button>
+      </div>
 
-
-  <!-- ======================================================
-       MAP MODAL
-  ======================================================= -->
-
-  <div
-    id="mapModal"
-    class="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-900/90 backdrop-blur-sm transition-all duration-300 modal-inactive"
-  >
-
-    <div
-      class="relative max-w-4xl w-full bg-white rounded-[2.5rem] overflow-hidden shadow-2xl"
-    >
-
-      <div
-        class="p-6 border-b border-slate-100 flex justify-between items-center"
-      >
-
+      <div class="p-6 space-y-6">
         <div>
-
-          <h3
-            class="text-xs font-black uppercase text-slate-800 tracking-widest italic"
-          >
-            Lokasi Check-in
-          </h3>
-
-          <p
-            id="mapSubtitle"
-            class="text-[9px] text-slate-400 font-bold uppercase mt-1"
-          ></p>
-
+          <label class="text-[10px] font-black text-slate-400 uppercase mb-2 block">Pilih Toko</label>
+          <select id="tokoSelect" class="w-full p-4 bg-slate-50 rounded-xl font-bold appearance-none shadow-inner border-none"></select>
         </div>
 
+        <div class="relative">
+          <video id="video" autoplay playsinline muted></video>
+          <canvas id="canvas" class="hidden"></canvas>
+          <div id="gpsBox" class="absolute top-4 left-4 bg-black/60 text-[10px] text-white px-3 py-1 rounded-full font-bold tracking-widest">GPS: MENCARI...</div>
+          
+          <button onclick="switchCamera()" class="absolute bottom-4 right-4 bg-white/20 hover:bg-white/40 backdrop-blur-md p-3 rounded-full transition-all">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12c0 1.2-4.03 6-9 6s-9-4.8-9-6c0-1.2 4.03-6 9-6s9 4.8 9 6Z"/><path d="M3 12h18"/><path d="M12 21a9 9 0 0 0 0-18"/></svg>
+          </button>
+        </div>
 
-        <button
-          onclick="closeMapModal()"
-          class="bg-slate-100 hover:bg-red-50 text-slate-400 hover:text-red-600 p-2 rounded-xl"
-        >
-
-          ✕
-
-        </button>
-
+        <button onclick="prosesCheckin()" id="btnCheckin" class="w-full bg-red-600 text-white font-black py-4 rounded-xl shadow-lg active:scale-95">CHECK-IN</button>
+        <p id="statusMsg" class="text-center text-xs font-bold mt-2 text-slate-500"></p>
       </div>
-
-
-      <div class="w-full aspect-video bg-slate-100">
-
-        <iframe
-          id="mapFrame"
-          width="100%"
-          height="100%"
-          frameborder="0"
-          style="border:0"
-          allowfullscreen
-          loading="lazy"
-        ></iframe>
-
-      </div>
-
     </div>
-
   </div>
-
-
-
-  <!-- ======================================================
-       NAVBAR
-  ======================================================= -->
-
-  <nav
-    class="bg-slate-900 text-white p-5 sticky top-0 z-50 shadow-xl"
-  >
-
-    <div
-      class="max-w-6xl mx-auto flex justify-between items-center"
-    >
-
-      <div class="flex items-center gap-3">
-
-        <div class="bg-red-600 p-2 rounded-lg">
-
-          📍
-
-        </div>
-
-
-        <h1
-          class="font-black uppercase tracking-widest text-lg"
-        >
-
-          Field Action
-
-          <span class="text-red-500 italic">
-            Admin
-          </span>
-
-        </h1>
-
-      </div>
-
-
-      <button
-        onclick="loadData()"
-        class="bg-red-600 hover:bg-red-700 px-5 py-2 rounded-xl text-xs font-black transition-all active:scale-95 flex items-center gap-2 uppercase"
-      >
-
-        ↻
-
-        Sync
-
-      </button>
-
-    </div>
-
-  </nav>
-
-
-
-  <!-- ======================================================
-       MAIN
-  ======================================================= -->
-
-  <div
-    class="max-w-6xl mx-auto p-6 space-y-8"
-  >
-
-
-    <!-- SUMMARY -->
-
-    <section>
-
-      <div
-        class="flex items-center justify-between mb-4 px-2"
-      >
-
-        <h2
-          class="text-[10px] font-black uppercase text-slate-400 tracking-[0.2em]"
-        >
-          Monitoring Progress
-        </h2>
-
-
-        <span
-          id="dateDisplay"
-          class="text-[10px] font-bold text-slate-600 bg-white border border-slate-200 px-4 py-1.5 rounded-full uppercase shadow-sm italic tracking-widest"
-        >
-          ---
-        </span>
-
-      </div>
-
-
-      <div
-        id="summaryCards"
-        class="flex gap-4 overflow-x-auto pb-4 scrollbar-hide"
-      >
-
-        <div
-          class="min-w-[240px] bg-white p-6 rounded-[2.5rem] border border-slate-200 animate-pulse"
-        >
-
-          <div
-            class="h-2 w-20 bg-slate-100 rounded mb-4"
-          ></div>
-
-          <div
-            class="h-8 w-16 bg-slate-100 rounded"
-          ></div>
-
-        </div>
-
-      </div>
-
-    </section>
-
-
-
-    <!-- TABLE -->
-
-    <section
-      class="bg-white rounded-[2.5rem] shadow-2xl border border-slate-200 overflow-hidden"
-    >
-
-      <div
-        class="p-8 border-b border-slate-100 flex flex-col md:flex-row justify-between items-start md:items-center gap-6"
-      >
-
-        <div>
-
-          <h2
-            class="text-xs font-black uppercase text-slate-800 tracking-widest italic border-l-4 border-red-500 pl-3"
-          >
-
-            History Kunjungan
-
-          </h2>
-
-        </div>
-
-
-        <div
-          class="flex items-center gap-3 w-full md:w-auto"
-        >
-
-          <input
-            type="date"
-            id="filterTanggal"
-            class="w-full bg-slate-100 border-2 border-transparent focus:border-red-500 rounded-2xl px-5 py-2.5 text-[11px] font-black uppercase text-slate-700 outline-none transition-all"
-            onchange="loadData()"
-          >
-
-
-          <div
-            id="totalVisitBadge"
-            class="bg-slate-900 text-white px-5 py-3 rounded-2xl text-[10px] font-black whitespace-nowrap shadow-lg"
-          >
-            0 VISIT
-          </div>
-
-        </div>
-
-      </div>
-
-
-
-      <div class="overflow-x-auto">
-
-        <table
-          class="w-full text-left border-collapse"
-        >
-
-          <thead>
-
-            <tr
-              class="bg-slate-50/50 border-b border-slate-200 text-[10px] font-black uppercase text-slate-500 tracking-[0.15em]"
-            >
-
-              <th class="p-8">
-                Sales
-              </th>
-
-              <th class="p-8">
-                Toko / Outlet
-              </th>
-
-              <th class="p-8">
-                Waktu
-              </th>
-
-              <th class="p-8">
-                Titik GPS
-              </th>
-
-              <th class="p-8 text-center">
-                Bukti
-              </th>
-
-            </tr>
-
-          </thead>
-
-
-          <tbody id="tableBody">
-
-          </tbody>
-
-        </table>
-
-      </div>
-
-    </section>
-
-  </div>
-
-
-
-  <!-- ======================================================
-       JAVASCRIPT
-  ======================================================= -->
 
   <script>
-
-    /*
-     * PENTING:
-     * GANTI DENGAN URL DEPLOYMENT /exec KAMU
-     */
-
-    const SCRIPT_URL =
-      "https://script.google.com/macros/s/AKfycbzv1Slj2BHWSiFkzwndJlGcJWjTyB2Z5hF2cNgD_rkkb2oyLNYAn1ktl1bNFY6YZWYu/exec";
-
-
-    /* =====================================================
-       INIT
-    ===================================================== */
-
-    window.onload = function () {
-
-      const today =
-        getLocalDateString();
-
-
-      document
-        .getElementById("filterTanggal")
-        .value = today;
-
-
-      loadData();
-
-    };
-
-
-    /* =====================================================
-       LOCAL DATE
-    ===================================================== */
-
-    function getLocalDateString() {
-
-      const now =
-        new Date();
-
-
-      const year =
-        now.getFullYear();
-
-
-      const month =
-        String(
-          now.getMonth() + 1
-        ).padStart(2, "0");
-
-
-      const day =
-        String(
-          now.getDate()
-        ).padStart(2, "0");
-
-
-      return (
-        year
-        + "-"
-        + month
-        + "-"
-        + day
-      );
-
-    }
-
-
-    /* =====================================================
-       API
-    ===================================================== */
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx0WgFFvm-NRwgFcXSg2aZiquvgZrR-DBUR1yTxRKkFvlYRo5W37l30Zn7r8AbRf_N6/exec"; 
+    
+    let userData = { id: '', nama: '', toko: [] };
+    let currentCoords = null;
+    let currentStream = null;
+    let useFrontCamera = false;
 
     async function callAPI(payload) {
-
-      console.log(
-        "API REQUEST:",
-        payload
-      );
-
-
-      try {
-
-        const response =
-          await fetch(
-            SCRIPT_URL,
-            {
-              method: "POST",
-
-              headers: {
-                "Content-Type":
-                  "text/plain;charset=utf-8"
-              },
-
-              body:
-                JSON.stringify(payload),
-
-              redirect:
-                "follow"
-            }
-          );
-
-
-        console.log(
-          "HTTP STATUS:",
-          response.status
-        );
-
-
-        if (!response.ok) {
-
-          throw new Error(
-            "HTTP "
-            + response.status
-            + " "
-            + response.statusText
-          );
-
-        }
-
-
-        const text =
-          await response.text();
-
-
-        console.log(
-          "API RESPONSE:",
-          text
-        );
-
-
-        if (!text) {
-
-          throw new Error(
-            "Server mengirim response kosong"
-          );
-
-        }
-
-
-        let data;
-
-
-        try {
-
-          data =
-            JSON.parse(text);
-
-        } catch (error) {
-
-          console.error(
-            "INVALID JSON:",
-            text
-          );
-
-
-          throw new Error(
-            "Response server bukan JSON"
-          );
-
-        }
-
-
-        return data;
-
-
-      } catch (error) {
-
-        console.error(
-          "API ERROR:",
-          error
-        );
-
-
-        showError(
-          "Gagal terhubung ke server: "
-          + error.message
-        );
-
-
-        return null;
-
-      }
-
+      const response = await fetch(SCRIPT_URL, {
+        method: "POST",
+        body: JSON.stringify(payload)
+      });
+      return await response.json();
     }
 
-
-    /* =====================================================
-       LOAD DATA
-    ===================================================== */
-
-    async function loadData() {
-
-      const selectedDate =
-        document
-          .getElementById(
-            "filterTanggal"
-          )
-          .value;
-
-
-      if (!selectedDate) {
-        return;
+    async function auth() {
+      const id = document.getElementById('inputId').value.trim();
+      if(!id) return;
+      document.getElementById('btnLogin').innerHTML = '<span class="loading-spin"></span>';
+      
+      const res = await callAPI({ action: "login", id: id });
+      if(res.success) {
+        userData = { ...res, id: id };
+        updateDropdown(res.toko);
+        document.getElementById('displayNama').innerText = res.nama;
+        document.getElementById('loginPanel').classList.add('hidden');
+        document.getElementById('appPanel').classList.remove('hidden');
+        initCamera(); initGPS();
+      } else {
+        document.getElementById('loginError').innerText = res.msg;
+        document.getElementById('btnLogin').innerText = "MASUK";
       }
-
-
-      document
-        .getElementById(
-          "tableBody"
-        )
-        .innerHTML = `
-
-          <tr>
-
-            <td
-              colspan="5"
-              class="p-24 text-center"
-            >
-
-              <div
-                class="loading-spin mx-auto"
-              ></div>
-
-              <p
-                class="mt-4 text-[10px] font-black uppercase text-slate-400"
-              >
-                Loading data...
-              </p>
-
-            </td>
-
-          </tr>
-
-        `;
-
-
-      const summaryData =
-        await callAPI({
-          action:
-            "getSummary",
-
-          data:
-            selectedDate
-        });
-
-
-      const logsData =
-        await callAPI({
-          action:
-            "getLogs",
-
-          data:
-            selectedDate
-        });
-
-
-      renderSummary(
-        summaryData
-      );
-
-
-      renderTable(
-        logsData
-      );
-
-
-      updateDateDisplay(
-        selectedDate
-      );
-
     }
 
+    function updateDropdown(list) {
+      const select = document.getElementById('tokoSelect');
+      select.innerHTML = list.length ? list.map(t => `<option value="${t.nama}">${t.nama}</option>`).join('') : '<option>Jadwal Selesai!</option>';
+      if(!list.length) document.getElementById('btnCheckin').disabled = true;
+    }
 
-    /* =====================================================
-       DATE DISPLAY
-    ===================================================== */
+    async function initCamera() {
+      if (currentStream) {
+        currentStream.getTracks().forEach(track => track.stop());
+      }
 
-    function updateDateDisplay(
-      selectedDate
-    ) {
-
-      const date =
-        new Date(
-          selectedDate
-          + "T00:00:00"
-        );
-
-
-      const options = {
-
-        weekday:
-          "long",
-
-        year:
-          "numeric",
-
-        month:
-          "long",
-
-        day:
-          "numeric"
-
+      const constraints = {
+        video: {
+          facingMode: useFrontCamera ? "user" : "environment"
+        }
       };
 
-
-      document
-        .getElementById(
-          "dateDisplay"
-        )
-        .innerText =
-          date.toLocaleDateString(
-            "id-ID",
-            options
-          );
-
-    }
-
-
-    /* =====================================================
-       SUMMARY
-    ===================================================== */
-
-    function renderSummary(
-      data
-    ) {
-
-      const container =
-        document.getElementById(
-          "summaryCards"
-        );
-
-
-      if (
-        !data ||
-        !Array.isArray(data)
-      ) {
-
-        container.innerHTML = `
-
-          <p
-            class="text-red-500 text-[10px] font-black p-4 uppercase"
-          >
-            Gagal mengambil summary
-          </p>
-
-        `;
-
-        return;
-
+      try {
+        currentStream = await navigator.mediaDevices.getUserMedia(constraints);
+        document.getElementById('video').srcObject = currentStream;
+      } catch (err) {
+        console.error("Gagal akses kamera: ", err);
+        alert("Gagal mengakses kamera. Pastikan izin diberikan.");
       }
+    }
 
+    function switchCamera() {
+      useFrontCamera = !useFrontCamera;
+      initCamera();
+    }
 
-      if (data.length === 0) {
+    function initGPS() {
+      navigator.geolocation.watchPosition(p => {
+        currentCoords = p.coords;
+        document.getElementById('gpsBox').innerText = "GPS: AKTIF";
+        document.getElementById('gpsBox').style.backgroundColor = "rgba(22, 163, 74, 0.8)";
+      }, null, { enableHighAccuracy: true });
+    }
 
-        container.innerHTML = `
+    async function prosesCheckin() {
+      const btn = document.getElementById('btnCheckin');
+      const status = document.getElementById('statusMsg');
+      const video = document.getElementById('video');
+      const canvas = document.getElementById('canvas');
+      const nameToko = document.getElementById('tokoSelect').value;
 
-          <p
-            class="text-slate-400 text-[10px] font-black p-4 uppercase italic"
-          >
-            No summary data found.
-          </p>
+      if (!nameToko || nameToko === "Jadwal Selesai!") return;
 
-        `;
-
-        return;
-
+      canvas.width = video.videoWidth; 
+      canvas.height = video.videoHeight;
+      const ctx = canvas.getContext('2d');
+      
+      if (useFrontCamera) {
+        ctx.translate(canvas.width, 0);
+        ctx.scale(-1, 1);
       }
-
-
-      container.innerHTML =
-        data.map(
-          function (s) {
-
-            const persen =
-              s.target > 0
-                ? Math.round(
-                    (
-                      s.realisasi
-                      /
-                      s.target
-                    ) * 100
-                  )
-                : 0;
-
-
-            return `
-
-              <div
-                class="min-w-[260px] bg-white p-7 rounded-[2.5rem] shadow-sm border border-slate-200 hover:border-red-200 transition-all"
-              >
-
-                <p
-                  class="text-red-600 font-black text-[10px] uppercase mb-1 tracking-widest"
-                >
-                  ${escapeHTML(s.nama)}
-                </p>
-
-
-                <div
-                  class="flex justify-between items-end mb-4"
-                >
-
-                  <h3
-                    class="text-4xl font-black text-slate-900"
-                  >
-                    ${persen}%
-                  </h3>
-
-
-                  <p
-                    class="text-[9px] font-bold text-slate-400 uppercase italic"
-                  >
-                    Target Hit
-                  </p>
-
-                </div>
-
-
-                <div
-                  class="text-[10px] font-bold flex justify-between text-slate-400"
-                >
-
-                  <span>
-                    ${s.realisasi} Done
-                  </span>
-
-                  <span>
-                    ${s.target} Plan
-                  </span>
-
-                </div>
-
-              </div>
-
-            `;
-
-          }
-        ).join("");
-
-    }
-
-
-    /* =====================================================
-       TABLE
-    ===================================================== */
-
-    function renderTable(
-      data
-    ) {
-
-      const tbody =
-        document.getElementById(
-          "tableBody"
-        );
-
-
-      const badge =
-        document.getElementById(
-          "totalVisitBadge"
-        );
-
-
-      if (
-        !data ||
-        !Array.isArray(data)
-      ) {
-
-        tbody.innerHTML = `
-
-          <tr>
-
-            <td
-              colspan="5"
-              class="p-32 text-center text-red-400 font-black uppercase text-[10px]"
-            >
-              Gagal mengambil data kunjungan
-            </td>
-
-          </tr>
-
-        `;
-
-
-        badge.innerText =
-          "ERROR";
-
-
-        return;
-
-      }
-
-
-      if (data.length === 0) {
-
-        tbody.innerHTML = `
-
-          <tr>
-
-            <td
-              colspan="5"
-              class="p-32 text-center text-slate-300 font-black uppercase text-[10px] tracking-widest"
-            >
-              Tidak ada record kunjungan
-            </td>
-
-          </tr>
-
-        `;
-
-
-        badge.innerText =
-          "0 VISIT";
-
-
-        return;
-
-      }
-
-
-      badge.innerText =
-        data.length
-        + " VISIT TERCATAT";
-
-
-      tbody.innerHTML =
-        data.map(
-          function (item) {
-
-            const sales =
-              escapeHTML(
-                item.sales || ""
-              );
-
-
-            const toko =
-              escapeHTML(
-                item.toko || ""
-              );
-
-
-            const lokasi =
-              escapeHTML(
-                item.lokasi || ""
-              );
-
-
-            const foto =
-              escapeHTML(
-                item.foto || ""
-              );
-
-
-            const initial =
-              escapeHTML(
-                (
-                  item.sales || "?"
-                )
-                .charAt(0)
-              );
-
-
-            return `
-
-              <tr
-                class="border-b border-slate-50 tr-hover"
-              >
-
-                <td class="p-8">
-
-                  <div
-                    class="flex items-center gap-3"
-                  >
-
-                    <div
-                      class="w-8 h-8 bg-slate-900 text-white rounded-full flex items-center justify-center font-black text-[10px] uppercase"
-                    >
-                      ${initial}
-                    </div>
-
-
-                    <p
-                      class="font-black text-slate-900 text-[11px] uppercase"
-                    >
-                      ${sales}
-                    </p>
-
-                  </div>
-
-                </td>
-
-
-                <td class="p-8">
-
-                  <p
-                    class="font-bold text-slate-700 uppercase text-[11px] leading-tight"
-                  >
-                    ${toko}
-                  </p>
-
-                </td>
-
-
-                <td class="p-8 text-[11px]">
-
-                  <span
-                    class="font-black text-slate-900"
-                  >
-                    ${escapeHTML(item.tanggal || "")}
-                  </span>
-
-                  <br>
-
-                  <span
-                    class="font-bold text-red-500 uppercase tracking-tighter italic"
-                  >
-                    ${escapeHTML(item.jam || "")}
-                  </span>
-
-                </td>
-
-
-                <td class="p-8">
-
-                  <button
-                    onclick="openMapModal(
-                      ${JSON.stringify(item.lokasi || "")},
-                      ${JSON.stringify(item.sales || "")},
-                      ${JSON.stringify(item.toko || "")}
-                    )"
-                    class="flex items-center gap-2 group text-left"
-                  >
-
-                    <span
-                      class="text-[9px] font-black text-slate-400 uppercase bg-slate-100 group-hover:text-red-600 px-3 py-1.5 rounded-lg border transition-all"
-                    >
-                      Lihat GPS
-                    </span>
-
-                    📍
-
-                  </button>
-
-                </td>
-
-
-                <td class="p-8 text-center">
-
-                  ${
-                    foto
-                      ? `
-
-                        <button
-                          onclick="openPhotoModal(
-                            ${JSON.stringify(item.foto || "")},
-                            ${JSON.stringify(item.sales || "")},
-                            ${JSON.stringify(item.toko || "")}
-                          )"
-                          class="bg-slate-900 text-white px-5 py-2.5 rounded-xl text-[10px] font-black hover:bg-red-600 transition-all uppercase shadow-md active:scale-95 inline-flex items-center gap-2"
-                        >
-
-                          🖼️ Foto
-
-                        </button>
-
-                      `
-                      :
-                      `
-
-                        <span
-                          class="text-[9px] text-slate-300 font-black uppercase"
-                        >
-                          Tidak ada foto
-                        </span>
-
-                      `
-                  }
-
-                </td>
-
-              </tr>
-
-            `;
-
-          }
-        ).join("");
-
-    }
-
-
-    /* =====================================================
-       PHOTO MODAL
-    ===================================================== */
-
-    function openPhotoModal(
-      imgUrl,
-      sales,
-      toko
-    ) {
-
-      const modal =
-        document.getElementById(
-          "photoModal"
-        );
-
-
-      document
-        .getElementById(
-          "modalTitle"
-        )
-        .innerText =
-          "Visit: "
-          + sales
-          + " @ "
-          + toko;
-
-
-      document
-        .getElementById(
-          "modalImg"
-        )
-        .src =
-          imgUrl;
-
-
-      modal.classList.replace(
-        "modal-inactive",
-        "modal-active"
-      );
-
-    }
-
-
-    function closePhotoModal() {
-
-      const modal =
-        document.getElementById(
-          "photoModal"
-        );
-
-
-      document
-        .getElementById(
-          "modalImg"
-        )
-        .src = "";
-
-
-      modal.classList.replace(
-        "modal-active",
-        "modal-inactive"
-      );
-
-    }
-
-
-    /* =====================================================
-       MAP
-    ===================================================== */
-
-    function openMapModal(
-      lokasiRaw,
-      sales,
-      toko
-    ) {
-
-      if (!lokasiRaw) {
-
-        alert(
-          "Lokasi GPS tidak tersedia."
-        );
-
-        return;
-
-      }
-
-
-      /*
-       * Mendukung:
-       * LAT:-1.234 LNG:98.123
-       * LAT:-1.234,LNG:98.123
-       * -1.234,98.123
-       */
-
-      let coords =
-        lokasiRaw
-          .replace(
-            /LAT:/gi,
-            ""
-          )
-          .replace(
-            /LNG:/gi,
-            ""
-          )
-          .replace(
-            /\s+/g,
-            ""
-          );
-
-
-      const mapUrl =
-        "https://maps.google.com/maps?q="
-        + encodeURIComponent(coords)
-        + "&z=15&output=embed";
-
-
-      document
-        .getElementById(
-          "mapSubtitle"
-        )
-        .innerText =
-          sales
-          + " | "
-          + toko;
-
-
-      document
-        .getElementById(
-          "mapFrame"
-        )
-        .src =
-          mapUrl;
-
-
-      document
-        .getElementById(
-          "mapModal"
-        )
-        .classList.replace(
-          "modal-inactive",
-          "modal-active"
-        );
-
-    }
-
-
-    function closeMapModal() {
-
-      document
-        .getElementById(
-          "mapModal"
-        )
-        .classList.replace(
-          "modal-active",
-          "modal-inactive"
-        );
-
-
-      document
-        .getElementById(
-          "mapFrame"
-        )
-        .src = "";
-
-    }
-
-
-    /* =====================================================
-       ESCAPE HTML
-    ===================================================== */
-
-    function escapeHTML(
-      value
-    ) {
-
-      return String(
-        value ?? ""
-      )
-        .replace(
-          /&/g,
-          "&amp;"
-        )
-        .replace(
-          /</g,
-          "&lt;"
-        )
-        .replace(
-          />/g,
-          "&gt;"
-        )
-        .replace(
-          /"/g,
-          "&quot;"
-        )
-        .replace(
-          /'/g,
-          "&#039;"
-        );
-
-    }
-
-
-    /* =====================================================
-       ERROR
-    ===================================================== */
-
-    function showError(
-      message
-    ) {
-
-      console.error(
-        message
-      );
-
-      alert(
-        message
-      );
-
-    }
-
-
-    /* =====================================================
-       CLOSE MODAL WHEN CLICK OUTSIDE
-    ===================================================== */
-
-    document
-      .getElementById(
-        "photoModal"
-      )
-      .addEventListener(
-        "click",
-        function (e) {
-
-          if (
-            e.target === this
-          ) {
-
-            closePhotoModal();
-
-          }
-
+      ctx.drawImage(video, 0, 0);
+      
+      btn.disabled = true;
+      btn.classList.add('opacity-50');
+      status.innerHTML = '<span class="loading-spin"></span> Mengirim data...';
+
+      const payload = {
+        action: "submit",
+        data: {
+          sales: userData.nama,
+          toko: nameToko,
+          foto: canvas.toDataURL('image/jpeg', 0.5),
+          statusLoc: currentCoords ? `LAT: ${currentCoords.latitude}, LNG: ${currentCoords.longitude}` : "NO GPS"
         }
-      );
+      };
 
-
-    document
-      .getElementById(
-        "mapModal"
-      )
-      .addEventListener(
-        "click",
-        function (e) {
-
-          if (
-            e.target === this
-          ) {
-
-            closeMapModal();
-
-          }
-
+      try {
+        const res = await callAPI(payload);
+        alert(res.msg);
+        status.innerHTML = 'Memperbarui daftar toko...';
+        const refreshData = await callAPI({ action: "login", id: userData.id });
+        
+        if(refreshData.success) {
+          userData.toko = refreshData.toko;
+          updateDropdown(refreshData.toko);
+          btn.disabled = false;
+          btn.classList.remove('opacity-50');
+          status.innerText = "Berhasil dikirim pada " + new Date().toLocaleTimeString();
+          window.scrollTo({ top: 0, behavior: 'smooth' });
         }
-      );
-
+      } catch (err) {
+        alert("Terjadi kesalahan: " + err);
+        btn.disabled = false;
+        btn.classList.remove('opacity-50');
+        status.innerText = "Gagal mengirim.";
+      }
+    }
   </script>
-
 </body>
-
 </html>
