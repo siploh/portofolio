@@ -4,6 +4,14 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Field Action | Admin Dashboard</title>
+  
+  <!-- Skrip Pengaman Sesi Login (Wajib ada di awal head) -->
+  <script>
+    if (sessionStorage.getItem('unibis_logged_in') !== 'true') {
+        window.location.replace('index.html');
+    }
+  </script>
+
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     .loading-spin {
@@ -120,7 +128,7 @@
   </div>
 
   <script>
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzKnwBxj71DBSw9NgN29d07luuhCoVT57eV6ljG98stzjG0fYQH1c7j1dDiT2nuvnsk/exec"; 
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwjWSNfCotDjmyKIbn8ZFGE1LdDHy8QOD4z0Se0sfa-NkoJ0Z1VLA8Oc99yyQxZjmIC/exec"; 
 
     window.onload = () => {
       const today = new Date().toISOString().split('T')[0];
