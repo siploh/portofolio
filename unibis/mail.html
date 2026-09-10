@@ -4,7 +4,15 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Mengarahkan ke Email...</title>
-  <link rel="icon" href="img/logo.png" />
+  <link rel="icon" href="https://unibis.co.id/wp-content/uploads/2022/07/unibis-logo.png" />
+
+  <!-- Skrip Pengaman Sesi Login (Wajib ada di setiap halaman menu) -->
+  <script>
+    if (sessionStorage.getItem('unibis_logged_in') !== 'true') {
+        window.location.replace('index.html');
+    }
+  </script>
+
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -38,7 +46,7 @@
     }
   </style>
   
-  <!-- Opsi 1: Otomatis redirect setelah halaman dimuat -->
+  <!-- Opsi Otomatis redirect setelah halaman dimuat dan lolos cek login -->
   <script>
     window.location.replace("https://mail.hostinger.com");
   </script>
