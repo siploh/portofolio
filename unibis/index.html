@@ -423,8 +423,8 @@ body{
 
     <!-- Dashboard Content -->
     <div class="menu-grid">
-      <!-- Katalog (Admin, Sales, Toko, Manager, Supervisor) -->
-      <a href="katalog.html" class="menu-link" data-role="admin,sales,toko,manager,supervisor">
+      <!-- Katalog (Admin, Sales, Toko, Manager, Supervisor, HBS, HBA, HBR, HBN) -->
+      <a href="katalog.html" class="menu-link" data-role="admin,sales,toko,manager,supervisor,HBS,HBA,HBR,HBN">
         <div class="menu-box">
           <i class="fas fa-book-open"></i>
           <h3>Katalog</h3>
@@ -432,8 +432,8 @@ body{
         </div>
       </a>
 
-      <!-- Toko (Admin, Sales, Manager, Supervisor) -->
-      <a class="menu-link" id="toko-menu-trigger" data-role="admin,sales,manager,supervisor">
+      <!-- Toko (Admin, Sales, Manager, Supervisor, HBS, HBA, HBR, HBN) -->
+      <a class="menu-link" id="toko-menu-trigger" data-role="admin,sales,manager,supervisor,HBS,HBA,HBR,HBN">
         <div class="menu-box">
           <i class="fas fa-store"></i>
           <h3>Toko</h3>
@@ -441,8 +441,8 @@ body{
         </div>
       </a>
 
-      <!-- Dashboard KPI (Admin, Sales, Manager, Supervisor) -->
-      <a class="menu-link" id="dashboard-menu-trigger" data-role="admin,sales,manager,supervisor">
+      <!-- Dashboard KPI (Admin, Sales, Manager, Supervisor, HBS, HBA, HBR, HBN) -->
+      <a class="menu-link" id="dashboard-menu-trigger" data-role="admin,sales,manager,supervisor,HBS,HBA,HBR,HBN">
         <div class="menu-box">
           <i class="fas fa-chart-pie"></i>
           <h3>Dashboard</h3>
@@ -459,8 +459,8 @@ body{
         </div>
       </a>
 
-      <!-- Field Action (Admin, Manager, Supervisor) -->
-      <a class="menu-link" id="fieldaction-menu-trigger" data-role="admin,manager,supervisor">
+      <!-- Field Action (Admin, Manager, Supervisor, HBS, HBA, HBR, HBN) -->
+      <a class="menu-link" id="fieldaction-menu-trigger" data-role="admin,manager,supervisor,HBS,HBA,HBR,HBN">
         <div class="menu-box">
           <i class="fas fa-route"></i>
           <h3>Field Action</h3>
@@ -468,8 +468,8 @@ body{
         </div>
       </a>
 
-      <!-- Program (Admin, Sales, Manager, Supervisor) -->
-      <a href="https://drive.google.com/file/d/1P6nxbzH-DZOotlIYwJfBEAGopoGIu-00/view" class="menu-link" data-role="admin,sales,manager,supervisor">
+      <!-- Program (Admin, Sales, Manager, Supervisor, HBS, HBA, HBR, HBN) -->
+      <a href="#" class="menu-link" data-role="admin,sales,manager,supervisor,HBS,HBA,HBR,HBN">
         <div class="menu-box">
           <i class="fas fa-bullhorn"></i>
           <h3>Program</h3>
@@ -477,8 +477,8 @@ body{
         </div>
       </a>
 
-      <!-- Surat (Admin, Manager, Supervisor) -->
-      <a href="surat.html" class="menu-link" data-role="admin,manager,supervisor">
+      <!-- Surat (Admin, Manager, Supervisor, HBS, HBA, HBR, HBN) -->
+      <a href="surat.html" class="menu-link" data-role="admin,manager,supervisor,HBS,HBA,HBR,HBN">
         <div class="menu-box">
           <i class="fas fa-file-contract"></i>
           <h3>Surat</h3>
@@ -495,8 +495,8 @@ body{
         </div>
       </a>
 
-      <!-- Email (Admin, Supervisor, Manager) -->
-      <a href="mail.html" class="menu-link" data-role="admin,manager,supervisor">
+      <!-- Email (Admin, Supervisor, Manager, HBS, HBA, HBR, HBN) -->
+      <a href="mail.html" class="menu-link" data-role="admin,manager,supervisor,HBS,HBA,HBR,HBN">
         <div class="menu-box">
           <i class="fas fa-envelope"></i>
           <h3>Email</h3>
@@ -637,7 +637,9 @@ body{
     menuLinks.forEach(link => {
       const allowedRoles = link.getAttribute('data-role');
       if (allowedRoles) {
-        const rolesArray = allowedRoles.split(',');
+        // Mengubah semua role yang diizinkan di data-role menjadi huruf kecil untuk dicocokkan
+        const rolesArray = allowedRoles.split(',').map(r => r.trim().toLowerCase());
+        // Role dari database/session juga sudah di-toLowerCase() saat login
         if (rolesArray.includes(role)) {
           link.classList.remove('menu-hidden');
         } else {
@@ -687,7 +689,7 @@ body{
         userRoleText.innerText = userRole;
         
         applyRolePermissions(userRole);
-        setupBackToExit();
+        setupBackTypeExit(); // pastikan fungsi dipanggil
       } else {
         loginError.innerText = data.message;
         loginError.style.display = 'block';
