@@ -1,53 +1,823 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Dashboard Sales</title>
-  <link rel="icon" href="https://unibis.co.id/wp-content/uploads/2022/07/unibis-logo.png" />
-  
-  <!-- Skrip Pengaman Sesi Login -->
-  <script>
-    if (sessionStorage.getItem('unibis_logged_in') !== 'true') {
-        window.location.replace('index.html');
-    }
-  </script>
+<meta charset="UTF-8">
+<title>Unibis Langsa</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <style>
-    html, body {
-      margin: 0;
-      padding: 0;
-      width: 100%;
-      height: 100%;
-      background-color: #eee;
-      overflow: hidden; /* Mencegah scroll ganda */
-    }
+<!-- PWA Manifest & Meta Tags -->
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#dc2626">
 
-    .iframe-container {
-      width: 100%;
-      height: 100dvh; /* Menggunakan dvh agar pas di mobile browser */
-      overflow: hidden;
-    }
+<!-- Favicon -->
+<link rel="icon" type="image/png" href="https://unibis.co.id/wp-content/uploads/2022/07/unibis-logo.png">
 
-    iframe {
-      display: block;
-      width: 100%;
-      height: 100%;
-      border: none;
-    }
-  </style>
+<!-- Font & Icon -->
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<style>
+:root {
+  --red: #dc2626;
+  --red-dark: #991b1b;
+  --white: #ffffff;
+  --dark: #1e293b;
+  --bg-gradient: linear-gradient(135deg, #fef2f2, #f8fafc);
+}
+
+*{box-sizing:border-box}
+
+body{
+  margin:0;
+  font-family:'Poppins',sans-serif;
+  background: var(--bg-gradient);
+  min-height:100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* ===== LOGIN CONTAINER ===== */
+.login-container {
+  width: 100%;
+  max-width: 400px;
+  background: var(--white);
+  padding: 40px 30px;
+  border-radius: 24px;
+  box-shadow: 0 15px 35px rgba(0,0,0,0.08);
+  border: 1px solid #fee2e2;
+  text-align: center;
+}
+
+.login-header h1 {
+  font-size: 26px;
+  color: var(--red);
+  margin: 0 0 8px 0;
+}
+
+.login-header p {
+  color: #64748b;
+  font-size: 13px;
+  margin-bottom: 25px;
+}
+
+.form-group {
+  margin-bottom: 18px;
+  text-align: left;
+}
+
+.form-group label {
+  display: block;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--dark);
+  margin-bottom: 6px;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 12px 16px;
+  border: 1px solid #cbd5e1;
+  border-radius: 12px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.form-group input:focus {
+  border-color: var(--red);
+}
+
+.btn-login {
+  width: 100%;
+  background: var(--red);
+  color: var(--white);
+  border: none;
+  padding: 12px;
+  border-radius: 12px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+  margin-top: 10px;
+}
+
+.btn-login:hover {
+  background: var(--red-dark);
+}
+
+.login-error {
+  color: var(--red);
+  font-size: 12px;
+  margin-top: 12px;
+  display: none;
+}
+
+/* ===== APP CONTAINER (Hidden by Default) ===== */
+.app-container {
+  width: 100%;
+  max-width: 1100px;
+  min-height: 100vh;
+  margin: 0 auto;
+  padding: 30px 20px;
+  display: none;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+/* ===== HEADER & MENU STYLES ===== */
+.app-header {
+  text-align: center;
+  margin-bottom: 35px;
+  position: relative;
+}
+
+.logout-btn-container {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 10px;
+}
+
+.btn-logout {
+  background: transparent;
+  border: 1px solid var(--red);
+  color: var(--red);
+  padding: 6px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 600;
+  font-family: 'Poppins', sans-serif;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.btn-logout:hover {
+  background: var(--red);
+  color: var(--white);
+}
+
+.app-header h1 {
+  font-size: 30px;
+  font-weight: 700;
+  color: var(--red);
+  margin: 0;
+}
+
+.app-header .subtitle {
+  color: #64748b;
+  font-size: 14px;
+  margin-top: 6px;
+}
+
+.menu-grid{
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+  width: 100%;
+}
+
+.menu-link{
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.menu-box{
+  background: var(--white);
+  border: 1px solid #fee2e2;
+  border-radius: 20px;
+  padding: 24px 16px;
+  text-align: center;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.03);
+  transition: all 0.3s cubic-bezier(.4,0,.2,1);
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.menu-box:hover{
+  transform: translateY(-6px);
+  box-shadow: 0 15px 30px rgba(220, 38, 38, 0.12);
+  border-color: var(--red);
+}
+
+.menu-box i{
+  font-size: 36px;
+  margin-bottom: 12px;
+  color: var(--red);
+}
+
+.menu-box h3{
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--dark);
+}
+
+.menu-box p{
+  margin: 6px 0 0 0;
+  font-size: 12px;
+  color: #64748b;
+}
+
+/* Kelas untuk menyembunyikan menu berdasarkan role */
+.menu-hidden {
+  display: none !important;
+}
+
+/* ===== POPUP MODAL ===== */
+.modal-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+  z-index: 1000;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-overlay.active {
+  display: flex;
+}
+
+.modal-content {
+  background: var(--white);
+  padding: 30px;
+  border-radius: 24px;
+  width: 90%;
+  max-width: 600px;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+  position: relative;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.modal-header h3 {
+  margin: 0;
+  color: var(--dark);
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.close-btn {
+  background: #f1f5f9;
+  border: none;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  font-size: 14px;
+  color: #64748b;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.close-btn:hover {
+  background: #fee2e2;
+  color: var(--red);
+}
+
+.modal-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+/* Khusus Modal Dashboard (2 menu, biar posisinya pas) */
+.modal-grid-2 {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+
+/* ===== MODAL KONFIRMASI KELUAR ===== */
+.logout-modal-content {
+  background: var(--white);
+  padding: 30px;
+  border-radius: 20px;
+  width: 90%;
+  max-width: 380px;
+  text-align: center;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+}
+
+.logout-modal-content i {
+  font-size: 45px;
+  color: var(--red);
+  margin-bottom: 15px;
+}
+
+.logout-modal-content h3 {
+  margin: 0 0 10px 0;
+  color: var(--dark);
+  font-size: 18px;
+}
+
+.logout-modal-content p {
+  color: #64748b;
+  font-size: 14px;
+  margin-bottom: 25px;
+}
+
+.logout-modal-actions {
+  display: flex;
+  gap: 12px;
+}
+
+.btn-modal-no, .btn-modal-yes {
+  flex: 1;
+  padding: 10px;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  font-family: 'Poppins', sans-serif;
+  transition: all 0.2s;
+}
+
+.btn-modal-no {
+  background: #f1f5f9;
+  color: #64748b;
+}
+
+.btn-modal-no:hover {
+  background: #e2e8f0;
+}
+
+.btn-modal-yes {
+  background: var(--red);
+  color: var(--white);
+}
+
+.btn-modal-yes:hover {
+  background: var(--red-dark);
+}
+
+@media(max-width: 1024px) {
+  .menu-grid { grid-template-columns: repeat(3, 1fr); }
+}
+@media(max-width: 768px) {
+  .app-container { padding: 20px 15px; }
+  .menu-grid { grid-template-columns: repeat(2, 1fr); gap: 14px; }
+  .modal-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media(max-width: 480px) {
+  .menu-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+  .modal-content { width: 95%; padding: 20px; }
+  .modal-grid, .modal-grid-2 { grid-template-columns: 1fr; }
+}
+</style>
 </head>
+
 <body>
-  <div class="iframe-container">
-    <iframe
-      id="app"
-      src="https://script.google.com/macros/s/AKfycbw74TEuqMhryQKlvTFAG3gYk2nOyo_CN_rEehgBJMOqvOjdZ9g306fgdpfiLymBj6wT7A/exec"
-      scrolling="yes"
-      allowfullscreen="true"
-      webkitallowfullscreen="true"
-      mozallowfullscreen="true"
-      allow="fullscreen; camera; microphone; display-capture; geolocation;">
-    </iframe>
+
+<!-- ===== FORM LOGIN ===== -->
+<div class="login-container" id="loginCard">
+  <div class="login-header">
+    <h1>UNIBIS Langsa</h1>
+    <p>Silakan login untuk mengakses sistem</p>
   </div>
+  <form id="loginForm">
+    <div class="form-group">
+      <label>Username</label>
+      <input type="text" id="username" name="username" autocomplete="username" required placeholder="Masukkan username">
+    </div>
+    <div class="form-group">
+      <label>Password</label>
+      <input type="password" id="password" name="current-password" autocomplete="current-password" required placeholder="Masukkan password">
+    </div>
+    <button type="submit" class="btn-login" id="loginBtn">Masuk</button>
+    <div class="login-error" id="loginError">Username atau password salah!</div>
+  </form>
+</div>
+
+<!-- ===== APP CONTAINER (DASHBOARD) ===== -->
+<div class="app-container" id="appContainer">
+  <!-- App Header -->
+  <div>
+    <div class="app-header">
+      <div class="logout-btn-container">
+        <button class="btn-logout" id="logoutBtn">
+          <i class="fas fa-sign-out-alt"></i> Keluar
+        </button>
+      </div>
+      <h1>UNIBIS Langsa</h1>
+      <div class="subtitle">Selamat Datang (<span id="userWelcome"></span>) - <span id="userRoleText" style="text-transform: capitalize; font-weight: 600;"></span></div>
+    </div>
+
+    <!-- Dashboard Content -->
+    <div class="menu-grid">
+      <!-- Katalog (Admin, Sales, Toko, Manager, Supervisor, HBS, HBA, HBR, HBN) -->
+      <a href="katalog.html" class="menu-link" data-role="admin,sales,toko,manager,supervisor,HBS,HBA,HBR,HBN">
+        <div class="menu-box">
+          <i class="fas fa-book-open"></i>
+          <h3>Katalog</h3>
+          <p>Daftar Katalog Unibis</p>
+        </div>
+      </a>
+
+      <!-- Toko (Admin, Sales, Manager, Supervisor, HBS, HBA, HBR, HBN) -->
+      <a class="menu-link" id="toko-menu-trigger" data-role="admin,sales,manager,supervisor,HBS,HBA,HBR,HBN">
+        <div class="menu-box">
+          <i class="fas fa-store"></i>
+          <h3>Toko</h3>
+          <p>Daftar Toko</p>
+        </div>
+      </a>
+
+      <!-- Dashboard KPI (Admin, Sales, Manager, Supervisor, HBS, HBA, HBR, HBN) -->
+      <a class="menu-link" id="dashboard-menu-trigger" data-role="admin,sales,manager,supervisor,HBS,HBA,HBR,HBN">
+        <div class="menu-box">
+          <i class="fas fa-chart-pie"></i>
+          <h3>Dashboard</h3>
+          <p>KPI Monitoring</p>
+        </div>
+      </a>
+
+      <!-- Tambah Toko (Hanya Admin) -->
+      <a href="tambahtoko.html" class="menu-link" data-role="admin">
+        <div class="menu-box">
+          <i class="fas fa-plus-circle"></i>
+          <h3>Tambah Toko</h3>
+          <p>Tambah/Ubah Toko</p>
+        </div>
+      </a>
+
+      <!-- Field Action (Admin, Manager, Supervisor, HBS, HBA, HBR, HBN) -->
+      <a class="menu-link" id="fieldaction-menu-trigger" data-role="admin,manager,supervisor,HBS,HBA,HBR,HBN">
+        <div class="menu-box">
+          <i class="fas fa-route"></i>
+          <h3>Field Action</h3>
+          <p>Dashboard Lapangan</p>
+        </div>
+      </a>
+
+      <!-- Program (Admin, Sales, Manager, Supervisor, HBS, HBA, HBR, HBN) -->
+      <a href="#" class="menu-link" data-role="admin,sales,manager,supervisor,HBS,HBA,HBR,HBN">
+        <div class="menu-box">
+          <i class="fas fa-bullhorn"></i>
+          <h3>Program</h3>
+          <p>Program Berjalan</p>
+        </div>
+      </a>
+
+      <!-- Surat (Admin, Manager, Supervisor, HBS, HBA, HBR, HBN) -->
+      <a href="surat.html" class="menu-link" data-role="admin,manager,supervisor,HBS,HBA,HBR,HBN">
+        <div class="menu-box">
+          <i class="fas fa-file-contract"></i>
+          <h3>Surat</h3>
+          <p>Aturan & Surat</p>
+        </div>
+      </a>
+
+      <!-- Kunjungan (Admin, Sales) -->
+      <a href="kunjungan.html" class="menu-link" data-role="admin,sales">
+        <div class="menu-box">
+          <i class="fas fa-map-marked-alt"></i>
+          <h3>Kunjungan</h3>
+          <p>Check In Toko</p>
+        </div>
+      </a>
+
+      <!-- Email (Admin, Supervisor, Manager, HBS, HBA, HBR, HBN) -->
+      <a href="mail.html" class="menu-link" data-role="admin,manager,supervisor,HBS,HBA,HBR,HBN">
+        <div class="menu-box">
+          <i class="fas fa-envelope"></i>
+          <h3>Email</h3>
+          <p>Kotak Masuk</p>
+        </div>
+      </a>
+    </div>
+  </div>
+
+  <div style="text-align: center; font-size: 11px; color: #94a3b8; margin-top: 30px;">
+    &copy; 2026 UNIBIS Langsa. All rights reserved.
+  </div>
+</div>
+
+<!-- ===== POPUP MODAL TOKO ===== -->
+<div class="modal-overlay" id="tokoModal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h3>Menu Toko</h3>
+      <button class="close-btn" id="closeTokoModal"><i class="fas fa-times"></i></button>
+    </div>
+    <div class="modal-grid">
+      <a href="toko.html" class="menu-link">
+        <div class="menu-box">
+          <i class="fas fa-list"></i>
+          <h3>Daftar Toko</h3>
+          <p>Lihat Seluruh</p>
+        </div>
+      </a>
+      <a href="tokoprogram.html" class="menu-link">
+        <div class="menu-box">
+          <i class="fas fa-gift"></i>
+          <h3>Toko Program</h3>
+          <p>Program Berjalan</p>
+        </div>
+      </a>
+      <a href="tambahtoko.html" class="menu-link">
+        <div class="menu-box">
+          <i class="fas fa-plus-circle"></i>
+          <h3>Tambah Toko</h3>
+          <p>Kelola Toko</p>
+        </div>
+      </a>
+    </div>
+  </div>
+</div>
+
+<!-- ===== POPUP MODAL DASHBOARD ===== -->
+<div class="modal-overlay" id="dashboardModal">
+  <div class="modal-content" style="max-width: 450px;">
+    <div class="modal-header">
+      <h3>Menu Dashboard</h3>
+      <button class="close-btn" id="closeDashboardModal"><i class="fas fa-times"></i></button>
+    </div>
+    <div class="modal-grid-2">
+      <a href="Dashboard.html" class="menu-link">
+        <div class="menu-box">
+          <i class="fas fa-chart-line"></i>
+          <h3>Dashboard Sales</h3>
+          <p>Monitor Penjualan</p>
+        </div>
+      </a>
+      <a href="PlanAktivity.html" class="menu-link">
+        <div class="menu-box">
+          <i class="fas fa-bullseye"></i>
+          <h3>Plan Aktivity</h3>
+          <p>Perencanaan Aktifitas</p>
+        </div>
+      </a>
+    </div>
+  </div>
+</div>
+
+<!-- ===== POPUP MODAL FIELD ACTION ===== -->
+<div class="modal-overlay" id="fieldActionModal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h3>Menu Field Action</h3>
+      <button class="close-btn" id="closeFieldActionModal"><i class="fas fa-times"></i></button>
+    </div>
+    <div class="modal-grid">
+      <a href="kunjungan.html" class="menu-link">
+        <div class="menu-box">
+          <i class="fas fa-map-marked-alt"></i>
+          <h3>Kunjungan</h3>
+          <p>Check In Toko</p>
+        </div>
+      </a>
+      <a href="jks.html" class="menu-link">
+        <div class="menu-box">
+          <i class="fas fa-clipboard-list"></i>
+          <h3>JKS Sales</h3>
+          <p>Jurnal Kunjungan</p>
+        </div>
+      </a>
+      <a href="dash.kunjungan.html" class="menu-link">
+        <div class="menu-box">
+          <i class="fas fa-user-shield"></i>
+          <h3>Admin Dash</h3>
+          <p>Kunjungan</p>
+        </div>
+      </a>
+    </div>
+  </div>
+</div>
+
+<!-- ===== POPUP MODAL KONFIRMASI KELUAR ===== -->
+<div class="modal-overlay" id="logoutConfirmModal">
+  <div class="logout-modal-content">
+    <i class="fas fa-question-circle"></i>
+    <h3>Konfirmasi Keluar</h3>
+    <p>Apakah Anda ingin keluar?</p>
+    <div class="logout-modal-actions">
+      <button class="btn-modal-no" id="cancelLogoutBtn">Tidak</button>
+      <button class="btn-modal-yes" id="confirmLogoutBtn">Ya</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== JAVASCRIPT ===== -->
+<script>
+  const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwtHWlrmYLZtXYy1JQs-leuSNszH3jgMg1k4GIPDvacaXfdayT0xKL6b_sciuDlPfPH/exec';
+
+  const loginCard = document.getElementById('loginCard');
+  const appContainer = document.getElementById('appContainer');
+  const loginForm = document.getElementById('loginForm');
+  const loginBtn = document.getElementById('loginBtn');
+  const loginError = document.getElementById('loginError');
+  const userWelcome = document.getElementById('userWelcome');
+  const userRoleText = document.getElementById('userRoleText');
+  const logoutBtn = document.getElementById('logoutBtn');
+  const logoutConfirmModal = document.getElementById('logoutConfirmModal');
+  const cancelLogoutBtn = document.getElementById('cancelLogoutBtn');
+  const confirmLogoutBtn = document.getElementById('confirmLogoutBtn');
+
+  function applyRolePermissions(role) {
+    const menuLinks = document.querySelectorAll('.menu-grid .menu-link');
+    menuLinks.forEach(link => {
+      const allowedRoles = link.getAttribute('data-role');
+      if (allowedRoles) {
+        // Mengubah semua role yang diizinkan di data-role menjadi huruf kecil untuk dicocokkan
+        const rolesArray = allowedRoles.split(',').map(r => r.trim().toLowerCase());
+        // Role dari database/session juga sudah di-toLowerCase() saat login
+        if (rolesArray.includes(role)) {
+          link.classList.remove('menu-hidden');
+        } else {
+          link.classList.add('menu-hidden');
+        }
+      }
+    });
+  }
+
+  if (sessionStorage.getItem('unibis_logged_in') === 'true') {
+    loginCard.style.display = 'none';
+    appContainer.style.display = 'flex';
+    const savedName = sessionStorage.getItem('unibis_nama') || 'User';
+    const savedRole = sessionStorage.getItem('unibis_role') || 'admin';
+    
+    userWelcome.innerText = savedName;
+    userRoleText.innerText = savedRole;
+    applyRolePermissions(savedRole);
+    setupBackToExit();
+  }
+
+  loginForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const username = document.getElementById('username').value;
+    const password = document.getElementById('password').value;
+
+    loginBtn.innerText = 'Memproses...';
+    loginBtn.disabled = true;
+    loginError.style.display = 'none';
+
+    fetch(SCRIPT_URL, {
+      method: 'POST',
+      body: JSON.stringify({ action: 'login', username: username, password: password })
+    })
+    .then(res => res.json())
+    .then(data => {
+      if (data.status === 'success') {
+        const userRole = data.role ? data.role.toLowerCase() : 'toko';
+
+        sessionStorage.setItem('unibis_logged_in', 'true');
+        sessionStorage.setItem('unibis_nama', data.nama);
+        sessionStorage.setItem('unibis_role', userRole);
+        
+        loginCard.style.display = 'none';
+        appContainer.style.display = 'flex';
+        userWelcome.innerText = data.nama;
+        userRoleText.innerText = userRole;
+        
+        applyRolePermissions(userRole);
+        setupBackTypeExit(); // pastikan fungsi dipanggil
+      } else {
+        loginError.innerText = data.message;
+        loginError.style.display = 'block';
+      }
+    })
+    .catch(err => {
+      loginError.innerText = 'Gagal terhubung ke server database.';
+      loginError.style.display = 'block';
+    })
+    .finally(() => {
+      loginBtn.innerText = 'Masuk';
+      loginBtn.disabled = false;
+    });
+  });
+
+  logoutBtn.addEventListener('click', () => {
+    logoutConfirmModal.classList.add('active');
+  });
+
+  cancelLogoutBtn.addEventListener('click', () => {
+    logoutConfirmModal.classList.remove('active');
+  });
+
+  logoutConfirmModal.addEventListener('click', (e) => {
+    if (e.target === logoutConfirmModal) {
+      logoutConfirmModal.classList.remove('active');
+    }
+  });
+
+  function executeLogout() {
+    logoutConfirmModal.classList.remove('active');
+    sessionStorage.removeItem('unibis_logged_in');
+    sessionStorage.removeItem('unibis_nama');
+    sessionStorage.removeItem('unibis_role');
+    
+    appContainer.style.display = 'none';
+    loginCard.style.display = 'block';
+    
+    document.getElementById('username').value = '';
+    document.getElementById('password').value = '';
+  }
+
+  confirmLogoutBtn.addEventListener('click', () => {
+    executeLogout();
+  });
+
+  function setupBackToExit() {
+    history.pushState(null, null, window.location.href);
+
+    window.addEventListener('popstate', function (event) {
+      const activeModal = document.querySelector('.modal-overlay.active');
+      if (activeModal && activeModal !== logoutConfirmModal) {
+        activeModal.classList.remove('active');
+        history.pushState(null, null, window.location.href);
+        return;
+      }
+
+      logoutConfirmModal.classList.add('active');
+      history.pushState(null, null, window.location.href);
+    });
+
+    cancelLogoutBtn.onclick = () => {
+      logoutConfirmModal.classList.remove('active');
+      history.pushState(null, null, window.location.href);
+    };
+
+    confirmLogoutBtn.onclick = () => {
+      executeLogout();
+    };
+  }
+
+  const tokoTrigger = document.getElementById('toko-menu-trigger');
+  const tokoModal = document.getElementById('tokoModal');
+  const closeTokoModal = document.getElementById('closeTokoModal');
+
+  tokoTrigger.addEventListener('click', (e) => {
+    e.preventDefault();
+    tokoModal.classList.add('active');
+  });
+
+  closeTokoModal.addEventListener('click', () => {
+    tokoModal.classList.remove('active');
+  });
+
+  tokoModal.addEventListener('click', (e) => {
+    if (e.target === tokoModal) {
+      tokoModal.classList.remove('active');
+    }
+  });
+
+  const dashboardTrigger = document.getElementById('dashboard-menu-trigger');
+  const dashboardModal = document.getElementById('dashboardModal');
+  const closeDashboardModal = document.getElementById('closeDashboardModal');
+
+  dashboardTrigger.addEventListener('click', (e) => {
+    e.preventDefault();
+    dashboardModal.classList.add('active');
+  });
+
+  closeDashboardModal.addEventListener('click', () => {
+    dashboardModal.classList.remove('active');
+  });
+
+  dashboardModal.addEventListener('click', (e) => {
+    if (e.target === dashboardModal) {
+      dashboardModal.classList.remove('active');
+    }
+  });
+
+  const fieldActionTrigger = document.getElementById('fieldaction-menu-trigger');
+  const fieldActionModal = document.getElementById('fieldActionModal');
+  const closeFieldActionModal = document.getElementById('closeFieldActionModal');
+
+  fieldActionTrigger.addEventListener('click', (e) => {
+    e.preventDefault();
+    fieldActionModal.classList.add('active');
+  });
+
+  closeFieldActionModal.addEventListener('click', () => {
+    fieldActionModal.classList.remove('active');
+  });
+
+  fieldActionModal.addEventListener('click', (e) => {
+    if (e.target === fieldActionModal) {
+      fieldActionModal.classList.remove('active');
+    }
+  });
+</script>
+
 </body>
 </html>
