@@ -418,7 +418,7 @@ body{
         </button>
       </div>
       <h1>UNIBIS Langsa</h1>
-      <div class="subtitle">Selamat Datang (<span id="userWelcome"></span>) - <span id="userRoleText" style="text-transform: capitalize; font-weight: 600;"></span></div>
+      <div class="subtitle">Selamat Datang (<span id="userWelcome"></span>) - <span id="userRoleText" style="text-transform: uppercase; font-weight: 600;"></span></div>
     </div>
 
     <!-- Dashboard Content -->
@@ -637,10 +637,8 @@ body{
     menuLinks.forEach(link => {
       const allowedRoles = link.getAttribute('data-role');
       if (allowedRoles) {
-        // Mengubah semua role yang diizinkan di data-role menjadi huruf kecil untuk dicocokkan
         const rolesArray = allowedRoles.split(',').map(r => r.trim().toLowerCase());
-        // Role dari database/session juga sudah di-toLowerCase() saat login
-        if (rolesArray.includes(role)) {
+        if (rolesArray.includes(role.toLowerCase())) {
           link.classList.remove('menu-hidden');
         } else {
           link.classList.add('menu-hidden');
@@ -677,7 +675,7 @@ body{
     .then(res => res.json())
     .then(data => {
       if (data.status === 'success') {
-        const userRole = data.role ? data.role.toLowerCase() : 'toko';
+        const userRole = data.role ? data.role : 'toko';
 
         sessionStorage.setItem('unibis_logged_in', 'true');
         sessionStorage.setItem('unibis_nama', data.nama);
@@ -689,7 +687,7 @@ body{
         userRoleText.innerText = userRole;
         
         applyRolePermissions(userRole);
-        setupBackTypeExit(); // pastikan fungsi dipanggil
+        setupBackToExit();
       } else {
         loginError.innerText = data.message;
         loginError.style.display = 'block';
