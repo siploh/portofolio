@@ -137,6 +137,7 @@ body{
   display: flex;
   justify-content: flex-end;
   margin-bottom: 10px;
+  gap: 8px;
 }
 
 .btn-logout {
@@ -157,6 +158,16 @@ body{
 
 .btn-logout:hover {
   background: var(--red);
+  color: var(--white);
+}
+
+.btn-secondary-action {
+  border-color: #64748b;
+  color: #64748b;
+}
+
+.btn-secondary-action:hover {
+  background: #64748b;
   color: var(--white);
 }
 
@@ -413,6 +424,9 @@ body{
   <div>
     <div class="app-header">
       <div class="logout-btn-container">
+        <button class="btn-logout btn-secondary-action" id="changePasswordBtn">
+          <i class="fas fa-key"></i> Ganti Password
+        </button>
         <button class="btn-logout" id="logoutBtn">
           <i class="fas fa-sign-out-alt"></i> Keluar
         </button>
@@ -603,6 +617,32 @@ body{
   </div>
 </div>
 
+<!-- ===== POPUP MODAL GANTI PASSWORD ===== -->
+<div class="modal-overlay" id="changePasswordModal">
+  <div class="modal-content" style="max-width: 400px;">
+    <div class="modal-header">
+      <h3>Ganti Password</h3>
+      <button class="close-btn" id="closePasswordModal"><i class="fas fa-times"></i></button>
+    </div>
+    <form id="changePasswordForm">
+      <div class="form-group">
+        <label>Password Lama</label>
+        <input type="password" id="oldPassword" required placeholder="Masukkan password lama">
+      </div>
+      <div class="form-group">
+        <label>Password Baru</label>
+        <input type="password" id="newPassword" required placeholder="Masukkan password baru">
+      </div>
+      <div class="form-group">
+        <label>Konfirmasi Password Baru</label>
+        <input type="password" id="confirmPassword" required placeholder="Ulangi password baru">
+      </div>
+      <div class="login-error" id="passwordError" style="margin-bottom: 12px; display: none;"></div>
+      <button type="submit" class="btn-login" id="submitPasswordBtn">Simpan Password</button>
+    </form>
+  </div>
+</div>
+
 <!-- ===== POPUP MODAL KONFIRMASI KELUAR ===== -->
 <div class="modal-overlay" id="logoutConfirmModal">
   <div class="logout-modal-content">
@@ -618,7 +658,7 @@ body{
 
 <!-- ===== JAVASCRIPT ===== -->
 <script>
-  const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwtHWlrmYLZtXYy1JQs-leuSNszH3jgMg1k4GIPDvacaXfdayT0xKL6b_sciuDlPfPH/exec';
+  const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyCL5dWgtV7isrDa4QVPxft88YMWADkLNWqcXE09ijjCwNzW1jIGTzZ26yPwh8WqYAr/exec';
 
   const loginCard = document.getElementById('loginCard');
   const appContainer = document.getElementById('appContainer');
@@ -680,6 +720,7 @@ body{
         sessionStorage.setItem('unibis_logged_in', 'true');
         sessionStorage.setItem('unibis_nama', data.nama);
         sessionStorage.setItem('unibis_role', userRole);
+        sessionStorage.setItem('unibis_username_key', username);
         
         loginCard.style.display = 'none';
         appContainer.style.display = 'flex';
@@ -722,6 +763,7 @@ body{
     sessionStorage.removeItem('unibis_logged_in');
     sessionStorage.removeItem('unibis_nama');
     sessionStorage.removeItem('unibis_role');
+    sessionStorage.removeItem('unibis_username_key');
     
     appContainer.style.display = 'none';
     loginCard.style.display = 'block';
@@ -758,6 +800,76 @@ body{
       executeLogout();
     };
   }
+
+  // Fitur Ganti Password
+  const changePasswordBtn = document.getElementById('changePasswordBtn');
+  const changePasswordModal = document.getElementById('changePasswordModal');
+  const closePasswordModal = document.getElementById('closePasswordModal');
+  const changePasswordForm = document.getElementById('changePasswordForm');
+  const submitPasswordBtn = document.getElementById('submitPasswordBtn');
+  const passwordError = document.getElementById('passwordError');
+
+  changePasswordBtn.addEventListener('click', () => {
+    changePasswordForm.reset();
+    passwordError.style.display = 'none';
+    changePasswordModal.classList.add('active');
+  });
+
+  closePasswordModal.addEventListener('click', () => {
+    changePasswordModal.classList.remove('active');
+  });
+
+  changePasswordModal.addEventListener('click', (e) => {
+    if (e.target === changePasswordModal) {
+      changePasswordModal.classList.remove('active');
+    }
+  });
+
+  changePasswordForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const oldPassword = document.getElementById('oldPassword').value;
+    const newPassword = document.getElementById('newPassword').value;
+    const confirmPassword = document.getElementById('confirmPassword').value;
+    const username = sessionStorage.getItem('unibis_username_key');
+
+    if (newPassword !== confirmPassword) {
+      passwordError.innerText = 'Konfirmasi password baru tidak cocok!';
+      passwordError.style.display = 'block';
+      return;
+    }
+
+    submitPasswordBtn.innerText = 'Menyimpan...';
+    submitPasswordBtn.disabled = true;
+    passwordError.style.display = 'none';
+
+    fetch(SCRIPT_URL, {
+      method: 'POST',
+      body: JSON.stringify({
+        action: 'changePassword',
+        username: username,
+        oldPassword: oldPassword,
+        newPassword: newPassword
+      })
+    })
+    .then(res => res.json())
+    .then(data => {
+      if (data.status === 'success') {
+        alert('Password berhasil diubah! Silakan login ulang.');
+        executeLogout();
+      } else {
+        passwordError.innerText = data.message;
+        passwordError.style.display = 'block';
+      }
+    })
+    .catch(err => {
+      passwordError.innerText = 'Gagal terhubung ke server.';
+      passwordError.style.display = 'block';
+    })
+    .finally(() => {
+      submitPasswordBtn.innerText = 'Simpan Password';
+      submitPasswordBtn.disabled = false;
+    });
+  });
 
   const tokoTrigger = document.getElementById('toko-menu-trigger');
   const tokoModal = document.getElementById('tokoModal');
