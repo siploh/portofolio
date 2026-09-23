@@ -13,46 +13,51 @@
   <link rel="apple-touch-icon" href="img/logo.png" />
 
   <style>
+    * {
+      box-sizing: border-box;
+    }
+
     body {
       margin: 0;
-      padding: 0;
+      padding: 15px;
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       background: linear-gradient(135deg, #2c3e50, #34495e);
       color: #333;
       display: flex;
       justify-content: center;
       align-items: center;
-      height: 100vh;
+      min-height: 100vh;
+      min-height: 100dvh; /* Menyesuaikan tinggi layar dinamis di HP */
     }
 
     .card {
       background: #ffffff;
-      padding: 30px 25px;
+      padding: 25px 20px;
       border-radius: 16px;
       box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+      width: 100%;
       max-width: 340px;
-      width: 90%;
       text-align: center;
     }
 
     .logo-img {
-      width: 75px;
-      height: 75px;
-      margin-bottom: 15px;
+      width: 65px;
+      height: 65px;
+      margin-bottom: 12px;
       object-fit: contain;
     }
 
     h2 {
       color: #2c3e50;
-      font-size: 18px;
-      margin-bottom: 8px;
+      font-size: 17px;
+      margin: 0 0 5px 0;
       font-weight: 700;
     }
 
     p {
       color: #666;
-      font-size: 13px;
-      margin-bottom: 20px;
+      font-size: 12px;
+      margin: 0 0 15px 0;
       line-height: 1.4;
     }
 
@@ -72,18 +77,19 @@
     input[type="text"] {
       width: 100%;
       padding: 12px;
-      box-sizing: border-box;
       border: 2px solid #ddd;
       border-radius: 8px;
       font-size: 16px;
       text-align: center;
       letter-spacing: 2px;
+      background-color: #fafafa;
       transition: border-color 0.3s;
     }
 
     input[type="text"]:focus {
       border-color: #2c3e50;
       outline: none;
+      background-color: #fff;
     }
 
     .btn {
@@ -99,7 +105,7 @@
       transition: background 0.3s;
     }
 
-    .btn:hover {
+    .btn:active {
       background-color: #1a252f;
     }
 
@@ -128,7 +134,7 @@
   </div>
 
   <script>
-    // 1. Pendaftaran Service Worker agar memenuhi standar PWA & tombol Install muncul
+    // 1. Pendaftaran Service Worker agar menu Install PWA muncul di HP
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
         navigator.serviceWorker.register('sw.js')
@@ -147,7 +153,7 @@
       
       if (nilaiInput === "05") {
         errorText.style.display = "none";
-        // Mengarahkan ke halaman login.html (atau bisa diganti link Google Apps Script Anda)
+        // Mengarahkan ke halaman login.html setelah kode benar
         window.location.href = "login.html";
       } else {
         errorText.style.display = "block";
@@ -157,7 +163,7 @@
 
     submitBtn.addEventListener('click', prosesVerifikasi);
 
-    // Bisa tekan tombol "Enter" pada keyboard HP
+    // Bisa tekan tombol "Enter" / "Go" pada keyboard HP
     idInput.addEventListener('keypress', function (e) {
       if (e.key === 'Enter') {
         prosesVerifikasi();
