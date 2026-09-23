@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+  <title>RT 05 Desa Suka Mulya</title>
+  
+  <!-- Hubungkan ke Manifest & PWA -->
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#2c3e50">
+  
+  <link rel="icon" href="img/logo.png" />
+  <link rel="apple-touch-icon" href="img/logo.png" />
+
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #2c3e50, #34495e);
+      color: #333;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .card {
+      background: #ffffff;
+      padding: 30px 25px;
+      border-radius: 16px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+      max-width: 340px;
+      width: 90%;
+      text-align: center;
+    }
+
+    .logo-img {
+      width: 75px;
+      height: 75px;
+      margin-bottom: 15px;
+      object-fit: contain;
+    }
+
+    h2 {
+      color: #2c3e50;
+      font-size: 18px;
+      margin-bottom: 8px;
+      font-weight: 700;
+    }
+
+    p {
+      color: #666;
+      font-size: 13px;
+      margin-bottom: 20px;
+      line-height: 1.4;
+    }
+
+    .input-group {
+      margin-bottom: 15px;
+      text-align: left;
+    }
+
+    label {
+      display: block;
+      font-size: 12px;
+      font-weight: bold;
+      color: #444;
+      margin-bottom: 5px;
+    }
+
+    input[type="text"] {
+      width: 100%;
+      padding: 12px;
+      box-sizing: border-box;
+      border: 2px solid #ddd;
+      border-radius: 8px;
+      font-size: 16px;
+      text-align: center;
+      letter-spacing: 2px;
+      transition: border-color 0.3s;
+    }
+
+    input[type="text"]:focus {
+      border-color: #2c3e50;
+      outline: none;
+    }
+
+    .btn {
+      width: 100%;
+      padding: 12px;
+      background-color: #2c3e50;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 15px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    .btn:hover {
+      background-color: #1a252f;
+    }
+
+    .error-msg {
+      color: #e74c3c;
+      font-size: 12px;
+      margin-top: 8px;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="card">
+    <img src="img/logo.png" alt="Logo RT 05" class="logo-img">
+    <h2>Selamat Datang</h2>
+    <p>Aplikasi Warga RT 05 Desa Suka Mulya</p>
+    
+    <div class="input-group">
+      <label for="idWarga">Masukkan ID Wilayah</label>
+      <input type="text" id="idWarga" placeholder="----" maxlength="5" autocomplete="off" />
+    </div>
+
+    <button id="submitBtn" class="btn">Lanjutkan</button>
+    <div id="errorText" class="error-msg">ID salah! Silakan masukkan kode "05".</div>
+  </div>
+
+  <script>
+    // 1. Pendaftaran Service Worker agar memenuhi standar PWA & tombol Install muncul
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('sw.js')
+          .then((reg) => console.log('Service Worker Berhasil:', reg.scope))
+          .catch((err) => console.log('Service Worker Gagal:', err));
+      });
+    }
+
+    // 2. Logika Verifikasi ID "05"
+    const submitBtn = document.getElementById('submitBtn');
+    const idInput = document.getElementById('idWarga');
+    const errorText = document.getElementById('errorText');
+
+    function prosesVerifikasi() {
+      const nilaiInput = idInput.value.trim();
+      
+      if (nilaiInput === "05") {
+        errorText.style.display = "none";
+        // Mengarahkan ke halaman login.html (atau bisa diganti link Google Apps Script Anda)
+        window.location.href = "login.html";
+      } else {
+        errorText.style.display = "block";
+        idInput.focus();
+      }
+    }
+
+    submitBtn.addEventListener('click', prosesVerifikasi);
+
+    // Bisa tekan tombol "Enter" pada keyboard HP
+    idInput.addEventListener('keypress', function (e) {
+      if (e.key === 'Enter') {
+        prosesVerifikasi();
+      }
+    });
+  </script>
+</body>
+</html>
