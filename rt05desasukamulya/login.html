@@ -12,22 +12,23 @@
       width: 100%;
       height: 100%;
       background-color: #eee;
-      overflow: hidden; /* Mencegah munculnya scrollbar */
+      /* Mengizinkan scrolling agar bagian bawah tidak terpotong */
+      overflow: auto; 
+      -webkit-overflow-scrolling: touch;
     }
 
     .iframe-container {
       width: 100%;
-      height: 100dvh;
-      overflow: hidden;
-      position: relative;
+      /* Menggunakan min-height agar kontainer bisa menyesuaikan isi ke bawah */
+      min-height: 100%;
+      height: 100%;
+      overflow: visible;
     }
 
     iframe {
-      position: absolute;
-      top: 0;
-      left: 0;
+      display: block;
       width: 100%;
-      height: 100%;
+      height: 100vh;
       border: none;
       background-color: #fff;
     }
@@ -38,7 +39,7 @@
     <iframe
       id="app"
       src="https://script.google.com/macros/s/AKfycbyluUW2M_v4WcBxiDn8iNDvoUK6cwChlg7f7AJ2o7ChlM7Qt3nGxuHnh4wwAoWc2QAGmA/exec"
-      scrolling="no"
+      scrolling="yes"
       allowfullscreen="true"
       webkitallowfullscreen="true"
       mozallowfullscreen="true"
