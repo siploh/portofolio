@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>PHOTOBOX Camera</title>
+<style>
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;width:100%;min-height:100%;background:#080808;color:#fff;font-family:Arial,sans-serif}
+body{min-height:100vh}
+.wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:16px}
+.panel{width:min(980px,100%);text-align:center}
+h1{font-size:clamp(28px,5vw,52px);margin:8px 0}
+.sub{color:#aaa;line-height:1.5}
+.video-wrap{position:relative;width:100%;max-width:900px;margin:18px auto}
+video{display:block;width:100%;max-height:68vh;object-fit:cover;background:#111;border-radius:20px;transform:scaleX(-1)}
+canvas{display:none}
+.count{font-size:100px;font-weight:800;min-height:120px;line-height:1}
+button{border:0;border-radius:14px;padding:15px 26px;font-size:19px;font-weight:700;cursor:pointer;background:#fff;color:#111;margin:8px}
+button:disabled{opacity:.45;cursor:not-allowed}
+.status{min-height:28px;color:#ccc;margin:10px}
+.error{background:#5b1d1d;color:#fff;padding:13px;border-radius:10px;margin:12px auto;max-width:760px}
+.success{background:#173d24;color:#fff;padding:13px;border-radius:10px;margin:12px auto;max-width:760px}
+.hidden{display:none!important}
+.hint{font-size:14px;color:#777;margin-top:12px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="panel">
+    <h1 id="title">PHOTOBOX</h1>
+    <div class="status" id="status">Menunggu koneksi dari halaman photobox...</div>
+    <div id="err" class="error hidden"></div>
+
+    <div class="video-wrap">
+      <video id="video" autoplay playsinline muted></video>
+      <canvas id="canvas"></canvas>
+    </div>
+
+    <div id="count" class="count"></div>
+
+    <div>
+      <button id="captureBtn" disabled>AMBIL FOTO</button>
+      <button id="closeBtn">TUTUP</button>
+    </div>
+
+    <div class="hint">
+      Kamera berjalan di halaman terpisah agar izin kamera tidak dibatasi sandbox Google Apps Script.
+    </div>
+  </div>
+</div>
+
+<script>
+'use strict';
+
+let stream = null;
+let configured = false;
+let busy = false;
+let photoIndex = 0;
+let photoCount = 1;
+
+const video = document.getElementById('video');
+const canvas = document.getElementById('canvas');
+const countEl = document.getElementById('count');
+const titleEl = document.getElementById('title');
+const statusEl = document.getElementById('status');
+const errEl = document.getElementById('err');
+const captureBtn = document.getElementById('captureBtn');
+const closeBtn = document.getElementById('closeBtn');
+
+function showError(message){
+  errEl.textContent = String(message || 'Kamera tidak dapat digunakan.');
+  errEl.classList.remove('hidden');
+  statusEl.textContent = 'Kamera belum siap.';
+}
+
+function clearError(){
+  errEl.textContent = '';
+  errEl.classList.add('hidden');
+}
+
+function send(type, extra){
+  try{
+    if(window.opener && !window.opener.closed){
+      window.opener.postMessage(
+        Object.assign({type:type}, extra || {}),
+        '*'
+      );
+    }
+  }catch(error){
+    console.error(error);
+  }
+}
+
+function stopCamera(){
+  if(stream){
+    stream.getTracks().forEach(function(track){
+      try{ track.stop(); }catch(e){}
+    });
+    stream = null;
+  }
+  video.srcObject = null;
+}
+
+async function openCamera(){
+  if(!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia){
+    throw new Error('Browser tidak mendukung kamera. Gunakan Chrome, Edge, Safari, atau browser modern lain.');
+  }
+
+  /*
+    Karena halaman ini adalah top-level page HTTPS,
+    getUserMedia dapat meminta izin kamera secara normal.
+  */
+  stream = await navigator.mediaDevices.getUserMedia({
+    video:{
+      facingMode:'user',
+      width:{ideal:1920},
+      height:{ideal:1080}
+    },
+    audio:false
+  });
+
+  video.srcObject = stream;
+  await video.play();
+
+  captureBtn.disabled = false;
+  statusEl.textContent = 'Kamera siap. Tekan AMBIL FOTO.';
+}
+
+function countdown(seconds){
+  return new Promise(function(resolve){
+    let remaining = Number(seconds) || 3;
+    countEl.textContent = remaining;
+
+    const timer = setInterval(function(){
+      remaining--;
+
+      if(remaining <= 0){
+        clearInterval(timer);
+        countEl.textContent = '';
+        resolve();
+      }else{
+        countEl.textContent = remaining;
+      }
+    },1000);
+  });
+}
+
+async function capture(){
+  if(busy || !configured || !stream){
+    return;
+  }
+
+  busy = true;
+  captureBtn.disabled = true;
+  clearError();
+
+  try{
+    statusEl.textContent =
+      'Foto ' + (photoIndex + 1) + ' dari ' + photoCount + '...';
+
+    await countdown(3);
+
+    const width = video.videoWidth || 1280;
+    const height = video.videoHeight || 720;
+
+    canvas.width = width;
+    canvas.height = height;
+
+    const ctx = canvas.getContext('2d');
+
+    /*
+      Mirror hasil agar sama seperti preview.
+    */
+    ctx.save();
+    ctx.translate(width,0);
+    ctx.scale(-1,1);
+    ctx.drawImage(video,0,0,width,height);
+    ctx.restore();
+
+    const dataUrl =
+      canvas.toDataURL('image/jpeg',0.88);
+
+    photoIndex++;
+
+    statusEl.textContent =
+      'Mengirim foto ' + photoIndex + '...';
+
+    send(
+      'PHOTOBOX_PHOTO',
+      {
+        dataUrl:dataUrl,
+        index:photoIndex
+      }
+    );
+
+  }catch(error){
+    console.error(error);
+    showError(
+      (error && error.name ? error.name + ': ' : '') +
+      (error && error.message ? error.message : error)
+    );
+
+    captureBtn.disabled = false;
+    busy = false;
+
+    send(
+      'PHOTOBOX_CAMERA_ERROR',
+      {
+        message:
+          (error && error.name ? error.name + ': ' : '') +
+          (error && error.message ? error.message : error)
+      }
+    );
+  }
+}
+
+window.addEventListener('message', async function(event){
+  /*
+    Hanya menerima instruksi dari opener.
+  */
+  if(event.source !== window.opener){
+    return;
+  }
+
+  const data = event.data || {};
+
+  if(data.type === 'PHOTOBOX_CAMERA_CONFIG'){
+    configured = true;
+    photoCount = Math.max(1, Number(data.count || 1));
+    photoIndex = 0;
+    busy = false;
+
+    titleEl.textContent =
+      data.title || 'PHOTOBOX';
+
+    clearError();
+
+    try{
+      await openCamera();
+    }catch(error){
+      console.error(error);
+
+      const message =
+        (error && error.name ? error.name + ': ' : '') +
+        (error && error.message ? error.message : error);
+
+      showError(message);
+
+      captureBtn.disabled = true;
+
+      send(
+        'PHOTOBOX_CAMERA_ERROR',
+        {message:message}
+      );
+    }
+
+    return;
+  }
+
+  if(data.type === 'PHOTOBOX_CAPTURE'){
+    await capture();
+    return;
+  }
+
+  if(data.type === 'PHOTOBOX_NEXT'){
+    busy = false;
+    captureBtn.disabled = false;
+    statusEl.textContent =
+      'Foto berikutnya siap. Tekan AMBIL FOTO.';
+    return;
+  }
+
+  if(data.type === 'PHOTOBOX_RETRY'){
+    busy = false;
+    captureBtn.disabled = false;
+    statusEl.textContent =
+      'Upload gagal. Silakan ambil ulang foto ini.';
+    return;
+  }
+
+  if(data.type === 'PHOTOBOX_DONE'){
+    busy = false;
+    captureBtn.disabled = true;
+    statusEl.textContent =
+      'Semua foto selesai. Jendela akan ditutup...';
+
+    setTimeout(function(){
+      stopCamera();
+      try{ window.close(); }catch(e){}
+    },500);
+
+    return;
+  }
+
+  if(data.type === 'PHOTOBOX_CLOSE'){
+    stopCamera();
+    try{ window.close(); }catch(e){}
+    return;
+  }
+});
+
+captureBtn.addEventListener('click', capture);
+
+closeBtn.addEventListener('click', function(){
+  send(
+    'PHOTOBOX_CAMERA_ERROR',
+    {message:'Kamera ditutup oleh pengguna.'}
+  );
+  stopCamera();
+  try{ window.close(); }catch(e){}
+});
+
+/*
+  Beri tahu halaman Apps Script bahwa halaman kamera
+  sudah berhasil dimuat.
+*/
+window.addEventListener('load', function(){
+  send('PHOTOBOX_CAMERA_READY');
+});
+
+window.addEventListener('beforeunload', function(){
+  stopCamera();
+});
+</script>
+</body>
+</html>
