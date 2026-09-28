@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+  <title>W-BOX - Aplikasi Photobooth Modern</title>
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            darkbg: '#0a0b10',
+            cardbg: 'rgba(18, 20, 32, 0.75)',
+            accentpink: '#ec4899',
+            accentcyan: '#06b6d4',
+            accentpurple: '#8b5cf6',
+          },
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Google Fonts Inter & Outfit -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800;900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  
+  <!-- FontAwesome for icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #0a0b10;
+      color: #f3f4f6;
+      overflow-x: hidden;
+    }
+
+    .font-outfit {
+      font-family: 'Outfit', sans-serif;
+    }
+
+    /* Background animated gradient mesh */
+    .mesh-bg {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: -1;
+      background: radial-gradient(circle at 15% 20%, rgba(139, 92, 246, 0.18) 0%, transparent 40%),
+                  radial-gradient(circle at 85% 80%, rgba(6, 182, 212, 0.15) 0%, transparent 40%),
+                  radial-gradient(circle at 50% 50%, rgba(236, 72, 153, 0.12) 0%, transparent 50%),
+                  #07080c;
+    }
+
+    /* Glassmorphism Card */
+    .glass-card {
+      background: rgba(18, 20, 32, 0.65);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7),
+                  0 0 30px rgba(139, 92, 246, 0.1);
+    }
+
+    /* Neon Glow text */
+    .neon-glow {
+      text-shadow: 0 0 25px rgba(236, 72, 153, 0.5),
+                   0 0 50px rgba(139, 92, 246, 0.3);
+    }
+
+    /* Floating animation */
+    @keyframes float {
+      0%, 100% { transform: translateY(0px) rotate(0deg); }
+      50% { transform: translateY(-8px) rotate(1deg); }
+    }
+    .animate-float {
+      animation: float 5s ease-in-out infinite;
+    }
+
+    /* Pulse ring effect */
+    @keyframes pulse-ring {
+      0% { transform: scale(0.95); opacity: 0.8; }
+      50% { transform: scale(1.05); opacity: 0.4; }
+      100% { transform: scale(0.95); opacity: 0.8; }
+    }
+    .pulse-ring-anim {
+      animation: pulse-ring 3s infinite ease-in-out;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex items-center justify-center p-4">
+
+  <div class="mesh-bg"></div>
+  
+  <div class="absolute top-10 left-10 w-32 h-32 bg-purple-600/10 rounded-full blur-3xl pointer-events-none"></div>
+  <div class="absolute bottom-10 right-10 w-40 h-40 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none"></div>
+
+  <main class="w-full max-w-md mx-auto">
+    <div class="glass-card rounded-3xl p-8 sm:p-10 relative overflow-hidden transition-all duration-300 text-center">
+      
+      <!-- Top Decorative Glow Line -->
+      <div class="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-pink-500 to-transparent"></div>
+
+      <!-- Logo & Branding Icon -->
+      <div class="flex justify-center mb-6">
+        <div class="w-24 h-24 rounded-2xl bg-gradient-to-tr from-purple-600 via-pink-500 to-cyan-400 p-[2px] animate-float shadow-xl shadow-purple-500/25 relative">
+          <div class="absolute inset-0 rounded-2xl bg-gradient-to-tr from-purple-600 to-cyan-400 blur-md opacity-40 pulse-ring-anim"></div>
+          <div class="w-full h-full bg-darkbg rounded-[14px] flex items-center justify-center relative z-10">
+            <i class="fa-solid fa-camera-retro text-4xl bg-gradient-to-r from-pink-400 to-cyan-300 bg-clip-text text-transparent"></i>
+          </div>
+        </div>
+      </div>
+
+      <!-- App Title & Subtitle -->
+      <div class="mb-8">
+        <h1 class="font-outfit font-black text-4xl sm:text-5xl tracking-wider text-white mb-2 neon-glow">
+          W-BOX
+        </h1>
+        <div class="inline-block px-3 py-1 rounded-full bg-white/5 border border-white/10 text-xs font-medium text-cyan-300 tracking-wider uppercase mb-3">
+          Studio Edition v2.5
+        </div>
+        <p class="text-gray-300 text-sm sm:text-base font-light leading-relaxed px-2">
+          Abadikan momen berharga Anda dengan sentuhan efek modern, filter sinematik, dan cetak kilat.
+        </p>
+      </div>
+
+      <!-- Features Highlights -->
+      <div class="grid grid-cols-3 gap-2 mb-8 text-center">
+        <div class="p-2.5 rounded-xl bg-white/5 border border-white/5">
+          <i class="fa-solid fa-wand-magic-sparkles text-pink-400 mb-1 text-sm"></i>
+          <div class="text-[11px] text-gray-300 font-medium">Filter AI</div>
+        </div>
+        <div class="p-2.5 rounded-xl bg-white/5 border border-white/5">
+          <i class="fa-solid fa-bolt text-cyan-400 mb-1 text-sm"></i>
+          <div class="text-[11px] text-gray-300 font-medium">Super Cepat</div>
+        </div>
+        <div class="p-2.5 rounded-xl bg-white/5 border border-white/5">
+          <i class="fa-solid fa-cloud-arrow-down text-purple-400 mb-1 text-sm"></i>
+          <div class="text-[11px] text-gray-300 font-medium">QR Instan</div>
+        </div>
+      </div>
+
+      <!-- Action Button (Direct Start Session) -->
+      <div class="space-y-4">
+        <button 
+          id="startSessionBtn" 
+          class="w-full py-4 px-6 rounded-2xl bg-gradient-to-r from-purple-600 via-pink-600 to-cyan-500 text-white font-outfit font-bold text-lg tracking-wide shadow-xl shadow-pink-600/30 hover:shadow-pink-600/50 hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 flex items-center justify-center gap-3 group cursor-pointer relative overflow-hidden"
+        >
+          <span class="absolute inset-0 w-full h-full bg-white/20 transform -translate-x-full group-hover:translate-x-full transition-transform duration-700"></span>
+          <i class="fa-solid fa-play text-sm bg-white/20 p-2 rounded-full"></i>
+          <span>Mulai Sesi Sekarang</span>
+          <i class="fa-solid fa-arrow-right-long group-hover:translate-x-1.5 transition-transform duration-300"></i>
+        </button>
+      </div>
+
+      <!-- Footer Info -->
+      <div class="mt-8 pt-6 border-t border-white/5 text-center">
+        <p class="text-xs text-gray-500 flex items-center justify-center gap-2">
+          <i class="fa-solid fa-camera text-pink-400"></i> Ready to Capture • W-BOX Studio
+        </p>
+      </div>
+
+    </div>
+  </main>
+
+  <script>
+    // Register Service Worker for PWA capabilities
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('sw.js')
+          .then((reg) => console.log('W-BOX Service Worker Registered:', reg.scope))
+          .catch((err) => console.log('W-BOX Service Worker Failed:', err));
+      });
+    }
+
+    const startSessionBtn = document.getElementById('startSessionBtn');
+
+    startSessionBtn.addEventListener('click', () => {
+      // Loading animation state on button click
+      startSessionBtn.innerHTML = `<i class="fa-solid fa-circle-notch fa-spin"></i><span> Menyiapkan Kamera Studio...</span>`;
+      startSessionBtn.classList.add('opacity-90', 'cursor-wait');
+
+      // Pindah ke halaman W-BOX.html setelah 1 detik
+      setTimeout(() => {
+        window.location.href = "W-BOX.html";
+      }, 1000);
+    });
+  </script>
+</body>
+</html>
