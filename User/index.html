@@ -147,6 +147,15 @@
                 resetFormState();
             }
         });
+
+        // Pendaftaran Service Worker agar PWA bisa diinstal
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/User/sw.js')
+                    .then((reg) => console.log('Service Worker berhasil didaftarkan!', reg))
+                    .catch((err) => console.log('Gagal mendaftarkan Service Worker:', err));
+            });
+        }
     </script>
 
 </body>
