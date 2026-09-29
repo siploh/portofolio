@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+  <title>Link House Cafe</title>
+  
+  <!-- Hubungkan ke Manifest & PWA -->
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#3e2723">
+  
+  <link rel="icon" href="img/logo.png" />
+  <link rel="apple-touch-icon" href="img/logo.png" />
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding: 15px;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #3e2723, #5d4037);
+      color: #333;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      min-height: 100dvh; /* Menyesuaikan tinggi layar dinamis di HP */
+    }
+
+    .card {
+      background: #ffffff;
+      padding: 25px 20px;
+      border-radius: 16px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+      width: 100%;
+      max-width: 340px;
+      text-align: center;
+    }
+
+    .logo-img {
+      width: 65px;
+      height: 65px;
+      margin-bottom: 12px;
+      object-fit: contain;
+    }
+
+    h2 {
+      color: #3e2723;
+      font-size: 19px;
+      margin: 0 0 5px 0;
+      font-weight: 700;
+    }
+
+    p {
+      color: #666;
+      font-size: 12px;
+      margin: 0 0 20px 0;
+      line-height: 1.4;
+    }
+
+    .btn {
+      width: 100%;
+      padding: 12px;
+      background-color: #5d4037;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 15px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    .btn:active {
+      background-color: #3e2723;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="card">
+    <img src="img/logo.png" alt="Logo Link House Cafe" class="logo-img">
+    <h2>Selamat Datang</h2>
+    <p>Link House Cafe & Resto</p>
+
+    <button id="submitBtn" class="btn">Lanjutkan</button>
+  </div>
+
+  <script>
+    // 1. Pendaftaran Service Worker agar menu Install PWA muncul di HP
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('sw.js')
+          .then((reg) => console.log('Service Worker Berhasil:', reg.scope))
+          .catch((err) => console.log('Service Worker Gagal:', err));
+      });
+    }
+
+    // 2. Langsung pindah ke halaman berikutnya saat tombol diklik tanpa cek password
+    const submitBtn = document.getElementById('submitBtn');
+
+    submitBtn.addEventListener('click', function() {
+      window.location.href = "login.html";
+    });
+  </script>
+</body>
+</html>
