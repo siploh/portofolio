@@ -1,6 +1,6 @@
 const CACHE_NAME = 'w-pos-cache-v1';
 const assetsToCache = [
-  '/User3/',
+  '/User/',
   '/User/index.html',
   '/User/manifest.json',
   '/User/img/Logo.png'
