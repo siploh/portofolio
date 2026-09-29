@@ -1,4 +1,4 @@
-const CACHE_NAME = 'w-pos-cache-v1';
+const CACHE_NAME = 'w-pos-cache-v2';
 const assetsToCache = [
   '/User/',
   '/User/index.html',
