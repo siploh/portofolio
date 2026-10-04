@@ -11,7 +11,7 @@
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <link rel="apple-touch-icon" href="img/Logo.jpeg"> <!-- Diperbaiki dari img/.jpeg -->
+    <link rel="apple-touch-icon" href="img/Logo.jpeg">
 
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -109,7 +109,7 @@
             </form>
 
             <!-- Tombol Opsional Install PWA -->
-            <button id="pwaInstallBtn">Install Aplikasi</button>
+            <button id="pwaInstallBtn">📲 Install Aplikasi</button>
         </div>
     </div>
 
@@ -190,10 +190,9 @@
 
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
-                // Diperbaiki: Hapus parameter scope manual agar otomatis menyesuaikan direktori file
                 navigator.serviceWorker.register('./sw.js')
                     .then(registration => {
-                        console.log('ServiceWorker registered with scope:', registration.scope);
+                        console.log('ServiceWorker registered:', registration.scope);
                     })
                     .catch(error => {
                         console.error('ServiceWorker registration failed:', error);
@@ -210,16 +209,17 @@
         });
 
         if (installBtn) {
-            installBtn.addEventListener('click', () => {
+            installBtn.addEventListener('click', async () => {
                 if (deferredPrompt) {
                     deferredPrompt.prompt();
-                    deferredPrompt.userChoice.then((choiceResult) => {
-                        if (choiceResult.outcome === 'accepted') {
-                            console.log('User menerima instalasi PWA');
-                        }
-                        deferredPrompt = null;
-                        installBtn.style.display = 'none';
-                    });
+                    
+                    const { outcome } = await deferredPrompt.userChoice;
+                    if (outcome === 'accepted') {
+                        console.log('Pengguna menyetujui instalasi PWA');
+                    }
+                    
+                    deferredPrompt = null;
+                    installBtn.style.display = 'none';
                 }
             });
         }
