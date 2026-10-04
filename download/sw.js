@@ -1,24 +1,20 @@
-const CACHE_NAME = 'w-pos-cache-v4';
-// Hanya cache file utama yang pasti ada agar instalasi tidak gagal
+const CACHE_NAME = 'w-pos-cache-v5';
 const assetsToCache = [
   './',
   './index.html',
   './manifest.json'
 ];
 
-// Event Install: Caching file utama dengan aman
+// Event Install: Simpan file inti
 self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME)
-      .then((cache) => {
-        // Menggunakan addAll dengan penanganan error agar tidak memutus instalasi jika ada file opsional
-        return cache.addAll(assetsToCache).catch(err => console.log('Cache addAll error:', err));
-      })
+      .then((cache) => cache.addAll(assetsToCache))
       .then(() => self.skipWaiting())
   );
 });
 
-// Event Activate: Mengambil alih kontrol klien
+// Event Activate: Bersihkan cache lama dan ambil alih kontrol
 self.addEventListener('activate', (event) => {
   event.waitUntil(
     caches.keys().then((keys) => {
@@ -33,29 +29,27 @@ self.addEventListener('activate', (event) => {
   );
 });
 
-// Event Fetch: Strategi Stale-While-Revalidate yang aman untuk PWA
+// Event Fetch: Network First (Coba internet dulu, jika gagal/offline baru ambil dari cache)
 self.addEventListener('fetch', (event) => {
   if (event.request.method !== 'GET') return;
 
   event.respondWith(
-    caches.match(event.request)
-      .then((cachedResponse) => {
-        // Ambil dari cache dulu jika ada, lalu update dari network di latar belakang
-        const fetchPromise = fetch(event.request)
-          .then((networkResponse) => {
-            if (networkResponse && networkResponse.status === 200) {
-              const responseToCache = networkResponse.clone();
-              caches.open(CACHE_NAME).then((cache) => {
-                cache.put(event.request, responseToCache);
-              });
-            }
-            return networkResponse;
-          })
-          .catch(() => {
-            // Jika network gagal dan tidak ada cache, biarkan atau abaikan
+    fetch(event.request)
+      .then((networkResponse) => {
+        // Jika internet aktif, update cache secara otomatis
+        if (networkResponse && networkResponse.status === 200) {
+          const responseToCache = networkResponse.clone();
+          caches.open(CACHE_NAME).then((cache) => {
+            cache.put(event.request, responseToCache);
           });
-
-        return cachedResponse || fetchPromise;
+        }
+        return networkResponse;
+      })
+      .catch(() => {
+        // Jika offline atau gagal terhubung, ambil dari cache
+        return caches.match(event.request).then((cachedResponse) => {
+          return cachedResponse || caches.match('./index.html');
+        });
       })
   );
 });
