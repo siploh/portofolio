@@ -1,4 +1,4 @@
-const CACHE_NAME = 'w-pos-cache-v2';
+const CACHE_NAME = 'w-pos-cache-v3'; // Naikkan versi cache
 const assetsToCache = [
   './',
   './index.html',
@@ -6,7 +6,7 @@ const assetsToCache = [
   './img/Logo.jpeg'
 ];
 
-// Event Install
+// Event Install: Langsung lewati antrean menunggu
 self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME)
@@ -15,7 +15,7 @@ self.addEventListener('install', (event) => {
   );
 });
 
-// Event Activate
+// Event Activate: Langsung ambil alih kontrol klien tanpa menunggu restart browser
 self.addEventListener('activate', (event) => {
   event.waitUntil(
     caches.keys().then((keys) => {
@@ -30,21 +30,23 @@ self.addEventListener('activate', (event) => {
   );
 });
 
-// Event Fetch: Network First untuk memastikan proses login/navigasi lancar
+// Event Fetch: Network First dengan fallback cache yang andal
 self.addEventListener('fetch', (event) => {
   if (event.request.method !== 'GET') return;
 
   event.respondWith(
     fetch(event.request)
       .then((networkResponse) => {
-        // Jika jaringan tersedia, simpan cache terbaru dan kembalikan respon
-        return caches.open(CACHE_NAME).then((cache) => {
-          cache.put(event.request, networkResponse.clone());
+        if (!networkResponse || networkResponse.status !== 200) {
           return networkResponse;
+        }
+        const responseToCache = networkResponse.clone();
+        caches.open(CACHE_NAME).then((cache) => {
+          cache.put(event.request, responseToCache);
         });
+        return networkResponse;
       })
       .catch(() => {
-        // Jika offline, ambil dari cache
         return caches.match(event.request);
       })
   );
