@@ -1,0 +1,820 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Katalog Lengkap Inaco</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f2f5;
+            padding: 15px;
+            width: 100vw;
+            overflow-x: hidden;
+        }
+        .header {
+            width: 100%;
+            background: #ffffff;
+            padding: 20px;
+            text-align: center;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            border: 1px solid #e1e4e8;
+        }
+        .header h1 {
+            font-size: 2em;
+            color: #1a73e8;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+        }
+        .catalog-container {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr); 
+            gap: 10px;
+            width: 100%;
+        }
+        .card {
+            background: #fff;
+            border: 1px solid #d1d5da;
+            border-radius: 8px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            transition: all 0.3s ease;
+        }
+        .card:hover { transform: translateY(-5px); box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+        .image-container {
+            width: 100%;
+            height: 100px; 
+            background: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px;
+        }
+        .image-container img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+        .details {
+            padding: 10px 5px;
+            text-align: center;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        .category {
+            font-size: 9px;
+            font-weight: bold;
+            color: #f39c12;
+            text-transform: uppercase;
+            margin-bottom: 5px;
+        }
+        .product-name {
+            font-size: 10px;
+            font-weight: bold;
+            color: #2c3e50;
+            min-height: 35px;
+            line-height: 1.2;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+        .qty-info {
+            font-size: 18px; 
+            color: #ffffff;
+            font-weight: 900;
+            background: #27ae60;
+            padding: 5px 10px;
+            border-radius: 5px;
+            margin: 2px auto 10px;
+            display: inline-block;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+        }
+        .price {
+            font-size: 14px;
+            font-weight: 900;
+            color: #c0392b;
+            margin-top: auto;
+            padding-top: 8px;
+            border-top: 1px dashed #ddd;
+        }
+        footer {
+            text-align: center;
+            padding: 30px;
+            color: #7f8c8d;
+            font-size: 11px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <h1>MASTER KATALOG INACO</h1>
+</div>
+
+<div class="catalog-container">
+    
+    <div class="card">
+        <div class="image-container"><img src="https://d1d8o7q9jg8pjk.cloudfront.net/p/lg_62d3d7db78f53.png"></div>
+        <div class="details">
+            <span class="category">INACO</span>
+            <div class="product-name">ALOEVERA CUP BANANA 200g</div>
+            <div class="qty-info">x24</div>
+            <div class="price">Rp 97.369</div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="image-container"><img src="https://inacofood.com/data/product/84/1746106262_Aloevera%20Lychee%20Cup%20new.png"></div>
+        <div class="details">
+            <span class="category">INACO</span>
+            <div class="product-name">ALOEVERA CUP LYCHEE 200g</div>
+            <div class="qty-info">x24</div>
+            <div class="price">Rp 97.369</div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="image-container"><img src="https://arti-assets.sgp1.cdn.digitaloceanspaces.com/megaswalayan/products/ed558de9-b365-4194-958d-fa93cdf87ae1.jpg"></div>
+        <div class="details">
+            <span class="category">INACO</span>
+            <div class="product-name">ALOEVERA CUP PEACH 200g</div>
+            <div class="qty-info">x24</div>
+            <div class="price">Rp 97.369</div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="image-container"><img src="https://arti-assets.sgp1.cdn.digitaloceanspaces.com/megaswalayan/products/710ac5f0-e3dc-4aa9-bbae-ba2c4652b33e.jpg"></div>
+        <div class="details">
+            <span class="category">INACO</span>
+            <div class="product-name">ALOEVERA SP BANANA 280g</div>
+            <div class="qty-info">x24</div>
+            <div class="price">Rp 151.582</div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="image-container"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRFDHxlgnDeVyN1caXGOdCY6iWwCvuH_SWWOQ&s"></div>
+        <div class="details">
+            <span class="category">INACO</span>
+            <div class="product-name">ALOEVERA SP LYCHEE 280g</div>
+            <div class="qty-info">x24</div>
+            <div class="price">Rp 151.582</div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="image-container"><img src="https://image.dailymartazzahra.com/s3/productimages/webp/co37129/p814269/w300-h300/88125cd5-12e6-42f3-a9c0-71d9c9018162.jpg"></div>
+        <div class="details">
+            <span class="category">INACO</span>
+            <div class="product-name">ALOEVERA SP PEACH 280g</div>
+            <div class="qty-info">x24</div>
+            <div class="price">Rp 151.582</div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="image-container"><img src="https://inacofood.com/data/product/36/1732895041_FrozenMix-100g-296x296.png"></div>
+        <div class="details">
+            <span class="category">INACO</span>
+            <div class="product-name">GUMMY CANDY-SACHET MIX</div>
+            <div class="qty-info">15gx48</div>
+            <div class="price">Rp 85.248</div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="image-container"><img src="https://down-id.img.susercontent.com/file/sg-11134201-22120-fnd7f1g7vqkv98"></div>
+        <div class="details">
+            <span class="category">INACO</span>
+            <div class="product-name">GUMMY FROZEN MIX 100g</div>
+            <div class="qty-info">x12</div>
+            <div class="price">Rp 106.560</div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="image-container"><img src="https://down-id.img.susercontent.com/file/sg-11134201-22120-fnd7f1g7vqkv98"></div>
+        <div class="details">
+            <span class="category">INACO</span>
+            <div class="product-name">GUMMY FROZEN MIX 120g</div>
+            <div class="qty-info">x12</div>
+            <div class="price">Rp 106.560</div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="image-container"><img src="https://inacofood.com/data/product/726/1731572260_imc-yoghurt.png"></div>
+        <div class="details">
+            <span class="category">INACO</span>
+            <div class="product-name">IMCOCO 250ml YOGHURT</div>
+            <div class="qty-info">x12</div>
+            <div class="price">Rp 75.125</div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="image-container"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ7_pQsahaRg-KWfedujLh0ZjGGpBKfggnhTg&s"></div>
+        <div class="details">
+            <span class="category">INACO</span>
+            <div class="product-name">IMCOCO COCOMELON 350ml</div>
+            <div class="qty-info">x24</div>
+            <div class="price">Rp 150.250</div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="image-container"><img src="https://inacofood.com/data/product/30/1727593659_imc-leci.png"></div>
+        <div class="details">
+            <span class="category">INACO</span>
+            <div class="product-name">IMCOCO LYCHEE 350ml</div>
+            <div class="qty-info">x24</div>
+            <div class="price">Rp 150.250</div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="image-container"><img src="https://images.tokopedia.net/img/cache/700/VqbcmM/2023/3/20/dc8e9943-ffeb-4981-98b6-fd9b8d5c3462.jpg.webp"></div>
+        <div class="details">
+            <span class="category">INACO</span>
+            <div class="product-name">IMCOCO MANGO 350ml</div>
+            <div class="qty-info">x24</div>
+            <div class="price">Rp 150.250</div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="image-container"><img src="https://www.static-src.com/wcsstore/Indraprastha/images/catalog/full/catalog-image/106/MTA-178762650/inaco_inaco_350ml_i-m_coco_minuman_nata_decoco_pakai_puding_rasa_stroberi_mangga_leci_cocomelon_siap_minum_kemasan_boto_innaco_full01_j7iueexn.jpg"></div>
+        <div class="details">
+            <span class="category">INACO</span>
+            <div class="product-name">IMCOCO STRAWBERRY 350ml</div>
+            <div class="qty-info">x24</div>
+            <div class="price">Rp 150.250</div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="image-container"><img src="https://inacofood.com/data/product/37/1727703562_rtdp-blackcurrant.png"></div>
+        <div class="details">
+            <span class="category">INACO</span>
+            <div class="product-name">JELLYDRINK BCURRANT 135g</div>
+            <div class="qty-info">x60</div>
+            <div class="price">Rp 167.366</div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="image-container"><img src="https://inacofood.com/data/product/37/1727703562_rtdp-blackcurrant.png"></div>
+        <div class="details">
+            <span class="category">INACO</span>
+            <div class="product-name">JELLYDRINK BCURRANT 120g</div>
+            <div class="qty-info">5Px10</div>
+            <div class="price">Rp 87.524</div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="image-container"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRMSDkIvYfEj8tW-HFq08GY3DgYwRFEMW1BhQ&s"></div>
+        <div class="details">
+            <span class="category">INACO</span>
+            <div class="product-name">JELLYDRINK MANGO 120g</div>
+            <div class="qty-info">5Px10</div>
+            <div class="price">Rp 87.524</div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="image-container"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRMSDkIvYfEj8tW-HFq08GY3DgYwRFEMW1BhQ&s"></div>
+        <div class="details">
+            <span class="category">INACO</span>
+            <div class="product-name">JELLYDRINK MANGO 135g</div>
+            <div class="qty-info">x60</div>
+            <div class="price">Rp 167.366</div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="image-container"><img src="https://images.tokopedia.net/img/cache/700/VqbcmM/2024/2/17/6781e942-3dfb-4f3f-b376-3671180e6b7c.jpg.webp"></div>
+        <div class="details">
+            <span class="category">INACO</span>
+            <div class="product-name">JELLYDRINK STRAWBRY 120g</div>
+            <div class="qty-info">5Px10</div>
+            <div class="price">Rp 87.524</div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="image-container"><img src="https://images.tokopedia.net/img/cache/700/VqbcmM/2024/2/17/6781e942-3dfb-4f3f-b376-3671180e6b7c.jpg.webp"></div>
+        <div class="details">
+            <span class="category">INACO</span>
+            <div class="product-name">JELLYDRINK STRAWBRY 135g</div>
+            <div class="qty-info">x60</div>
+            <div class="price">Rp 167.366</div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="image-container"><img src="https://img.sayurbox.com/2c8194bb4dc03e583ed916fb38cdea8e?tr=f-auto,w-360"></div>
+        <div class="details">
+            <span class="category">INACO</span>
+            <div class="product-name">KOLANG KALING FRAMBOZEN</div>
+            <div class="qty-info">x24</div>
+            <div class="price">Rp 207.579</div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="image-container"><img src="https://down-id.img.susercontent.com/file/id-11134207-81ztd-mfib2dlofoy6e0"></div>
+        <div class="details">
+            <span class="category">INACO</span>
+            <div class="product-name">MINIJELLY SURPRISE PACK</div>
+            <div class="qty-info">x60</div>
+            <div class="price">Rp 89.977</div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="image-container"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR88Izkr7CcTV-Hm3XYEfuqYZEqV1WMry-F3A&s"></div>
+        <div class="details">
+            <span class="category">INACO</span>
+            <div class="product-name">MINIJELLY-15S 15g 15CUP</div>
+            <div class="qty-info">x24</div>
+            <div class="price">Rp 162.904</div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="image-container"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR88Izkr7CcTV-Hm3XYEfuqYZEqV1WMry-F3A&s"></div>
+        <div class="details">
+            <span class="category">INACO</span>
+            <div class="product-name">MINIJELLY-15S 15g NPS</div>
+            <div class="qty-info">x24</div>
+            <div class="price">Rp 162.904</div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="image-container"><img src="https://p16-oec-sg.ibyteimg.com/tos-alisg-i-aphluv4xwc-sg/img/product-1/2019/2/3/3611450/3611450_e209f5b1-379a-4ab1-9303-19ccb4197e30_1000_1000.jpg~tplv-aphluv4xwc-resize-jpeg:700:0.jpg"></div>
+        <div class="details">
+            <span class="category">INACO</span>
+            <div class="product-name">MINIJELLY-25S 15g 25CUP</div>
+            <div class="qty-info">x12</div>
+            <div class="price">Rp 133.933</div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="image-container"><img src="https://p16-oec-sg.ibyteimg.com/tos-alisg-i-aphluv4xwc-sg/img/product-1/2019/2/3/3611450/3611450_e209f5b1-379a-4ab1-9303-19ccb4197e30_1000_1000.jpg~tplv-aphluv4xwc-resize-jpeg:700:0.jpg"></div>
+        <div class="details">
+            <span class="category">INACO</span>
+            <div class="product-name">MINIJELLY-25S 15g NPS</div>
+            <div class="qty-info">x12</div>
+            <div class="price">Rp 133.933</div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="image-container"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQF6YamuvExtkuXcyXoYfkuLIxFpQWZ5iqNSQ&s"></div>
+        <div class="details">
+            <span class="category">INACO</span>
+            <div class="product-name">MINIJELLY-40S 15g ASST</div>
+            <div class="qty-info">x12</div>
+            <div class="price">Rp 303.456</div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="image-container"><img src="https://lh6.googleusercontent.com/proxy/FGu-J5FJukmscs8yMyoe9FFRXCBdJW6q2VGWuLlYqwefZXqOYLtJ0yL00-0h4JUSz8Q5CJ1ppM4z2EBmerbYo5EMnt7tVcevGiBpIx1bYUAyyzmuaIUi4undneWplCQ-cxZNqlwZDwVJAFkEG1kgFauHdBh62X6zXIU1Kdu2Ck8INACOMINIJELLY-5S"></div>
+        <div class="details">
+            <span class="category">INACO</span>
+            <div class="product-name">MINIJELLY-50S 15g BIG</div>
+            <div class="qty-info">x6</div>
+            <div class="price">Rp 180.020</div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="image-container"><img src="https://www.static-src.com/wcsstore/Indraprastha/images/catalog/full//102/MTA-41583477/inaco_inaco_mini_jelly_-75_g-_5_pcs-_full01_ibh7a21c.jpg"></div>
+        <div class="details">
+            <span class="category">INACO</span>
+            <div class="product-name">MINIJELLY-5S 15g 05CUP</div>
+            <div class="qty-info">x72</div>
+            <div class="price">Rp 165.035</div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="image-container"><img src="https://www.static-src.com/wcsstore/Indraprastha/images/catalog/full//102/MTA-41583477/inaco_inaco_mini_jelly_-75_g-_5_pcs-_full01_ibh7a21c.jpg"></div>
+        <div class="details">
+            <span class="category">INACO</span>
+            <div class="product-name">MINIJELLY-5S 15g NPS</div>
+            <div class="qty-info">x72</div>
+            <div class="price">Rp 165.035</div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="image-container"><img src="https://down-id.img.susercontent.com/file/f8274eb96281ee2086a821243b6e09c4"></div>
+        <div class="details">
+            <span class="category">INACO</span>
+            <div class="product-name">MINIJELLY-CURAH GRAPE</div>
+            <div class="qty-info">1KGx10</div>
+            <div class="price">Rp 274.503</div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="image-container"><img src="https://down-id.img.susercontent.com/file/f8274eb96281ee2086a821243b6e09c4"></div>
+        <div class="details">
+            <span class="category">INACO</span>
+            <div class="product-name">MINIJELLY-CURAH LYCHEE</div>
+            <div class="qty-info">1KGx10</div>
+            <div class="price">Rp 274.503</div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="image-container"><img src="https://down-id.img.susercontent.com/file/f8274eb96281ee2086a821243b6e09c4"></div>
+        <div class="details">
+            <span class="category">INACO</span>
+            <div class="product-name">MINIJELLY-CURAH MANGO</div>
+            <div class="qty-info">1KGx10</div>
+            <div class="price">Rp 274.503</div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="image-container"><img src="https://down-id.img.susercontent.com/file/f8274eb96281ee2086a821243b6e09c4"></div>
+        <div class="details">
+            <span class="category">INACO</span>
+            <div class="product-name">MINIJELLY-CURAH MIX</div>
+            <div class="qty-info">1KGx10</div>
+            <div class="price">Rp 274.503</div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="image-container"><img src="https://down-id.img.susercontent.com/file/f8274eb96281ee2086a821243b6e09c4"></div>
+        <div class="details">
+            <span class="category">INACO</span>
+            <div class="product-name">MINIJELLY-CURAH MIX NPS</div>
+            <div class="qty-info">1KGx10</div>
+            <div class="price">Rp 274.503</div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="image-container"><img src="https://down-id.img.susercontent.com/file/f8274eb96281ee2086a821243b6e09c4"></div>
+        <div class="details">
+            <span class="category">INACO</span>
+            <div class="product-name">MINIJELLY-CURAH MIX</div>
+            <div class="qty-info">1KGx2</div>
+            <div class="price">Rp 54.901</div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="image-container"><img src="https://down-id.img.susercontent.com/file/f8274eb96281ee2086a821243b6e09c4"></div>
+        <div class="details">
+            <span class="category">INACO</span>
+            <div class="product-name">MINIJELLY-CURAH ORANGE</div>
+            <div class="qty-info">1KGx10</div>
+            <div class="price">Rp 274.503</div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="image-container"><img src="https://down-id.img.susercontent.com/file/f8274eb96281ee2086a821243b6e09c4"></div>
+        <div class="details">
+            <span class="category">INACO</span>
+            <div class="product-name">MINIJELLY-CURAH PINEAPPLE</div>
+            <div class="qty-info">1KGx10</div>
+            <div class="price">Rp 274.503</div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="image-container"><img src="https://down-id.img.susercontent.com/file/f8274eb96281ee2086a821243b6e09c4"></div>
+        <div class="details">
+            <span class="category">INACO</span>
+            <div class="product-name">MINIJELLY-CURAH STRAWBRY</div>
+            <div class="qty-info">1KGx10</div>
+            <div class="price">Rp 274.503</div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="image-container"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQWgyqdbtdeChjeafUCGMiKRxcBNOj9B_Yzig&s"></div>
+        <div class="details">
+            <span class="category">INACO</span>
+            <div class="product-name">MINIJELLY-JELLYBOI MIX</div>
+            <div class="qty-info">x120</div>
+            <div class="price">Rp 93.906</div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="image-container"><img src="https://inacofood.com/data/product/728/1733126518_jgum.png"></div>
+        <div class="details">
+            <span class="category">INACO</span>
+            <div class="product-name">MINIJELLY-JELLYGUM-5S</div>
+            <div class="qty-info">x16</div>
+            <div class="price">Rp 62.604</div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="image-container"><img src="https://img.lazcdn.com/g/p/796957caed5a7ad93922abec19c2d2e4.png_960x960q80.png_.webp"></div>
+        <div class="details">
+            <span class="category">INACO</span>
+            <div class="product-name">MINIJELLY-KONYAKU 12CUP</div>
+            <div class="qty-info">x30</div>
+            <div class="price">Rp 208.625</div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="image-container"><img src="https://inacofood.com/data/product/42/1727707468_mp-25s.png"></div>
+        <div class="details">
+            <span class="category">INACO</span>
+            <div class="product-name">MINIPUDDING ANEKA RASA</div>
+            <div class="qty-info">x12</div>
+            <div class="price">Rp 175.917</div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="image-container"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRiChdRr1VlRwjiKVnOsEl-7_XqlRceeTzdtw&s"></div>
+        <div class="details">
+            <span class="category">INACO</span>
+            <div class="product-name">MINIPUDDING CURAH</div>
+            <div class="qty-info">1KGx10</div>
+            <div class="price">Rp 274.503</div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="image-container"><img src="https://inacofood.com/data/product/41/1727707109_mp-10s.png"></div>
+        <div class="details">
+            <span class="category">INACO</span>
+            <div class="product-name">MINIPUDDING MIX 10CUP</div>
+            <div class="qty-info">x30</div>
+            <div class="price">Rp 153.347</div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="image-container"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQzIzjRo_0A13ZgxzOqgtO0PrqeIZvXAglCzQ&s"></div>
+        <div class="details">
+            <span class="category">INACO</span>
+            <div class="product-name">MINIPUDDING MIX 3CUP</div>
+            <div class="qty-info">x60</div>
+            <div class="price">Rp 89.977</div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="image-container"><img src="https://inacofood.com/data/product/46/1727774935_bbs-bcurrant.png"></div>
+        <div class="details">
+            <span class="category">INACO</span>
+            <div class="product-name">BUBBLEBOI BLACKCURRANT</div>
+            <div class="qty-info">x80</div>
+            <div class="price">Rp 62.604</div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="image-container"><img src="https://inacofood.com/data/product/48/1727775356_bbs-bgum.png"></div>
+        <div class="details">
+            <span class="category">INACO</span>
+            <div class="product-name">BUBBLEBOI BUBBLEGUM</div>
+            <div class="qty-info">x80</div>
+            <div class="price">Rp 62.604</div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="image-container"><img src="https://inacofood.com/data/product/44/1727774508_bbs-anggur.png"></div>
+        <div class="details">
+            <span class="category">INACO</span>
+            <div class="product-name">BUBBLEBOI GRAPE</div>
+            <div class="qty-info">x80</div>
+            <div class="price">Rp 62.604</div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="image-container"><img src="https://www.idh.id/thumbs/f4xw2ylomftwk4ronfsgqltjmqxxk4dmn5qwi4zpmruxg5dsnfrhk5dpoixtcmrqgq3tmnbxguxxa4tpmr2wg5bpg4zdaobygeztgnrpg5tfqmjrjjhfm6ctmnre6r2lgqxgu4dh/f4xw2ylomftwk4ronfsgqltjmqxxk4dmn5qwi4zpmruxg5dsnfrhk5dpoixtcmrqgq3tmnbxguxxa4tpmr2wg5bpg4zdaobygeztgnrpg5tfqmjrjjhfm6ctmnre6r2lgqxgu4dhh53t2nrqgatgqpjwgaya-.jpg"></div>
+        <div class="details">
+            <span class="category">INACO</span>
+            <div class="product-name">BUBBLEBOI LYCHEE</div>
+            <div class="qty-info">x80</div>
+            <div class="price">Rp 62.604</div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="image-container"><img src="https://inacofood.com/data/product/45/1727774723_bbs-yoghurt.png"></div>
+        <div class="details">
+            <span class="category">INACO</span>
+            <div class="product-name">BUBBLEBOI YOGHURT</div>
+            <div class="qty-info">x80</div>
+            <div class="price">Rp 62.604</div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="image-container"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTakNObc6A8DLvr0RQ1bULY5K15mmVoitzc2g&s"></div>
+        <div class="details">
+            <span class="category">INACO</span>
+            <div class="product-name">NATADECOCO COCOPANDAN</div>
+            <div class="qty-info">x12</div>
+            <div class="price">Rp 173.027</div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="image-container"><img src="https://www.pohian.com/wp-content/uploads/2021/04/Inaco-Nata-De-Coco-Crispy-1-kg-Big-Cup-jpg.webp"></div>
+        <div class="details">
+            <span class="category">INACO</span>
+            <div class="product-name">CRISPY EMBER 15mm</div>
+            <div class="qty-info">x6</div>
+            <div class="price">Rp 95.971</div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="image-container"><img src="https://www.pohian.com/wp-content/uploads/2021/04/Inaco-Nata-De-Coco-Crispy-1-kg-Big-Cup-jpg.webp"></div>
+        <div class="details">
+            <span class="category">INACO</span>
+            <div class="product-name">CRISPY EMBER 7.5mm</div>
+            <div class="qty-info">x6</div>
+            <div class="price">Rp 95.971</div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="image-container"><img src="https://inacofood.com/data/product/74/1727981917_ndc-cup-leci.png"></div>
+        <div class="details">
+            <span class="category">INACO</span>
+            <div class="product-name">NATADECOCO CUP LYCHEE</div>
+            <div class="qty-info">x24</div>
+            <div class="price">Rp 86.980</div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="image-container"><img src="https://images.tokopedia.net/img/cache/700/VqbcmM/2024/9/25/317092d7-b997-4aa3-91fe-bbc1e834a35a.jpg.webp"></div>
+        <div class="details">
+            <span class="category">INACO</span>
+            <div class="product-name">NATADECOCO CUP MANGO</div>
+            <div class="qty-info">x24</div>
+            <div class="price">Rp 86.980</div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="image-container"><img src="https://inacofood.com/data/product/76/1727982234_ndc-cup-sel-stroberi.png"></div>
+        <div class="details">
+            <span class="category">INACO</span>
+            <div class="product-name">CUP SELASIH COCOPANDAN</div>
+            <div class="qty-info">x24</div>
+            <div class="price">Rp 97.103</div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="image-container"><img src="https://inacofood.com/data/product/77/1727982373_ndc-cup-sel-jeruk.png"></div>
+        <div class="details">
+            <span class="category">INACO</span>
+            <div class="product-name">CUP SELASIH ORANGE</div>
+            <div class="qty-info">x24</div>
+            <div class="price">Rp 97.103</div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="image-container"><img src="https://inacofood.com/data/product/76/1727982234_ndc-cup-sel-stroberi.png"></div>
+        <div class="details">
+            <span class="category">INACO</span>
+            <div class="product-name">CUP SELASIH STRAWBRY</div>
+            <div class="qty-info">x24</div>
+            <div class="price">Rp 97.103</div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="image-container"><img src="https://down-id.img.susercontent.com/file/id-11134207-7rbke-map6xlqi220k78"></div>
+        <div class="details">
+            <span class="category">INACO</span>
+            <div class="product-name">NATADECOCO CUTTING DUGAN</div>
+            <div class="qty-info">1KGx6</div>
+            <div class="price">Rp 86.513</div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="image-container"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT-R-8jxGXYdnb8IyS9y6PUP3MHoHlzmYDF7g&s"></div>
+        <div class="details">
+            <span class="category">INACO</span>
+            <div class="product-name">NATADECOCO DESSERT GUAVA</div>
+            <div class="qty-info">x24</div>
+            <div class="price">Rp 119.827</div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="image-container"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRjtcgYm5hwsTIofzYQqTWL6BvtQwZFFc5mZQ&s"></div>
+        <div class="details">
+            <span class="category">INACO</span>
+            <div class="product-name">SELASIH ORANGE 1KG</div>
+            <div class="qty-info">x12</div>
+            <div class="price">Rp 180.553</div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="image-container"><img src="https://inacofood.com/data/product/64/1727978254_ndc-bag-sel-stroberi.png"></div>
+        <div class="details">
+            <span class="category">INACO</span>
+            <div class="product-name">SELASIH STRAWBERRY 1KG</div>
+            <div class="qty-info">x12</div>
+            <div class="price">Rp 180.553</div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="image-container"><img src="https://img.lazcdn.com/g/p/29fb03584547ce05764008387c1c462c.jpg_720x720q80.jpg"></div>
+        <div class="details">
+            <span class="category">INACO</span>
+            <div class="product-name">NATADECOCO SP MIX 360g</div>
+            <div class="qty-info">x24</div>
+            <div class="price">Rp 151.582</div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="image-container"><img src="https://down-id.img.susercontent.com/file/id-11134207-7rbk3-m6j5aip9nict99"></div>
+        <div class="details">
+            <span class="category">INACO</span>
+            <div class="product-name">NATADECOCO VANILLA 1KG</div>
+            <div class="qty-info">x12</div>
+            <div class="price">Rp 173.027</div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="image-container"><img src="https://inacofood.com/data/product/32/1727594451_pd-yoghurt.png"></div>
+        <div class="details">
+            <span class="category">INACO</span>
+            <div class="product-name">PUDDING CUP YOGURT</div>
+            <div class="qty-info">x48</div>
+            <div class="price">Rp 166.766</div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="image-container"><img src="https://inacofood.com/data/product/733/1745307242_Pudding%20Hokaido%20Melon.png"></div>
+        <div class="details">
+            <span class="category">INACO</span>
+            <div class="product-name">PUDDING HOKKAIDO MELON</div>
+            <div class="qty-info">x48</div>
+            <div class="price">Rp 234.965</div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="image-container"><img src="https://down-id.img.susercontent.com/file/id-11134207-7r98q-ll7p8njp7z0ycf"></div>
+        <div class="details">
+            <span class="category">INACO</span>
+            <div class="product-name">PUDDING NUSANTARA 3S</div>
+            <div class="qty-info">x16</div>
+            <div class="price">Rp 161.616</div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="image-container"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQf-NqtW-lpEZTL2Bg1UpVXbe7CTksxuw0S4Q&s"></div>
+        <div class="details">
+            <span class="category">INACO</span>
+            <div class="product-name">PUDDING PUREE MANGO</div>
+            <div class="qty-info">x48</div>
+            <div class="price">Rp 166.766</div>
+        </div>
+    </div>
+
+</div>
+
+<footer>
+    © 2026 Master Katalog Inaco Digital - Seluruh Produk Terlampir (69 Item)
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard Neon Futuristik</title>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet">
+<style>
+    /* Reset */
+    * { margin:0; padding:0; box-sizing:border-box; }
+
+    body {
+        font-family: 'Arial', sans-serif;
+        min-height: 100vh;
+        background: #0d0d0d;
+        color: #fff;
+        overflow-x: hidden;
+    }
+
+    h1 {
+        text-align: center;
+        font-size: 3rem;
+        margin: 40px 20px;
+        text-shadow: 0 0 10px #0ff, 0 0 20px #0ff, 0 0 30px #0ff;
+    }
+
+    .container {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 25px;
+        max-width: 1200px;
+        margin: 0 auto 60px;
+        padding: 0 20px;
+        perspective: 1200px;
+    }
+
+    .box {
+        background: rgba(0,0,0,0.6);
+        border: 2px solid #0ff;
+        border-radius: 15px;
+        padding: 35px 20px;
+        text-align: center;
+        cursor: pointer;
+        transition: transform 0.5s, box-shadow 0.5s, border-color 0.5s;
+        box-shadow: 0 0 20px #0ff, 0 0 40px #0ff;
+    }
+
+    .box i {
+        font-size: 45px;
+        margin-bottom: 15px;
+        color: #0ff;
+        transition: transform 0.5s, color 0.5s, text-shadow 0.5s;
+    }
+
+    .box span {
+        font-weight: bold;
+        font-size: 16px;
+        letter-spacing: 0.5px;
+        color: #0ff;
+        text-shadow: 0 0 5px #0ff, 0 0 10px #0ff;
+    }
+
+    /* Hover neon glow effect */
+    .box:hover {
+        transform: rotateY(15deg) rotateX(10deg) scale(1.1);
+        box-shadow: 0 0 40px #0ff, 0 0 80px #0ff;
+        border-color: #1ff;
+    }
+
+    .box:hover i {
+        transform: rotateY(360deg) scale(1.3);
+        color: #1ff;
+        text-shadow: 0 0 20px #1ff, 0 0 40px #1ff;
+    }
+
+    /* Particle canvas */
+    #particles {
+        position: fixed;
+        top:0;
+        left:0;
+        width:100%;
+        height:100%;
+        z-index:-1;
+    }
+
+    /* Responsive */
+    @media(max-width:768px){
+        .box i { font-size: 35px; }
+        .box { padding: 30px 15px; }
+    }
+    @media(max-width:480px){
+        .box i { font-size: 28px; }
+        .box { padding: 25px 10px; }
+    }
+</style>
+</head>
+<body>
+
+<canvas id="particles"></canvas>
+
+<h1>Dashboard Neon</h1>
+
+<div class="container">
+    <div class="box" onclick="bukaMenu('menu1.html')"><i class="fas fa-home"></i><span>Home</span></div>
+    <div class="box" onclick="bukaMenu('menu2.html')"><i class="fas fa-user"></i><span>Profil</span></div>
+    <div class="box" onclick="bukaMenu('menu3.html')"><i class="fas fa-briefcase"></i><span>Layanan</span></div>
+    <div class="box" onclick="bukaMenu('menu4.html')"><i class="fas fa-envelope"></i><span>Kontak</span></div>
+    <div class="box" onclick="bukaMenu('menu5.html')"><i class="fas fa-cog"></i><span>Pengaturan</span></div>
+    <div class="box" onclick="bukaMenu('menu6.html')"><i class="fas fa-chart-line"></i><span>Statistik</span></div>
+    <div class="box" onclick="bukaMenu('menu7.html')"><i class="fas fa-calendar-alt"></i><span>Jadwal</span></div>
+    <div class="box" onclick="bukaMenu('menu8.html')"><i class="fas fa-comments"></i><span>Pesan</span></div>
+    <div class="box" onclick="bukaMenu('menu9.html')"><i class="fas fa-bell"></i><span>Notifikasi</span></div>
+    <div class="box" onclick="bukaMenu('menu10.html')"><i class="fas fa-star"></i><span>Favorit</span></div>
+    <div class="box" onclick="bukaMenu('menu11.html')"><i class="fas fa-question-circle"></i><span>Bantuan</span></div>
+    <div class="box" onclick="bukaMenu('menu12.html')"><i class="fas fa-sign-out-alt"></i><span>Keluar</span></div>
+</div>
+
+<script>
+function bukaMenu(link){
+    window.location.href = link;
+}
+
+// Simple particle background
+const canvas = document.getElementById('particles');
+const ctx = canvas.getContext('2d');
+let width = canvas.width = window.innerWidth;
+let height = canvas.height = window.innerHeight;
+
+const particles = [];
+const particleCount = 100;
+
+class Particle{
+    constructor(){
+        this.x = Math.random()*width;
+        this.y = Math.random()*height;
+        this.radius = Math.random()*2+1;
+        this.vx = (Math.random()-0.5)*1;
+        this.vy = (Math.random()-0.5)*1;
+        this.color = 'rgba(0,255,255,0.7)';
+    }
+    draw(){
+        ctx.beginPath();
+        ctx.arc(this.x,this.y,this.radius,0,Math.PI*2);
+        ctx.fillStyle = this.color;
+        ctx.fill();
+    }
+    update(){
+        this.x += this.vx;
+        this.y += this.vy;
+
+        if(this.x<0||this.x>width) this.vx*=-1;
+        if(this.y<0||this.y>height) this.vy*=-1;
+        this.draw();
+    }
+}
+
+for(let i=0;i<particleCount;i++){
+    particles.push(new Particle());
+}
+
+function animate(){
+    ctx.clearRect(0,0,width,height);
+    particles.forEach(p=>p.update());
+    requestAnimationFrame(animate);
+}
+
+animate();
+
+window.addEventListener('resize', ()=>{
+    width = canvas.width = window.innerWidth;
+    height = canvas.height = window.innerHeight;
+});
+</script>
+
+</body>
+</html>
