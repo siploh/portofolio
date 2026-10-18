@@ -180,27 +180,69 @@
         .service-card i { font-size: 2.5rem; color: var(--primary-sky); margin-bottom: 20px; }
         .service-card h3 { font-size: 1.3rem; margin-bottom: 10px; }
 
-        /* --- Bagian Member / Client --- */
+        /* --- Bagian Mitra / Client --- */
         .client-section { 
             padding: 80px 20px 100px; 
             background: var(--white); 
             text-align: center; 
         }
-        .client-container { 
-            max-width: 1000px; 
-            margin: 40px auto 0; 
+        .mitra-swiper-container {
+            max-width: 1100px;
+            margin: 40px auto 0;
+            position: relative;
+            padding: 0 20px;
         }
-        .client-img { 
-            width: 100%; 
-            max-width: 850px; 
-            height: auto; 
-            border-radius: 25px; 
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08); 
-            border: 4px solid var(--white);
-            transition: transform 0.3s ease;
+        .mitra-swiper {
+            width: 100%;
+            padding: 20px 10px 50px;
         }
-        .client-img:hover {
-            transform: scale(1.02);
+        .mitra-swiper .swiper-slide {
+            width: auto;
+            opacity: 1;
+            filter: none;
+            transform: none;
+        }
+        .mitra-card {
+            background: #ffffff;
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            border: 1px solid #f0f0f0;
+            text-align: center;
+            transition: all 0.3s ease;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        .mitra-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0, 168, 255, 0.15);
+            border-color: var(--soft-sky);
+        }
+        .mitra-img-wrapper {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            border-radius: 50%;
+            border: 3px solid var(--soft-sky);
+            background: #fafafa;
+        }
+        .mitra-img-wrapper img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .mitra-card h3 {
+            font-size: 1.1rem;
+            color: var(--dark-navy);
+            font-weight: 700;
+            margin: 0;
         }
 
         /* --- Floating WhatsApp --- */
@@ -233,7 +275,6 @@
             .swiper-slide { width: 250px; }
             .swiper-button-next, .swiper-button-prev { display: none; }
             .swiper-container-main { padding: 0; }
-            .client-img { border-radius: 15px; }
         }
         
         .portfolio-link {
@@ -245,7 +286,6 @@
 </head>
 <body>
 
-    <!-- Perbaikan A11y: Menggunakan tag <header> dan atribut aria-label pada link agar terbaca screen reader -->
     <header>
         <nav>
             <div class="nav-container">
@@ -259,7 +299,6 @@
         <i class="fab fa-whatsapp" aria-hidden="true"></i>
     </a>
 
-    <!-- Perbaikan A11y: Menggunakan tag <main> sebagai landmark utama -->
     <main>
         <section class="hero">
             <div data-aos="fade-up">
@@ -276,7 +315,6 @@
             <div class="about-grid">
                 <div class="about-content" data-aos="fade-right">
                     <div class="aceh-badge">DEDIKASI UNTUK ACEH</div>
-                    <!-- Perbaikan Hierarki Heading: Mengubah h4/h3 menjadi struktur berurutan dari h2 -->
                     <h2>Berawal dari Cinta untuk Tanah Rencong</h2>
                     <p><strong>Bawah Tangga Production</strong> lahir dari rasa kagum dan kecintaan mendalam terhadap kultur serta potensi luar biasa Bumi Serambi Mekkah. Meski tidak lahir di sini, Aceh telah menjadi rumah bagi kami untuk tumbuh dan berkarya.</p>
                     <p>Kami melihat banyak produk unggulan UMKM Aceh yang luar biasa, namun seringkali terkendala oleh biaya agensi digital yang selangit. Itulah misi kami: Menjadi jembatan digital dengan <strong>"Biaya Pasti Lebih Murah"</strong>.</p>
@@ -305,7 +343,7 @@
                                     <img src="img/pos.png" alt="Tangkapan layar Sistem Kasir Cloud W-POS" width="300" height="200" loading="lazy">
                                     <div class="portfolio-info">
                                         <h3>W-POS</h3>
-                                        <p style="font-size: 0.8rem; color: var(--gray-text);">Sistem Kasir Cloud UMKM</p>
+                                        <p style="font-size: 0.8rem; color: var(--gray-text);">Sistem Kasir Market & Store</p>
                                     </div>
                                 </div>
                             </a>
@@ -314,10 +352,10 @@
                         <div class="swiper-slide">
                             <a href="w-cafe.html" class="portfolio-link" aria-label="Lihat detail produk W-CAFE">
                                 <div class="portfolio-card">
-                                    <img src="img/cafe.png" alt="Tangkapan layar Website Profil W-CAFE" width="300" height="200" loading="lazy">
+                                    <img src="img/pos.png" alt="Tangkapan layar Website Profil W-CAFE" width="300" height="200" loading="lazy">
                                     <div class="portfolio-info">
                                         <h3>W-CAFE</h3>
-                                        <p style="font-size: 0.8rem; color: var(--gray-text);">Website Profil Profesional</p>
+                                        <p style="font-size: 0.8rem; color: var(--gray-text);">Sistem Kasir Cafe</p>
                                     </div>
                                 </div>
                             </a>
@@ -326,10 +364,10 @@
                         <div class="swiper-slide">
                             <a href="w-laundry.html" class="portfolio-link" aria-label="Lihat detail produk W-Laundry">
                                 <div class="portfolio-card">
-                                    <img src="img/laundry.png" alt="Tangkapan layar Custom App W-Laundry" width="300" height="200" loading="lazy">
+                                    <img src="img/pos.png" alt="Tangkapan layar Custom App W-Laundry" width="300" height="200" loading="lazy">
                                     <div class="portfolio-info">
                                         <h3>W-Laundry</h3>
-                                        <p style="font-size: 0.8rem; color: var(--gray-text);">Custom App untuk UMKM</p>
+                                        <p style="font-size: 0.8rem; color: var(--gray-text);">Sistem Kasir dan Member Laundry</p>
                                     </div>
                                 </div>
                             </a>
@@ -338,10 +376,10 @@
                         <div class="swiper-slide">
                             <a href="w-distri.html" class="portfolio-link" aria-label="Lihat detail produk W-Distri">
                                 <div class="portfolio-card">
-                                    <img src="img/distri.png" alt="Tangkapan layar Manajemen Data W-Distri" width="300" height="200" loading="lazy">
+                                    <img src="img/pos.png" alt="Tangkapan layar Manajemen Data W-Distri" width="300" height="200" loading="lazy">
                                     <div class="portfolio-info">
                                         <h3>W-Distri</h3>
-                                        <p style="font-size: 0.8rem; color: var(--gray-text);">Manajemen Data Real-time</p>
+                                        <p style="font-size: 0.8rem; color: var(--gray-text);">Manajemen orderan & Stock Data Real-time</p>
                                     </div>
                                 </div>
                             </a>
@@ -376,22 +414,126 @@
             </div>
         </section>
 
-        <section class="client-section">
+        <!-- --- Bagian Mitra yang Telah Mempercayai Kami --- -->
+        <section class="client-section" id="mitra">
             <div data-aos="fade-up">
                 <h2 style="font-size: 2.5rem; margin-bottom: 10px;">Mitra yang Telah Mempercayai Kami</h2>
                 <p style="color: var(--gray-text); max-width: 600px; margin: 0 auto 30px;">
-                    Terima kasih kepada para pemilik usaha dan member yang telah mengamanahkan transformasi digitalnya bersama Bawah Tangga Production.
+                    Terima kasih kepada para pemilik usaha dan mitra yang telah mengamanahkan transformasi digitalnya bersama Bawah Tangga Production.
                 </p>
-                <div class="client-container" data-aos="zoom-in" data-aos-delay="100">
-                    <!-- Optimasi LCP & Ukuran Gambar: Tambahkan atribut width, height, dan loading="lazy" -->
-                    <img src="img/member.jpeg" alt="Dokumentasi Member dan Client Bawah Tangga Production" class="client-img" width="850" height="500" loading="lazy">
+                
+                <div class="mitra-swiper-container" data-aos="zoom-in" data-aos-delay="100">
+                    <div class="swiper mitraSwiper">
+                        <div class="swiper-wrapper">
+                            <!-- Mitra 1 -->
+                            <div class="swiper-slide">
+                                <div class="mitra-card">
+                                    <div class="mitra-img-wrapper">
+                                        <img src="img/Link.jpeg" alt="Link House Cafe" loading="lazy">
+                                    </div>
+                                    <h3>Link House Cafe</h3>
+                                </div>
+                            </div>
+
+                            <!-- Mitra 2 -->
+                            <div class="swiper-slide">
+                                <div class="mitra-card">
+                                    <div class="mitra-img-wrapper">
+                                        <img src="img/KKL.jpeg" alt="Kuliner Kampong Langsa" loading="lazy">
+                                    </div>
+                                    <h3>Kuliner Kampong Langsa</h3>
+                                </div>
+                            </div>
+
+                            <!-- Mitra 3 -->
+                            <div class="swiper-slide">
+                                <div class="mitra-card">
+                                    <div class="mitra-img-wrapper">
+                                        <img src="img/Minibite.jpeg" alt="Logo Mitra 3" loading="lazy">
+                                    </div>
+                                    <h3>Minibite</h3>
+                                </div>
+                            </div>
+
+                            <!-- Mitra 4 -->
+                            <div class="swiper-slide">
+                                <div class="mitra-card">
+                                    <div class="mitra-img-wrapper">
+                                        <img src="img/Darfaqih.jpeg" alt="Logo Mitra 4" loading="lazy">
+                                    </div>
+                                    <h3>Market Darfaqih</h3>
+                                </div>
+                            </div>
+
+                            <!-- Mitra 5 -->
+                            <div class="swiper-slide">
+                                <div class="mitra-card">
+                                    <div class="mitra-img-wrapper">
+                                        <img src="img/Premium.jpeg" alt="Logo Mitra 5" loading="lazy">
+                                    </div>
+                                    <h3>Premium Bakery</h3>
+                                </div>
+                            </div>
+
+                            <!-- Mitra 6 -->
+                            <div class="swiper-slide">
+                                <div class="mitra-card">
+                                    <div class="mitra-img-wrapper">
+                                        <img src="img/Tigasekawan.jpeg" alt="Logo Mitra 5" loading="lazy">
+                                    </div>
+                                    <h3>Tiga Sekawan Baru</h3>
+                                </div>
+                            </div>
+
+                            <!-- Mitra 7 -->
+                            <div class="swiper-slide">
+                                <div class="mitra-card">
+                                    <div class="mitra-img-wrapper">
+                                        <img src="img/Udrizki.jpeg" alt="Logo Mitra 5" loading="lazy">
+                                    </div>
+                                    <h3>UD. Rizki Rizka</h3>
+                                </div>
+                            </div>
+
+                            <!-- Mitra 8 -->
+                            <div class="swiper-slide">
+                                <div class="mitra-card">
+                                    <div class="mitra-img-wrapper">
+                                        <img src="img/Azlink.jpeg" alt="Logo Mitra 5" loading="lazy">
+                                    </div>
+                                    <h3>AZ-Link</h3>
+                                </div>
+                            </div>
+
+                            <!-- Mitra 9 -->
+                            <div class="swiper-slide">
+                                <div class="mitra-card">
+                                    <div class="mitra-img-wrapper">
+                                        <img src="img/Dkriuk.png" alt="Logo Mitra 5" loading="lazy">
+                                    </div>
+                                    <h3>Dkriuk Langsa</h3>
+                                </div>
+                            </div>
+
+                             <!-- Mitra 10 -->
+                            <div class="swiper-slide">
+                                <div class="mitra-card">
+                                    <div class="mitra-img-wrapper">
+                                        <img src="img/Ybci.jpeg" alt="Logo Mitra 5" loading="lazy">
+                                    </div>
+                                    <h3>YBCI</h3>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="swiper-pagination"></div>
+                    </div>
                 </div>
             </div>
         </section>
     </main>
 
     <footer>
-        <p>&copy; 2026 Bawah Tangga Production. <br> Berakar di Aceh, Mengabdi dengan Hati untuk UMKM Aceh.</p>
+        <p>&copy; 2024 Bawah Tangga Production. <br> Berakar di Aceh, Mengabdi dengan Hati untuk UMKM Aceh.</p>
     </footer>
 
     <!-- Script eksternal -->
@@ -402,7 +544,7 @@
             // Inisialisasi AOS
             AOS.init({ duration: 1000, once: true });
 
-            // Inisialisasi Swiper
+            // Inisialisasi Swiper Produk Utama
             var swiper = new Swiper(".mySwiper", {
                 effect: "coverflow",
                 grabCursor: true,
@@ -428,6 +570,36 @@
                     delay: 4000,
                     disableOnInteraction: false
                 },
+            });
+
+            // Inisialisasi Swiper Slider Mitra
+            var mitraSwiper = new Swiper(".mitraSwiper", {
+                slidesPerView: 1,
+                spaceBetween: 20,
+                grabCursor: true,
+                loop: true,
+                autoplay: {
+                    delay: 3000,
+                    disableOnInteraction: false
+                },
+                pagination: {
+                    el: ".mitraSwiper .swiper-pagination",
+                    clickable: true
+                },
+                breakpoints: {
+                    480: {
+                        slidesPerView: 2,
+                        spaceBetween: 20
+                    },
+                    768: {
+                        slidesPerView: 3,
+                        spaceBetween: 25
+                    },
+                    1024: {
+                        slidesPerView: 4,
+                        spaceBetween: 30
+                    }
+                }
             });
         });
     </script>
