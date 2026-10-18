@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Analisa - All in One</title>
+    <title>Menu Mobile</title>
 
     <link rel="icon" href="images/ybci2.png">
     <link rel="manifest" href="manifest.json">
@@ -87,7 +87,11 @@
         }
         .client-info h4 { font-size: 15px; color: #333; margin-bottom: 4px; }
         .client-info p { font-size: 12px; color: #6c757d; }
-        .status-badge { font-size: 10px; padding: 5px 10px; border-radius: 10px; background: #e8f5e9; color: #2ecc71; font-weight: bold; }
+        
+        /* STATUS BADGES */
+        .status-badge { font-size: 10px; padding: 5px 10px; border-radius: 10px; font-weight: bold; }
+        .status-badge.aktif { background: #e8f5e9; color: #2ecc71; }
+        .status-badge.non-aktif { background: #ffebee; color: #e74c3c; }
 
         /* MODALS */
         .modal-overlay {
@@ -238,18 +242,49 @@
         // --- DASHBOARD LOGIC ---
         const clients = [
             { nama: "YBCI", hp: "08123456789", app: "Website", tempo: "30 September 2026" },
-            { nama: "CV. Isa", hp: "085260601214", app: "System Distributor", tempo: "30 September 2026" },
+            { nama: "CV. Isa", hp: "085260601214", app: "System Distributor", tempo: "1 September 2027" },
             { nama: "Premium Bakery", hp: "08116570404", app: "W-POS", tempo: "11 Mei 2027" },
             { nama: "UD. Rizki Rizka", hp: "085262629900", app: "W-POS", tempo: "12 Mei 2027" },
             { nama: "AZ-Link", hp: "082248828224", app: "W-POS", tempo: "31 Mei 2027" },
             { nama: "UD. Rizki Rizka", hp: "085262629900", app: "W-Egg", tempo: "11 Juni 2027" },
-            { nama: "Kuliner Kampung", hp: "082279071741", app: "W-CAFE", tempo: "31 Agustus 2027" }
+            { nama: "Kuliner Kampung", hp: "082279071741", app: "W-CAFE", tempo: "31 Agustus 2027" },
+            { nama: "Link House", hp: "082279071741", app: "W-CAFE", tempo: "01 Januari 2028" },
+            { nama: "Dkriuk Langsa", hp: "085275293699", app: "W-CAFE", tempo: "30 Oktober 2027" },
+            { nama: "CV. SB", hp: "082274236693", app: "Absensi", tempo: "17 Oktober 2027" }
         ];
+
+        // Helper Function untuk mengubah String Tanggal Indonesia ke Date Object
+        function parseIndonesianDate(dateStr) {
+            const months = {
+                'januari': 0, 'februari': 1, 'maret': 2, 'april': 3,
+                'mei': 4, 'juni': 5, 'juli': 6, 'agustus': 7,
+                'september': 8, 'oktober': 9, 'november': 10, 'desember': 11
+            };
+            const parts = dateStr.trim().split(' ');
+            if (parts.length === 3) {
+                const day = parseInt(parts[0], 10);
+                const month = months[parts[1].toLowerCase()];
+                const year = parseInt(parts[2], 10);
+                return new Date(year, month, day, 23, 59, 59); // diatur ke akhir hari
+            }
+            return new Date(dateStr);
+        }
+
+        // Helper Function untuk mengecek apakah client masih aktif
+        function isClientActive(tempoStr) {
+            const now = new Date();
+            const tempoDate = parseIndonesianDate(tempoStr);
+            return now <= tempoDate;
+        }
 
         function displayClients(data) {
             const list = document.getElementById('clientList');
             list.innerHTML = '';
             data.forEach(client => {
+                const isActive = isClientActive(client.tempo);
+                const statusText = isActive ? 'Aktif' : 'Non Aktif';
+                const statusClass = isActive ? 'aktif' : 'non-aktif';
+
                 const card = document.createElement('div');
                 card.className = 'client-card';
                 card.onclick = () => {
@@ -264,7 +299,7 @@
                         <h4>${client.nama}</h4>
                         <p>${client.app}</p>
                     </div>
-                    <div class="status-badge">Aktif</div>
+                    <div class="status-badge ${statusClass}">${statusText}</div>
                 `;
                 list.appendChild(card);
             });
