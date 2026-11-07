@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Karir - Sales Executive (Freelance) - Bawah Tangga Production</title>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --biru-langit-bg: #e0f2fe;
+            --biru-wpos: #38bdf8;
+            --biru-tua-wpos: #0284c7;
+            --teks-gelap: #1e3a8a;
+            --putih: #ffffff;
+            --abu-teks: #4b5563;
+            --abu-border: #e2e8f0;
+            --shadow-card: 0 4px 6px -1px rgba(0, 0, 0, 0.08), 0 2px 4px -1px rgba(0, 0, 0, 0.04);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--biru-langit-bg);
+            color: var(--abu-teks);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .main-container {
+            max-width: 1100px;
+            width: 100%;
+        }
+
+        header {
+            background-color: var(--putih);
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: var(--shadow-card);
+            display: flex;
+            align-items: center;
+            gap: 30px;
+            margin-bottom: 25px;
+        }
+
+        .header-logo {
+            width: 130px;
+            height: 130px;
+            object-fit: contain;
+            border-radius: 16px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+            flex-shrink: 0;
+        }
+
+        .header-text h2 {
+            color: var(--biru-tua-wpos);
+            font-size: 0.9rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-bottom: 6px;
+        }
+
+        .header-text h1 {
+            color: var(--teks-gelap);
+            font-size: 1.8rem;
+            font-weight: 800;
+            margin-bottom: 10px;
+        }
+
+        .header-text p {
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin-bottom: 15px;
+            color: var(--abu-teks);
+        }
+
+        .tag-container {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .tag {
+            background-color: #f0f9ff;
+            color: var(--biru-tua-wpos);
+            border: 1px solid #bae6fd;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .content-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 25px;
+            margin-bottom: 25px;
+        }
+
+        @media (min-width: 768px) {
+            .content-grid {
+                grid-template-columns: 3fr 2fr;
+            }
+        }
+
+        .info-column {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .info-card {
+            background-color: var(--putih);
+            padding: 25px;
+            border-radius: 16px;
+            box-shadow: var(--shadow-card);
+            border-left: 5px solid var(--biru-wpos);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 15px;
+            color: var(--teks-gelap);
+        }
+
+        .card-header i {
+            color: var(--biru-tua-wpos);
+            font-size: 1.2rem;
+        }
+
+        .card-header h3 {
+            font-size: 1.15rem;
+            font-weight: 700;
+        }
+
+        .info-card p {
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        .info-card ul {
+            list-style: none;
+        }
+
+        .info-card ul li {
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin-bottom: 10px;
+            position: relative;
+            padding-left: 24px;
+        }
+
+        .info-card ul li::before {
+            content: "\f00c";
+            font-family: "Font Awesome 6 Free";
+            font-weight: 900;
+            color: #16a34a;
+            position: absolute;
+            left: 0;
+            top: 1px;
+            font-size: 0.85rem;
+        }
+
+        .product-banner-box {
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+            border: 1px solid #bae6fd;
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            margin-top: 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .banner-logo {
+            max-width: 140px;
+            height: auto;
+        }
+
+        .banner-text {
+            font-size: 0.88rem !important;
+            color: var(--teks-gelap);
+        }
+
+        .form-column {
+            background-color: var(--putih);
+            padding: 28px;
+            border-radius: 16px;
+            box-shadow: var(--shadow-card);
+            position: sticky;
+            top: 20px;
+            height: fit-content;
+        }
+
+        .form-column h3 {
+            color: var(--teks-gelap);
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-bottom: 2px solid var(--biru-langit-bg);
+            padding-bottom: 10px;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.88rem;
+            font-weight: 600;
+            color: var(--teks-gelap);
+            margin-bottom: 6px;
+        }
+
+        .form-group label span {
+            color: #ef4444;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 10px 14px;
+            border: 1px solid var(--abu-border);
+            border-radius: 8px;
+            font-size: 0.92rem;
+            background-color: #f8fafc;
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        .form-control:focus {
+            border-color: var(--biru-tua-wpos);
+            background-color: var(--putih);
+            box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.2);
+        }
+
+        textarea.form-control {
+            resize: vertical;
+            height: 90px;
+        }
+
+        .submit-btn {
+            width: 100%;
+            background-color: var(--biru-tua-wpos);
+            color: var(--putih);
+            border: none;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .submit-btn:hover {
+            background-color: #0369a1;
+        }
+
+        .submit-btn:disabled {
+            background-color: #94a3b8;
+            cursor: not-allowed;
+        }
+
+        #alert-msg {
+            display: none;
+            padding: 10px 14px;
+            border-radius: 8px;
+            font-size: 0.88rem;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .alert-success {
+            background-color: #dcfce7;
+            color: #166534;
+            border: 1px solid #bbf7d0;
+        }
+
+        .alert-error {
+            background-color: #fee2e2;
+            color: #991b1b;
+            border: 1px solid #fecaca;
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px 0;
+            margin-top: 20px;
+            border-top: 1px solid var(--abu-border);
+            width: 100%;
+        }
+
+        footer p {
+            font-size: 0.85rem;
+            color: var(--abu-teks);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="main-container">
+        
+        <header>
+            <img src="img/logoweb.png" alt="W-POS Logo" class="header-logo">
+            
+            <div class="header-text">
+                <h2>Bawah Tangga Production</h2>
+                <h1>Sales Executive (Freelance)</h1>
+                <p>Pasarkan sistem kasir modern <strong>W-POS</strong> serta jasa pembuatan website & aplikasi kustom untuk mendukung digitalisasi UMKM dan bisnis retail.</p>
+                
+                <div class="tag-container">
+                    <div class="tag"><i class="fa-solid fa-location-dot"></i> Remote / Fleksibel</div>
+                    <div class="tag"><i class="fa-solid fa-clock"></i> Jam Kerja Fleksibel</div>
+                    <div class="tag"><i class="fa-solid fa-sack-dollar"></i> Komisi Berbasis Performa</div>
+                </div>
+            </div>
+        </header>
+
+        <div class="content-grid">
+            
+            <div class="info-column">
+                
+                <div class="info-card">
+                    <div class="card-header">
+                        <i class="fa-solid fa-building"></i>
+                        <h3>Tentang Peran Ini</h3>
+                    </div>
+                    <p><strong>Bawah Tangga Production</strong> adalah Software House penyedia solusi digitalisasi bisnis. Kami mencari Sales Freelance yang proaktif untuk memasarkan produk unggulan kami dan layanan kustom ke berbagai sektor usaha.</p>
+                </div>
+
+                <div class="info-card">
+                    <div class="card-header">
+                        <i class="fa-solid fa-gift"></i>
+                        <h3>Benefit & Produk Utama</h3>
+                    </div>
+                    <p>Mendapatkan komisi langsung dari setiap penjualan lisensi W-POS atau proyek pembuatan sistem yang berhasil di-closing.</p>
+                    
+                    <div class="product-banner-box">
+                        <img src="img/logoweb.png" alt="W-POS Product Logo" class="banner-logo">
+                        <p class="banner-text">Aplikasi Point of Sales (POS) / Kasir Digital fleksibel, cepat, dan mudah digunakan untuk kelola transaksi serta laporan keuangan UMKM secara real-time.</p>
+                    </div>
+                </div>
+
+                <div class="info-card">
+                    <div class="card-header">
+                        <i class="fa-solid fa-list-check"></i>
+                        <h3>Tanggung Jawab Utama</h3>
+                    </div>
+                    <ul>
+                        <li>Mencari & mengidentifikasi potensi calon klien (Toko Ritel, UMKM, Resto/Kafe, atau Perusahaan).</li>
+                        <li>Memasarkan produk unggulan <strong>W-POS</strong> serta jasa pembuatan website/aplikasi kustom.</li>
+                        <li>Melakukan pendekatan awal, memberikan presentasi singkat, atau menjadwalkan demo sistem.</li>
+                        <li>Menghubungkan prospek potensial dengan tim teknis Bawah Tangga Production untuk penutupan deal (*closing*).</li>
+                    </ul>
+                </div>
+
+                <div class="info-card">
+                    <div class="card-header">
+                        <i class="fa-solid fa-user-check"></i>
+                        <h3>Kualifikasi</h3>
+                    </div>
+                    <ul>
+                        <li>Memiliki minat tinggi atau pengalaman di bidang Sales / Marketing (diutamakan bidang IT / Software).</li>
+                        <li>Memahami manfaat sistem POS (aplikasi kasir) dan website untuk efisiensi bisnis.</li>
+                        <li>Komunikatif, percaya diri, dan memiliki kemampuan negosiasi yang baik.</li>
+                        <li>Jaringan (network) luas ke pemilik usaha/UMKM merupakan nilai tambah besar.</li>
+                        <li>Berorientasi pada target komisi pribadi.</li>
+                    </ul>
+                </div>
+
+                <div class="info-card">
+                    <div class="card-header">
+                        <i class="fa-solid fa-route"></i>
+                        <h3>Proses Rekrutmen</h3>
+                    </div>
+                    <p><strong>1. Isi Form Lamaran:</strong> Kirimkan data diri Anda melalui formulir pendaftaran.</p>
+                    <p><strong>2. Briefing Online:</strong> Wawancara singkat via WhatsApp/Zoom mengenai produk W-POS & skema komisi.</p>
+                    <p><strong>3. Onboarding:</strong> Terima akun demo W-POS & materi sales digital untuk langsung prospek.</p>
+                </div>
+
+            </div>
+
+            <div class="form-column">
+                <h3><i class="fa-solid fa-paper-plane"></i> Kirim Lamaran</h3>
+                
+                <div id="alert-msg"></div>
+
+                <form id="recruitment-form">
+                    
+                    <div class="form-group">
+                        <label for="nama">Nama Lengkap <span>*</span></label>
+                        <input type="text" id="nama" name="nama" class="form-control" placeholder="Contoh: Aurora" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="whatsapp">Nomor WhatsApp <span>*</span></label>
+                        <input type="tel" id="whatsapp" name="whatsapp" class="form-control" placeholder="081234567890" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">Alamat Email <span>*</span></label>
+                        <input type="email" id="email" name="email" class="form-control" placeholder="nama@email.com" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="pengalaman">Pengalaman Sales / Marketing <span>*</span></label>
+                        <select id="pengalaman" name="pengalaman" class="form-control" required>
+                            <option value="" disabled selected>Pilih Pengalaman</option>
+                            <option value="< 1 Tahun">&lt; 1 Tahun</option>
+                            <option value="1 - 3 Tahun">1 - 3 Tahun</option>
+                            <option value="> 3 Tahun">&gt; 3 Tahun</option>
+                            <option value="Belum Ada / Pemula">Belum Ada / Pemula</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="catatan">Target Pasar <span>*</span></label>
+                        <textarea id="catatan" name="catatan" class="form-control" placeholder="Uraian target pasar Anda..." required></textarea>
+                    </div>
+
+                    <button type="submit" id="submit-btn" class="submit-btn">
+                        <i class="fa-solid fa-paper-plane"></i> Kirim Lamaran
+                    </button>
+                </form>
+            </div>
+
+        </div>
+
+        <footer>
+            <p>&copy; 2024 Bawah Tangga Production - W-POS. All rights reserved.</p>
+        </footer>
+    </div>
+
+    <!-- SCRIPT JAVASCRIPT UNTUK INTEGRASI GOOGLE SHEETS -->
+    <script>
+        const scriptURL = 'https://script.google.com/macros/s/AKfycbxWYpgYx5iqLzDb_XwR1g-ZQWTPWFHFhbIiza3Lrec55hxn15K7mwiWbyBxMdMA2-vx/exec';
+        
+        const form = document.getElementById('recruitment-form');
+        const submitBtn = document.getElementById('submit-btn');
+        const alertMsg = document.getElementById('alert-msg');
+
+        form.addEventListener('submit', e => {
+            e.preventDefault();
+            
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Mengirim...';
+            alertMsg.style.display = 'none';
+
+            fetch(scriptURL, { 
+                method: 'POST', 
+                mode: 'no-cors',
+                body: new FormData(form)
+            })
+            .then(() => {
+                alertMsg.className = 'alert-success';
+                alertMsg.innerText = 'Lamaran Anda berhasil dikirim! Tim kami akan menghubungi via WhatsApp.';
+                alertMsg.style.display = 'block';
+                
+                form.reset();
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '<i class="fa-solid fa-paper-plane"></i> Kirim Lamaran';
+            })
+            .catch(error => {
+                alertMsg.className = 'alert-error';
+                alertMsg.innerText = 'Gagal mengirim lamaran. Silakan periksa koneksi internet Anda.';
+                alertMsg.style.display = 'block';
+                
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '<i class="fa-solid fa-paper-plane"></i> Kirim Lamaran';
+            });
+        });
+    </script>
+</body>
+</html>
