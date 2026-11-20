@@ -376,11 +376,12 @@
         <span>Daftar muat barang kiriman</span>
       </div>
     </div>
-    <div onclick="navigate('BS')" class="menu-card grad-red">
+    <!-- POPUP MENU BAD STOCK (INPUT & CETAK) -->
+    <div onclick="toggleModal('bsModal', true)" class="menu-card grad-red">
       <i class="fa-solid fa-box-tissue"></i>
       <div>
         <h3>Bad Stock</h3>
-        <span>Pencatatan produk rusak / retur</span>
+        <span>Input atau cetak produk rusak / retur</span>
       </div>
     </div>
   </div>
@@ -421,6 +422,33 @@
     </div>
   </div>
 
+</div>
+
+<!-- --- POP-UP MODAL PANEL BAD STOCK --- -->
+<div id="bsModal" class="modal-overlay" onclick="closeModalOutside(event, 'bsModal')">
+  <div class="modal-container" style="max-width: 640px;">
+    <div class="modal-header">
+      <div class="modal-title"><i class="fa-solid fa-box-tissue" style="margin-right: 8px; color: #ef4444;"></i> Menu Bad Stock</div>
+      <button class="modal-close" onclick="toggleModal('bsModal', false)"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    
+    <div class="menu-grid" style="grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));">
+      <div onclick="navigate('BS')" class="menu-card grad-red">
+        <i class="fa-solid fa-pen-to-square"></i>
+        <div>
+          <h3>Input</h3>
+          <span>Catat produk rusak atau retur</span>
+        </div>
+      </div>
+      <div onclick="navigate('CetakBS')" class="menu-card grad-orange">
+        <i class="fa-solid fa-print"></i>
+        <div>
+          <h3>Cetak</h3>
+          <span>Cetak laporan & rekap bad stock</span>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 
 <!-- --- POP-UP MODAL PANEL SALES --- -->
