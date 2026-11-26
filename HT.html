@@ -2,7 +2,7 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>HT Komunitas - Walkie Talkie Digital</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -12,7 +12,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Share+Tech+Mono&display=swap" rel="stylesheet">
     
     <style>
-        /* Kustomisasi Gaya Fisik Handy Talkie (HT) */
+        /* Kustomisasi Gaya Fisik Handy Talkie (HT) Full Viewport 100dvh */
         :root {
             --ht-body: #1c1f24;
             --ht-body-dark: #121417;
@@ -31,16 +31,19 @@
             user-select: text;
         }
 
-        body {
+        html, body {
             background-color: #090a0c;
             font-family: 'Inter', sans-serif;
             margin: 0;
             padding: 0;
-            min-height: 100dvh;
+            width: 100%;
+            height: 100dvh;
+            max-height: 100dvh;
+            overflow: hidden; /* Tanpa scroll sama sekali */
             display: flex;
             justify-content: center;
             align-items: center;
-            overflow-x: hidden;
+            overscroll-behavior: none;
         }
 
         .font-lcd {
@@ -53,92 +56,91 @@
             box-shadow: 
                 inset 0 2px 3px rgba(255, 255, 255, 0.12),
                 inset 0 -4px 8px rgba(0, 0, 0, 0.8),
-                0 20px 50px rgba(0, 0, 0, 0.9);
+                0 12px 35px rgba(0, 0, 0, 0.9);
             border: 2px solid #2e333c;
         }
 
-        /* Antena di bagian atas */
+        /* Antena ringkas di bagian atas */
         .ht-antenna {
             background: repeating-linear-gradient(
                 0deg,
                 #181a1e,
-                #181a1e 6px,
-                #24282e 6px,
-                #24282e 10px
+                #181a1e 5px,
+                #24282e 5px,
+                #24282e 8px
             );
-            box-shadow: inset -4px 0 6px rgba(0,0,0,0.7), inset 2px 0 4px rgba(255,255,255,0.1);
+            box-shadow: inset -3px 0 5px rgba(0,0,0,0.7), inset 2px 0 3px rgba(255,255,255,0.1);
         }
 
         /* Layar LCD Klasik dengan Backlight */
         .lcd-screen {
             background: linear-gradient(180deg, #98b08a 0%, #839b76 100%);
             box-shadow: 
-                inset 0 4px 10px rgba(0, 0, 0, 0.45),
-                inset 0 0 20px rgba(34, 51, 24, 0.25),
+                inset 0 3px 8px rgba(0, 0, 0, 0.45),
+                inset 0 0 16px rgba(34, 51, 24, 0.25),
                 0 1px 0 rgba(255, 255, 255, 0.15);
             color: #162211;
-            transition: all 0.25s ease;
+            transition: all 0.2s ease;
         }
 
-        /* Backlight LCD menyala terang saat TX / RX / Aktif */
         .lcd-screen.backlight-active {
             background: linear-gradient(180deg, #b5e06b 0%, #98c74e 100%);
             box-shadow: 
                 inset 0 3px 8px rgba(0, 0, 0, 0.35),
-                0 0 18px rgba(163, 230, 53, 0.45);
+                0 0 14px rgba(163, 230, 53, 0.4);
         }
 
         .lcd-screen.backlight-tx {
             background: linear-gradient(180deg, #f5b076 0%, #e09252 100%);
             box-shadow: 
                 inset 0 3px 8px rgba(0, 0, 0, 0.35),
-                0 0 18px rgba(249, 115, 22, 0.5);
+                0 0 14px rgba(249, 115, 22, 0.45);
         }
 
         /* Kisi-kisi Speaker Metalik */
         .speaker-grille {
             background-color: #14161a;
-            background-image: radial-gradient(#07080a 2px, transparent 2px);
-            background-size: 8px 8px;
-            box-shadow: inset 0 3px 6px rgba(0,0,0,0.9), 0 1px 1px rgba(255,255,255,0.08);
+            background-image: radial-gradient(#07080a 1.8px, transparent 1.8px);
+            background-size: 7px 7px;
+            box-shadow: inset 0 2px 5px rgba(0,0,0,0.9), 0 1px 1px rgba(255,255,255,0.08);
         }
 
         /* Tombol Taktis HT */
         .tactile-btn {
             background: linear-gradient(180deg, #323741 0%, #20242b 100%);
             box-shadow: 
-                0 4px 0 #0f1115,
-                0 6px 10px rgba(0,0,0,0.6),
+                0 3px 0 #0f1115,
+                0 5px 8px rgba(0,0,0,0.6),
                 inset 0 1px 1px rgba(255,255,255,0.18);
             border: 1px solid #3c424d;
             transition: transform 0.08s ease, box-shadow 0.08s ease;
         }
 
         .tactile-btn:active {
-            transform: translateY(3px);
+            transform: translateY(2px);
             box-shadow: 
                 0 1px 0 #0f1115,
-                0 2px 4px rgba(0,0,0,0.6),
+                0 2px 3px rgba(0,0,0,0.6),
                 inset 0 1px 2px rgba(0,0,0,0.5);
         }
 
-        /* Tombol Besar PTT (Push To Talk) */
+        /* Tombol Besar PTT (Push To Talk) Ergonomis */
         .ptt-button {
             background: radial-gradient(circle at 50% 30%, #ff5722 0%, #d84315 70%, #9f2b08 100%);
             box-shadow: 
-                0 8px 0 #5c1904,
-                0 14px 24px rgba(0, 0, 0, 0.75),
+                0 6px 0 #5c1904,
+                0 10px 20px rgba(0, 0, 0, 0.75),
                 inset 0 2px 4px rgba(255, 255, 255, 0.35);
-            border: 3px solid #3a1205;
+            border: 2.5px solid #3a1205;
             transition: all 0.08s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .ptt-button:active, .ptt-button.transmitting {
-            transform: translateY(6px);
+            transform: translateY(5px);
             background: radial-gradient(circle at 50% 50%, #ff2a2a 0%, #c61a1a 80%, #800d0d 100%);
             box-shadow: 
-                0 2px 0 #4a0707,
-                0 0 25px rgba(239, 68, 68, 0.75),
+                0 1px 0 #4a0707,
+                0 0 22px rgba(239, 68, 68, 0.8),
                 inset 0 4px 10px rgba(0, 0, 0, 0.6);
         }
 
@@ -149,261 +151,350 @@
         }
         .led-tx-on {
             background-color: #ef4444;
-            box-shadow: 0 0 12px #ef4444, 0 0 24px #dc2626, inset 0 1px 2px #fca5a5;
+            box-shadow: 0 0 10px #ef4444, 0 0 20px #dc2626, inset 0 1px 2px #fca5a5;
         }
         .led-rx-on {
             background-color: #22c55e;
-            box-shadow: 0 0 12px #22c55e, 0 0 24px #16a34a, inset 0 1px 2px #86efac;
+            box-shadow: 0 0 10px #22c55e, 0 0 20px #16a34a, inset 0 1px 2px #86efac;
         }
 
-        /* Custom Scrollbar untuk Log Aktivitas */
-        .log-scroll::-webkit-scrollbar {
+        /* Custom Scrollbar untuk isi Modal */
+        .modal-scroll::-webkit-scrollbar {
             width: 4px;
         }
-        .log-scroll::-webkit-scrollbar-track {
+        .modal-scroll::-webkit-scrollbar-track {
             background: #111317;
         }
-        .log-scroll::-webkit-scrollbar-thumb {
+        .modal-scroll::-webkit-scrollbar-thumb {
             background: #374151;
             border-radius: 4px;
         }
     </style>
 </head>
-<body class="p-2 sm:p-4">
+<body class="px-2 py-1.5 sm:p-3">
 
-    <!-- Kontainer Utama Unit HT (Mobile-First) -->
-    <div class="w-full max-w-[400px] flex flex-col items-center">
+    <!-- LAYAR PEMBUKA: WAJIB UNLOCK AUDIO & MIKROFON UNTUK BROWSER HP -->
+    <div id="unlock-overlay" class="fixed inset-0 z-50 bg-[#090a0c]/95 backdrop-blur-md flex items-center justify-center p-4">
+        <div class="w-full max-w-[360px] ht-chassis rounded-3xl p-6 flex flex-col items-center text-center gap-4 border border-orange-500/40">
+            <div class="w-16 h-16 rounded-2xl bg-orange-500/15 border border-orange-500/40 flex items-center justify-center shadow-lg">
+                <svg class="w-9 h-9 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"/>
+                </svg>
+            </div>
+            <div>
+                <span class="text-[10px] font-mono tracking-widest text-orange-400 uppercase bg-orange-500/10 px-2.5 py-0.5 rounded-full border border-orange-500/30">GARUDA-HT PRO v2</span>
+                <h1 class="text-xl font-extrabold text-white mt-2">Handy Talkie Komunitas</h1>
+                <p class="text-xs text-gray-400 mt-1.5 leading-relaxed">
+                    Browser HP memerlukan izin Anda untuk membuka kunci speaker speaker dan mikrofon sebelum berkomunikasi.
+                </p>
+            </div>
+            <button id="btn-activate-radio" class="w-full py-3.5 px-4 rounded-2xl bg-gradient-to-r from-orange-600 to-amber-600 hover:from-orange-500 hover:to-amber-500 text-white font-extrabold text-sm tracking-wide shadow-lg shadow-orange-950/60 active:scale-95 transition-transform flex items-center justify-center gap-2">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                </svg>
+                AKTIFKAN RADIO & AUDIO
+            </button>
+            <span class="text-[10px] text-gray-500">Pastikan volume media HP Anda sudah dinaikkan</span>
+        </div>
+    </div>
+
+    <!-- KONTAINER UTAMA UNIT HT: PAS 100% TINGGI LAYAR HP (100dvh, NO SCROLL) -->
+    <div class="w-full max-w-[400px] h-full max-h-[100dvh] flex flex-col justify-between">
         
-        <!-- Bagian Atas Fisik: Antena & Kenop Rotary -->
-        <div class="w-full flex items-end justify-between px-6 -mb-1 z-10">
-            <!-- Antena Karet Taktis -->
+        <!-- Bagian Atas Fisik: Antena Ringkas, LED TX/RX & Tombol Diagnostik/Power -->
+        <div class="w-full flex items-end justify-between px-5 shrink-0 -mb-1 z-10" style="height: clamp(36px, 6.5dvh, 52px);">
+            <!-- Antena Karet Taktis Ringkas -->
             <div class="flex flex-col items-center">
-                <div class="w-4 h-3 bg-[#141619] rounded-t-full border-t border-gray-700"></div>
-                <div class="w-6 h-14 ht-antenna rounded-t-sm"></div>
-                <div class="w-8 h-3 bg-[#242830] rounded-t-md border-t border-gray-600"></div>
+                <div class="w-3.5 h-2 bg-[#141619] rounded-t-full border-t border-gray-700"></div>
+                <div class="w-5 h-7 sm:h-9 ht-antenna rounded-t-sm"></div>
+                <div class="w-7 h-2 bg-[#242830] rounded-t-md border-t border-gray-600"></div>
             </div>
 
-            <!-- Label Merek & Indikator LED Atas -->
-            <div class="flex items-center gap-3 pb-2">
-                <div class="flex flex-col items-center">
-                    <div id="led-tx" class="w-3.5 h-3.5 rounded-full led-off border border-gray-800 transition-all"></div>
-                    <span class="text-[9px] font-bold text-gray-400 mt-0.5 tracking-wider">TX</span>
+            <!-- Indikator LED TX & RX -->
+            <div class="flex items-center gap-4 pb-1.5">
+                <div class="flex items-center gap-1.5">
+                    <div id="led-tx" class="w-3 h-3 rounded-full led-off border border-gray-800 transition-all"></div>
+                    <span class="text-[9px] font-extrabold text-gray-400 tracking-wider">TX</span>
                 </div>
-                <div class="flex flex-col items-center">
-                    <div id="led-rx" class="w-3.5 h-3.5 rounded-full led-off border border-gray-800 transition-all"></div>
-                    <span class="text-[9px] font-bold text-gray-400 mt-0.5 tracking-wider">RX</span>
+                <div class="flex items-center gap-1.5">
+                    <div id="led-rx" class="w-3 h-3 rounded-full led-off border border-gray-800 transition-all"></div>
+                    <span class="text-[9px] font-extrabold text-gray-400 tracking-wider">RX</span>
                 </div>
             </div>
 
-            <!-- Kenop Volume / Power -->
-            <div class="flex items-end gap-2">
-                <button id="btn-power" title="Daya / Hubungkan Ulang" class="w-9 h-7 bg-gradient-to-r from-gray-800 via-gray-700 to-gray-900 rounded-t-md border-t border-x border-gray-600 flex items-center justify-center shadow-md active:translate-y-0.5">
-                    <svg class="w-4 h-4 text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+            <!-- Kenop Diagnostik & Refresh Jaringan -->
+            <div class="flex items-end gap-1.5">
+                <button id="btn-open-diag" title="Diagnostik Audio & Jaringan" class="w-8 h-6 bg-gradient-to-r from-gray-800 via-gray-700 to-gray-900 rounded-t-md border-t border-x border-gray-600 flex items-center justify-center shadow-md active:translate-y-0.5">
+                    <svg class="w-3.5 h-3.5 text-sky-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                    </svg>
+                </button>
+                <button id="btn-power" title="Segarkan Koneksi" class="w-8 h-6 bg-gradient-to-r from-gray-800 via-gray-700 to-gray-900 rounded-t-md border-t border-x border-gray-600 flex items-center justify-center shadow-md active:translate-y-0.5">
+                    <svg class="w-3.5 h-3.5 text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
                     </svg>
                 </button>
             </div>
         </div>
 
-        <!-- Bodi Utama Handy Talkie -->
-        <div class="w-full ht-chassis rounded-[28px] p-4 sm:p-5 flex flex-col gap-3.5 relative">
+        <!-- Bodi Utama Handy Talkie (Flex-1 mengisi sisa tinggi layar dengan presisi) -->
+        <div class="w-full flex-1 min-h-0 ht-chassis rounded-[24px] p-3 sm:p-4 flex flex-col justify-between gap-2 relative overflow-hidden">
             
-            <!-- Header Bodi & Baut Sudut -->
-            <div class="flex items-center justify-between px-1">
+            <!-- 1. Header Merek & Status Singkat -->
+            <div class="flex items-center justify-between px-1 shrink-0">
                 <div class="flex items-center gap-1.5">
-                    <span class="w-2 h-2 rounded-full bg-gray-600 shadow-inner"></span>
-                    <span class="text-[11px] font-extrabold tracking-widest text-gray-300 uppercase">GARUDA-HT <span class="text-orange-500">PRO</span></span>
+                    <span class="w-1.5 h-1.5 rounded-full bg-gray-500"></span>
+                    <span class="text-[10px] font-extrabold tracking-widest text-gray-300 uppercase">GARUDA-HT <span class="text-orange-500">PRO</span></span>
                 </div>
-                <span class="text-[10px] font-mono text-gray-400 bg-black/40 px-2 py-0.5 rounded border border-gray-800">UHF/VHF DUAL</span>
-                <span class="w-2 h-2 rounded-full bg-gray-600 shadow-inner"></span>
+                <span id="transport-mode-pill" class="text-[9px] font-mono text-emerald-400 bg-black/50 px-2 py-0.5 rounded border border-gray-800">
+                    WEBRTC + STREAM
+                </span>
+                <span class="w-1.5 h-1.5 rounded-full bg-gray-500"></span>
             </div>
 
-            <!-- Kisi Speaker & Audio Visualizer -->
-            <div class="w-full speaker-grille rounded-xl p-2.5 border border-gray-800/90 flex flex-col justify-between gap-2">
-                <!-- Bar Visualizer Audio -->
-                <div class="flex items-center justify-between gap-1 h-5 px-1 bg-black/60 rounded border border-gray-800/80" id="audio-visualizer">
-                    <!-- 16 bar visualizer akan di-generate lewat JS -->
+            <!-- 2. Kisi Speaker & Audio Visualizer Kompak -->
+            <div class="w-full speaker-grille rounded-xl px-2.5 py-1.5 border border-gray-800/90 flex flex-col justify-between gap-1 shrink-0">
+                <div class="flex items-center justify-between gap-1 h-4 px-1 bg-black/60 rounded border border-gray-800/80" id="audio-visualizer">
+                    <!-- 20 bar visualizer di-generate JS -->
                 </div>
-                <div class="flex justify-between items-center text-[9px] text-gray-400 font-mono px-1">
-                    <span>MIC / SPEAKER 2W</span>
-                    <span id="audio-mode-badge" class="text-emerald-400">AUDIO AKTIF</span>
+                <div class="flex justify-between items-center text-[8.5px] text-gray-400 font-mono px-0.5">
+                    <span>SPEAKER 2W • DUAL AUDIO</span>
+                    <span id="audio-mode-badge" class="text-amber-400">MENUNGGU AKTIVASI</span>
                 </div>
             </div>
 
-            <!-- Bingkai Layar LCD Digital -->
-            <div class="bg-[#0d0f12] p-2 rounded-2xl border-2 border-gray-800 shadow-inner">
-                <div id="lcd-display" class="lcd-screen rounded-xl p-3 flex flex-col justify-between min-h-[145px] relative overflow-hidden">
+            <!-- 3. Bingkai Layar LCD Digital (Fleksibel tapi tetap proporsional) -->
+            <div class="bg-[#0d0f12] p-1.5 rounded-2xl border-2 border-gray-800 shadow-inner shrink-0">
+                <div id="lcd-display" class="lcd-screen rounded-xl px-2.5 py-2 flex flex-col justify-between gap-1 relative overflow-hidden">
                     
-                    <!-- Baris Atas LCD: Sinyal, Status Koneksi, Baterai -->
-                    <div class="flex items-center justify-between text-xs font-lcd border-b border-[#162211]/25 pb-1">
-                        <!-- Bar Sinyal -->
-                        <div class="flex items-end gap-0.5 h-3" title="Kekuatan Sinyal">
+                    <!-- Baris Atas LCD: Sinyal, Status Koneksi, Jumlah Rekan -->
+                    <div class="flex items-center justify-between text-[11px] font-lcd border-b border-[#162211]/25 pb-0.5">
+                        <div class="flex items-end gap-0.5 h-2.5" title="Kekuatan Sinyal">
+                            <span class="w-1 h-1 bg-[#162211]"></span>
                             <span class="w-1 h-1.5 bg-[#162211]"></span>
                             <span class="w-1 h-2 bg-[#162211]"></span>
-                            <span class="w-1 h-2.5 bg-[#162211]"></span>
-                            <span id="sig-bar-4" class="w-1 h-3 bg-[#162211]/30"></span>
-                            <span class="ml-1 text-[10px] font-bold">FM</span>
+                            <span id="sig-bar-4" class="w-1 h-2.5 bg-[#162211]/30"></span>
+                            <span class="ml-1 text-[9px] font-bold">FM</span>
                         </div>
 
-                        <!-- Status Jaringan -->
-                        <div id="lcd-net-status" class="text-[11px] font-bold tracking-tight truncate max-w-[165px]">
-                            MENYIAPKAN RADIO...
+                        <div id="lcd-net-status" class="text-[10px] font-bold tracking-tight truncate max-w-[155px]">
+                            SIAP AKTIFKAN
                         </div>
 
-                        <!-- Ikon Baterai -->
                         <div class="flex items-center gap-1">
-                            <span id="lcd-peer-count" class="text-[10px] font-bold bg-[#162211] text-[#98b08a] px-1 rounded">0 REKAN</span>
-                            <div class="w-5 h-2.5 border border-[#162211] p-0.5 flex items-center">
-                                <div class="w-full h-full bg-[#162211]"></div>
-                            </div>
+                            <span id="lcd-peer-count" class="text-[9px] font-bold bg-[#162211] text-[#98b08a] px-1 rounded">0 REKAN</span>
                         </div>
                     </div>
 
                     <!-- Baris Tengah LCD: Nomor Saluran & Frekuensi Besar -->
-                    <div class="my-1.5 flex items-baseline justify-between">
+                    <div class="flex items-center justify-between my-0.5">
                         <div>
-                            <div class="text-[10px] font-lcd uppercase opacity-80">SALURAN / FREKUENSI</div>
-                            <div class="flex items-baseline gap-2">
-                                <span id="lcd-channel-num" class="text-3xl font-lcd font-bold tracking-tighter">CH 01</span>
-                                <span id="lcd-freq" class="text-xl font-lcd font-bold">144.500</span>
-                                <span class="text-xs font-lcd font-bold">MHz</span>
+                            <div class="flex items-baseline gap-1.5">
+                                <span id="lcd-channel-num" class="text-2xl sm:text-3xl font-lcd font-bold tracking-tighter leading-none">CH 01</span>
+                                <span id="lcd-freq" class="text-lg sm:text-xl font-lcd font-bold leading-none">144.500</span>
+                                <span class="text-[10px] font-lcd font-bold">MHz</span>
                             </div>
                         </div>
                         <div class="text-right">
-                            <span id="lcd-tx-rx-badge" class="inline-block font-lcd text-xs font-bold px-1.5 py-0.5 border border-[#162211] rounded">
+                            <span id="lcd-tx-rx-badge" class="inline-block font-lcd text-[11px] font-bold px-1.5 py-0.5 border border-[#162211] rounded">
                                 STANDBY
                             </span>
                         </div>
                     </div>
 
+                    <!-- VU Meter Mikrofon Real-Time di dalam LCD -->
+                    <div class="flex items-center gap-1.5">
+                        <span class="text-[9px] font-lcd font-bold opacity-80">MIC</span>
+                        <div class="flex-1 h-1.5 bg-[#162211]/20 rounded-sm overflow-hidden flex gap-0.5 p-[1px]" id="lcd-vu-meter">
+                            <!-- 12 segmen VU meter -->
+                        </div>
+                        <span id="lcd-my-callsign" class="text-[9px] font-lcd font-bold bg-[#162211]/15 px-1 rounded truncate max-w-[90px]">ANGGOTA</span>
+                    </div>
+
                     <!-- Baris Bawah LCD: Nama Saluran Komunitas & Pembicara Aktif -->
-                    <div class="border-t border-[#162211]/25 pt-1 flex items-center justify-between text-xs font-lcd">
-                        <span id="lcd-channel-name" class="font-bold truncate max-w-[55%]">POSKO UTAMA</span>
-                        <span id="lcd-active-speaker" class="font-bold truncate max-w-[43%] text-right">SIAP MENERIMA</span>
+                    <div class="border-t border-[#162211]/25 pt-0.5 flex items-center justify-between text-[11px] font-lcd">
+                        <span id="lcd-channel-name" class="font-bold truncate max-w-[52%]">POSKO UTAMA</span>
+                        <span id="lcd-active-speaker" class="font-bold truncate max-w-[46%] text-right">SIAP MENERIMA</span>
                     </div>
                 </div>
             </div>
 
-            <!-- Pengaturan Cepat: Callsign & Kontrol Saluran -->
-            <div class="grid grid-cols-12 gap-2 items-center bg-[#14171c] p-2.5 rounded-xl border border-gray-800">
-                <!-- Input Nama Panggilan / Callsign -->
-                <div class="col-span-7 flex flex-col">
-                    <label for="input-callsign" class="text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1">
-                        Nama Panggilan / Callsign
-                    </label>
-                    <div class="flex items-center bg-[#0b0d10] border border-gray-700 rounded-lg px-2 py-1.5 focus-within:border-orange-500">
-                        <input 
-                            type="text" 
-                            id="input-callsign" 
-                            maxlength="14" 
-                            placeholder="Contoh: ELANG-01"
-                            class="w-full bg-transparent text-white font-lcd text-sm uppercase focus:outline-none"
-                        >
-                        <button id="btn-save-callsign" class="text-[10px] bg-orange-600 hover:bg-orange-500 text-white font-bold px-2 py-0.5 rounded ml-1">
-                            SET
-                        </button>
-                    </div>
+            <!-- 4. Baris Kontrol Saluran (+/-) & Volume Kompak -->
+            <div class="grid grid-cols-12 gap-2 items-center bg-[#14171c] p-2 rounded-xl border border-gray-800 shrink-0">
+                <!-- Kontrol Saluran (- / +) -->
+                <div class="col-span-5 flex items-center gap-1">
+                    <button id="btn-ch-down" class="tactile-btn flex-1 py-1.5 rounded-lg flex items-center justify-center text-white font-extrabold text-sm" aria-label="Saluran Sebelumnya">
+                        CH -
+                    </button>
+                    <button id="btn-ch-up" class="tactile-btn flex-1 py-1.5 rounded-lg flex items-center justify-center text-white font-extrabold text-sm" aria-label="Saluran Berikutnya">
+                        CH +
+                    </button>
                 </div>
 
-                <!-- Tombol Naik / Turun Saluran -->
-                <div class="col-span-5 flex flex-col">
-                    <span class="text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1 text-center">
-                        Saluran (CH)
-                    </span>
-                    <div class="grid grid-cols-2 gap-1.5">
-                        <button id="btn-ch-down" class="tactile-btn py-1.5 rounded-lg flex items-center justify-center text-white font-bold text-base" aria-label="Saluran Sebelumnya">
-                            ▼
-                        </button>
-                        <button id="btn-ch-up" class="tactile-btn py-1.5 rounded-lg flex items-center justify-center text-white font-bold text-base" aria-label="Saluran Berikutnya">
-                            ▲
-                        </button>
-                    </div>
+                <!-- Slider Volume Speaker -->
+                <div class="col-span-7 flex items-center gap-2 pl-1">
+                    <svg class="w-3.5 h-3.5 text-orange-400 shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M9.383 3.076A1 1 0 0110 4v12a1 1 0 01-1.707.707L4.586 13H2a1 1 0 01-1-1V8a1 1 0 011-1h2.586l3.707-3.707a1 1 0 011.09-.217zM14.657 2.929a1 1 0 011.414 0A9.972 9.972 0 0119 10a9.972 9.972 0 01-2.929 7.071 1 1 0 01-1.414-1.414A7.971 7.971 0 0017 10c0-2.21-.894-4.208-2.343-5.657a1 1 0 010-1.414zm-2.829 2.828a1 1 0 011.415 0A5.983 5.983 0 0115 10a5.984 5.984 0 01-1.757 4.243 1 1 0 01-1.415-1.415A3.984 3.984 0 0013 10a3.983 3.983 0 00-1.172-2.828 1 1 0 010-1.415z" clip-rule="evenodd"/>
+                    </svg>
+                    <input type="range" id="volume-slider" min="0" max="100" value="95" class="w-full accent-orange-500 h-1.5 bg-gray-700 rounded-lg cursor-pointer">
+                    <span id="volume-val" class="text-[10px] font-lcd text-orange-400 w-7 text-right">95%</span>
                 </div>
             </div>
 
-            <!-- Baris Kontrol Tambahan: Volume, Roger Beep, SOS, Log -->
-            <div class="grid grid-cols-4 gap-2">
-                <!-- Tombol Roger Beep Toggle -->
-                <button id="btn-roger-toggle" class="tactile-btn py-2 px-1 rounded-xl flex flex-col items-center justify-center gap-0.5">
-                    <span class="text-[10px] font-bold text-orange-400">ROGER</span>
-                    <span id="roger-status-text" class="text-[9px] font-mono text-emerald-400">ON</span>
+            <!-- 5. Baris 5 Tombol Fungsi Cepat (Callsign, Roger, Panggil, SOS, Log) -->
+            <div class="grid grid-cols-5 gap-1.5 shrink-0">
+                <!-- Pengaturan Callsign (Modal) -->
+                <button id="btn-open-callsign" class="tactile-btn py-1.5 px-1 rounded-xl flex flex-col items-center justify-center gap-0.5">
+                    <span class="text-[9.5px] font-bold text-amber-400">NAMA</span>
+                    <span class="text-[8px] font-mono text-gray-400">SET ID</span>
                 </button>
 
-                <!-- Tombol Ping / Panggil Rekan -->
-                <button id="btn-call-tone" class="tactile-btn py-2 px-1 rounded-xl flex flex-col items-center justify-center gap-0.5">
-                    <span class="text-[10px] font-bold text-gray-200">PANGGIL</span>
-                    <span class="text-[9px] font-mono text-gray-400">TONE</span>
+                <!-- Roger Beep Toggle -->
+                <button id="btn-roger-toggle" class="tactile-btn py-1.5 px-1 rounded-xl flex flex-col items-center justify-center gap-0.5">
+                    <span class="text-[9.5px] font-bold text-orange-400">ROGER</span>
+                    <span id="roger-status-text" class="text-[8px] font-mono text-emerald-400">ON</span>
                 </button>
 
-                <!-- Tombol SOS Darurat -->
-                <button id="btn-sos" class="tactile-btn py-2 px-1 rounded-xl flex flex-col items-center justify-center gap-0.5 border-red-900/60">
-                    <span class="text-[10px] font-extrabold text-red-500">SOS</span>
-                    <span class="text-[9px] font-mono text-gray-400">DARURAT</span>
+                <!-- Nada Panggil (Call Tone) -->
+                <button id="btn-call-tone" class="tactile-btn py-1.5 px-1 rounded-xl flex flex-col items-center justify-center gap-0.5">
+                    <span class="text-[9.5px] font-bold text-gray-200">PANGGIL</span>
+                    <span class="text-[8px] font-mono text-gray-400">TONE</span>
                 </button>
 
-                <!-- Tombol Buka/Tutup Log Riwayat -->
-                <button id="btn-toggle-log" class="tactile-btn py-2 px-1 rounded-xl flex flex-col items-center justify-center gap-0.5 relative">
-                    <span class="text-[10px] font-bold text-sky-400">RIWAYAT</span>
-                    <span id="log-badge-count" class="text-[9px] font-mono text-gray-300">0 LOG</span>
+                <!-- SOS Darurat -->
+                <button id="btn-sos" class="tactile-btn py-1.5 px-1 rounded-xl flex flex-col items-center justify-center gap-0.5 border-red-900/60">
+                    <span class="text-[9.5px] font-extrabold text-red-500">SOS</span>
+                    <span class="text-[8px] font-mono text-gray-400">DARURAT</span>
+                </button>
+
+                <!-- Riwayat Log (Modal) -->
+                <button id="btn-open-log" class="tactile-btn py-1.5 px-1 rounded-xl flex flex-col items-center justify-center gap-0.5">
+                    <span class="text-[9.5px] font-bold text-sky-400">LOG</span>
+                    <span id="log-badge-count" class="text-[8px] font-mono text-gray-300">0</span>
                 </button>
             </div>
 
-            <!-- Kontrol Slider Volume Speaker -->
-            <div class="flex items-center gap-3 bg-[#14171c] px-3 py-2 rounded-xl border border-gray-800">
-                <span class="text-[10px] font-bold text-gray-400 uppercase tracking-wider">VOLUME</span>
-                <input type="range" id="volume-slider" min="0" max="100" value="85" class="w-full accent-orange-500 h-1.5 bg-gray-700 rounded-lg cursor-pointer">
-                <span id="volume-val" class="text-xs font-lcd text-orange-400 w-8 text-right">85%</span>
-            </div>
-
-            <!-- Area Utama: Tombol Push-To-Talk (PTT) Besar -->
-            <div class="pt-1 pb-2 flex flex-col items-center">
+            <!-- 6. Area Utama: Tombol Push-To-Talk (PTT) Besar & Ergonomis untuk Jempol -->
+            <div class="flex-1 min-h-[76px] max-h-[135px] flex flex-col justify-center pb-1">
                 <button 
                     id="btn-ptt" 
-                    class="ptt-button w-full h-24 sm:h-28 rounded-2xl flex flex-col items-center justify-center gap-1 cursor-pointer relative overflow-hidden"
+                    class="ptt-button w-full h-full rounded-2xl flex flex-col items-center justify-center gap-0.5 cursor-pointer relative overflow-hidden"
                 >
-                    <!-- Garis Grip Karet Taktis pada Tombol PTT -->
-                    <div class="flex gap-1.5 mb-1 opacity-40">
-                        <span class="w-8 h-1 bg-black rounded-full"></span>
-                        <span class="w-8 h-1 bg-black rounded-full"></span>
-                        <span class="w-8 h-1 bg-black rounded-full"></span>
+                    <!-- Garis Grip Karet Taktis -->
+                    <div class="flex gap-1.5 mb-0.5 opacity-40">
+                        <span class="w-7 h-1 bg-black rounded-full"></span>
+                        <span class="w-7 h-1 bg-black rounded-full"></span>
+                        <span class="w-7 h-1 bg-black rounded-full"></span>
                     </div>
                     
                     <div class="flex items-center gap-2 text-white">
-                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                        <svg class="w-5 h-5 sm:w-6 sm:h-6 shrink-0" fill="currentColor" viewBox="0 0 24 24">
                             <path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3zm5.91-3c-.49 0-.9.36-.98.85C16.52 14.2 14.47 16 12 16s-4.52-1.8-4.93-4.15c-.08-.49-.49-.85-.98-.85-.61 0-1.09.54-1 1.14.49 3 2.89 5.35 5.91 5.78V20c0 .55.45 1 1 1s1-.45 1-1v-2.08c3.02-.43 5.42-2.78 5.91-5.78.1-.6-.39-1.14-1-1.14z"/>
                         </svg>
-                        <span id="ptt-main-label" class="text-base sm:text-lg font-extrabold tracking-wide drop-shadow">
+                        <span id="ptt-main-label" class="text-sm sm:text-base font-extrabold tracking-wide drop-shadow">
                             TEKAN & TAHAN UNTUK BICARA
                         </span>
                     </div>
-                    <span id="ptt-sub-label" class="text-[11px] font-semibold text-orange-100/90 tracking-wider">
-                        (PUSH TO TALK - PTT)
+                    <span id="ptt-sub-label" class="text-[10px] font-semibold text-orange-100/90 tracking-wider">
+                        PUSH TO TALK (PTT)
                     </span>
                 </button>
-            </div>
-
-            <!-- Panel Riwayat Transmisi (Drawer / Expandable) -->
-            <div id="log-drawer" class="hidden bg-[#101216] border border-gray-800 rounded-xl p-2.5 flex flex-col gap-2">
-                <div class="flex items-center justify-between border-b border-gray-800 pb-1.5">
-                    <span class="text-[11px] font-bold text-gray-300 uppercase tracking-wider">Log Aktivitas Saluran</span>
-                    <button id="btn-clear-log" class="text-[10px] text-red-400 hover:text-red-300 font-semibold">Hapus Log</button>
-                </div>
-                <div id="log-list" class="max-h-32 overflow-y-auto log-scroll flex flex-col gap-1.5 text-xs font-mono">
-                    <div class="text-gray-500 text-center py-2 text-[11px]">Belum ada aktivitas transmisi.</div>
-                </div>
-            </div>
-
-            <!-- Info Panduan Singkat Komunitas -->
-            <div class="text-center text-[10px] text-gray-400 leading-tight px-2">
-                Buka halaman ini di HP teman & pilih <strong class="text-gray-200">SALURAN</strong> yang sama untuk terhubung otomatis secara real-time.
             </div>
 
         </div>
     </div>
 
-    <!-- Modal / Notifikasi Kustom (Pengganti alert) -->
-    <div id="toast-box" class="fixed top-4 left-1/2 -translate-x-1/2 z-50 pointer-events-none opacity-0 transition-opacity duration-300">
-        <div id="toast-msg" class="bg-gray-900/95 text-white border border-orange-500/70 px-4 py-2 rounded-full text-xs font-semibold shadow-2xl">
+    <!-- ========================================================================
+         LACI MODAL OVERLAY (PENGATURAN CALLSIGN, RIWAYAT LOG, DIAGNOSTIK AUDIO)
+         ======================================================================== -->
+
+    <!-- MODAL 1: PENGATURAN NAMA PANGGILAN / CALLSIGN -->
+    <div id="modal-callsign" class="hidden fixed inset-0 z-40 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="w-full max-w-[350px] ht-chassis rounded-2xl p-4 flex flex-col gap-3 border border-gray-700">
+            <div class="flex items-center justify-between border-b border-gray-800 pb-2">
+                <h2 class="text-sm font-extrabold text-white uppercase tracking-wider">Pengaturan Callsign</h2>
+                <button data-close-modal="modal-callsign" class="text-gray-400 hover:text-white text-lg font-bold px-2">&times;</button>
+            </div>
+            <p class="text-xs text-gray-400">Identitas ini akan muncul di layar HT teman saat Anda berbicara.</p>
+            <input 
+                type="text" 
+                id="input-callsign" 
+                maxlength="14" 
+                placeholder="Contoh: ELANG-01"
+                class="w-full bg-[#0b0d10] border border-gray-700 rounded-xl px-3 py-2.5 text-white font-lcd text-base uppercase focus:outline-none focus:border-orange-500"
+            >
+            <div class="flex gap-2 pt-1">
+                <button data-close-modal="modal-callsign" class="flex-1 py-2.5 rounded-xl bg-gray-800 text-gray-300 text-xs font-bold">Batal</button>
+                <button id="btn-save-callsign" class="flex-1 py-2.5 rounded-xl bg-orange-600 hover:bg-orange-500 text-white text-xs font-extrabold">SIMPAN CALLSIGN</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL 2: RIWAYAT / LOG TRANSMISI SALURAN -->
+    <div id="modal-log" class="hidden fixed inset-0 z-40 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="w-full max-w-[360px] ht-chassis rounded-2xl p-4 flex flex-col gap-3 border border-gray-700 max-h-[75dvh]">
+            <div class="flex items-center justify-between border-b border-gray-800 pb-2 shrink-0">
+                <h2 class="text-sm font-extrabold text-sky-400 uppercase tracking-wider">Log Aktivitas Saluran</h2>
+                <div class="flex items-center gap-3">
+                    <button id="btn-clear-log" class="text-[11px] text-red-400 hover:text-red-300 font-semibold">Hapus</button>
+                    <button data-close-modal="modal-log" class="text-gray-400 hover:text-white text-lg font-bold px-1">&times;</button>
+                </div>
+            </div>
+            <div id="log-list" class="flex-1 overflow-y-auto modal-scroll flex flex-col gap-1.5 text-xs font-mono min-h-[140px]">
+                <div class="text-gray-500 text-center py-6 text-[11px]">Belum ada aktivitas transmisi.</div>
+            </div>
+            <button data-close-modal="modal-log" class="w-full py-2.5 rounded-xl bg-gray-800 text-white text-xs font-bold shrink-0">TUTUP RIWAYAT</button>
+        </div>
+    </div>
+
+    <!-- MODAL 3: PANEL DIAGNOSTIK AUDIO & JARINGAN + TES LOOPBACK 3 DETIK -->
+    <div id="modal-diag" class="hidden fixed inset-0 z-40 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="w-full max-w-[360px] ht-chassis rounded-2xl p-4 flex flex-col gap-3 border border-gray-700 max-h-[82dvh] overflow-y-auto modal-scroll">
+            <div class="flex items-center justify-between border-b border-gray-800 pb-2">
+                <h2 class="text-sm font-extrabold text-emerald-400 uppercase tracking-wider">Diagnostik Audio & Sinyal</h2>
+                <button data-close-modal="modal-diag" class="text-gray-400 hover:text-white text-lg font-bold px-2">&times;</button>
+            </div>
+
+            <!-- Status Teknis -->
+            <div class="bg-[#0d0f12] p-3 rounded-xl border border-gray-800 flex flex-col gap-2 text-xs font-mono">
+                <div class="flex justify-between">
+                    <span class="text-gray-400">Izin Mikrofon:</span>
+                    <span id="diag-mic-status" class="text-amber-400 font-bold">MEMERIKSA...</span>
+                </div>
+                <div class="flex justify-between">
+                    <span class="text-gray-400">Audio Engine:</span>
+                    <span id="diag-audio-ctx" class="text-emerald-400 font-bold">AKTIF</span>
+                </div>
+                <div class="flex justify-between">
+                    <span class="text-gray-400">ID Slot Jaringan:</span>
+                    <span id="diag-peer-id" class="text-gray-200 truncate max-w-[150px]">-</span>
+                </div>
+                <div class="flex justify-between">
+                    <span class="text-gray-400">Rekan Terhubung:</span>
+                    <span id="diag-peer-list" class="text-sky-400 font-bold">0 Orang</span>
+                </div>
+            </div>
+
+            <!-- Tes Loopback Audio 3 Detik -->
+            <div class="bg-[#14171c] p-3 rounded-xl border border-gray-800 flex flex-col gap-2">
+                <div class="text-xs font-bold text-white">Tes Mikrofon & Speaker (Loopback 3 Detik)</div>
+                <p class="text-[11px] text-gray-400 leading-snug">
+                    Merekam suara Anda selama 3 detik lalu memutarnya kembali ke speaker HP untuk memastikan mikrofon berfungsi.
+                </p>
+                <button id="btn-loopback-test" class="w-full py-2.5 rounded-xl bg-sky-600 hover:bg-sky-500 text-white text-xs font-extrabold shadow-md active:scale-95 transition-transform">
+                    MULAI TES LOOPBACK (3 DETIK)
+                </button>
+                <div id="loopback-status" class="text-[11px] font-mono text-center text-gray-400">Siap menguji audio</div>
+            </div>
+
+            <button data-close-modal="modal-diag" class="w-full py-2.5 rounded-xl bg-gray-800 text-white text-xs font-bold">TUTUP DIAGNOSTIK</button>
+        </div>
+    </div>
+
+    <!-- Notifikasi Toast Kustom (Pengganti alert) -->
+    <div id="toast-box" class="fixed top-3 left-1/2 -translate-x-1/2 z-50 pointer-events-none opacity-0 transition-opacity duration-300 w-[90%] max-w-[350px] flex justify-center">
+        <div id="toast-msg" class="bg-gray-900/95 text-white border border-orange-500/70 px-4 py-2 rounded-full text-xs font-semibold shadow-2xl text-center">
             Notifikasi
         </div>
     </div>
@@ -411,16 +502,17 @@
     <script>
         /**
          * ============================================================================
-         * APLIKASI HANDY TALKIE (HT) DIGITAL KOMUNITAS
-         * Fitur:
-         * 1. Komunikasi Suara Real-Time P2P menggunakan PeerJS (WebRTC) berbasis Saluran
-         * 2. Sintesis Efek Suara Radio Autentik (Squelch, Roger Beep, Call Tone, SOS)
-         * 3. Visualizer Audio Real-Time & Indikator LED TX/RX
-         * 4. Mode Lokal/Demo Otomatis jika izin mikrofon ditolak atau offline
+         * APLIKASI HANDY TALKIE (HT) DIGITAL KOMUNITAS v2 (FULL 100dvh NO-SCROLL)
+         * Fitur Lengkap:
+         * 1. Layar Pembuka Unlock Audio & Mikrofon (Wajib untuk Chrome/Safari HP)
+         * 2. Tampilan Fisik HT Taktis 100dvh tanpa scroll + Modal Drawer
+         * 3. Koneksi Suara Ganda: WebRTC P2P (dengan STUN server) + Fallback Audio Chunk Streaming
+         * 4. VU Meter Mikrofon Real-Time & Visualizer Audio
+         * 5. Panel Diagnostik & Tes Loopback 3 Detik
          * ============================================================================
          */
 
-        // --- 1. KONFIGURASI SALURAN KOMUNITAS ---
+        // --- 1. KONFIGURASI SALURAN KOMUNITAS & STUN SERVER ---
         const CHANNELS = [
             { id: '01', freq: '144.500', name: 'POSKO UTAMA' },
             { id: '02', freq: '145.000', name: 'KONVOI & TOURING' },
@@ -430,35 +522,50 @@
             { id: '06', freq: '147.000', name: 'DARURAT / EMERGENCY' }
         ];
 
-        // Jumlah maksimal slot rekan per saluran untuk mesh P2P tanpa server terpusat
         const MAX_SLOTS_PER_CHANNEL = 6;
-        const ROOM_PREFIX = 'garuda-ht-komunitas-v1';
+        const ROOM_PREFIX = 'garuda-ht-komunitas-v2';
+
+        // STUN server publik agar WebRTC bisa menembus perbedaan jaringan operator seluler / Wi-Fi
+        const ICE_SERVERS = {
+            iceServers: [
+                { urls: 'stun:stun.l.google.com:19302' },
+                { urls: 'stun:stun1.l.google.com:19302' },
+                { urls: 'stun:stun2.l.google.com:19302' },
+                { urls: 'stun:stun.stunprotocol.org:3478' }
+            ]
+        };
 
         // --- 2. STATE APLIKASI ---
         let currentChannelIdx = 0;
         let myCallsign = 'ANGGOTA-' + Math.floor(100 + Math.random() * 900);
         let rogerBeepEnabled = true;
-        let masterVolume = 0.85;
+        let masterVolume = 0.95;
         let isTransmitting = false;
         let isReceiving = false;
         let localStream = null;
         let micAvailable = false;
 
-        // State PeerJS / Jaringan
+        // State PeerJS & Fallback Audio Chunk Recorder
         let peer = null;
         let mySlot = -1;
-        let activeDataConns = new Map(); // peerId -> DataConnection
-        let activeMediaCalls = new Map(); // peerId -> MediaConnection
-        let connectedPeersInfo = new Map(); // peerId -> { callsign }
+        let activeDataConns = new Map();
+        let activeMediaCalls = new Map();
+        let connectedPeersInfo = new Map();
         let discoveryInterval = null;
+        let chunkRecorder = null;
+        let chunkInterval = null;
 
         // Web Audio API Context & Visualizer
         let audioCtx = null;
         let analyser = null;
         let visualizerBars = [];
+        let vuSegments = [];
         let logs = [];
 
         // --- 3. ELEMEN DOM ---
+        const elUnlockOverlay = document.getElementById('unlock-overlay');
+        const elBtnActivateRadio = document.getElementById('btn-activate-radio');
+
         const elLcdDisplay = document.getElementById('lcd-display');
         const elLcdNetStatus = document.getElementById('lcd-net-status');
         const elLcdPeerCount = document.getElementById('lcd-peer-count');
@@ -467,6 +574,8 @@
         const elLcdChannelName = document.getElementById('lcd-channel-name');
         const elLcdTxRxBadge = document.getElementById('lcd-tx-rx-badge');
         const elLcdActiveSpeaker = document.getElementById('lcd-active-speaker');
+        const elLcdMyCallsign = document.getElementById('lcd-my-callsign');
+        const elLcdVuMeter = document.getElementById('lcd-vu-meter');
 
         const elLedTx = document.getElementById('led-tx');
         const elLedRx = document.getElementById('led-rx');
@@ -480,9 +589,7 @@
         const elRogerStatusText = document.getElementById('roger-status-text');
         const elBtnCallTone = document.getElementById('btn-call-tone');
         const elBtnSos = document.getElementById('btn-sos');
-        const elBtnToggleLog = document.getElementById('btn-toggle-log');
         const elLogBadgeCount = document.getElementById('log-badge-count');
-        const elLogDrawer = document.getElementById('log-drawer');
         const elLogList = document.getElementById('log-list');
         const elBtnClearLog = document.getElementById('btn-clear-log');
         const elVolumeSlider = document.getElementById('volume-slider');
@@ -491,21 +598,38 @@
         const elAudioModeBadge = document.getElementById('audio-mode-badge');
         const elBtnPower = document.getElementById('btn-power');
 
-        // Kontainer elemen <audio> tersembunyi untuk memutar suara rekan
+        // Elemen Diagnostik & Loopback
+        const elDiagMicStatus = document.getElementById('diag-mic-status');
+        const elDiagAudioCtx = document.getElementById('diag-audio-ctx');
+        const elDiagPeerId = document.getElementById('diag-peer-id');
+        const elDiagPeerList = document.getElementById('diag-peer-list');
+        const elBtnLoopbackTest = document.getElementById('btn-loopback-test');
+        const elLoopbackStatus = document.getElementById('loopback-status');
+
+        // Kontainer elemen <audio> tersembunyi untuk memutar suara WebRTC rekan
         const remoteAudioContainer = document.createElement('div');
         remoteAudioContainer.style.display = 'none';
         document.body.appendChild(remoteAudioContainer);
 
-        // --- 4. INISIALISASI VISUALIZER & AUDIO SYNTHESIZER ---
-        function initVisualizer() {
+        // --- 4. INISIALISASI VISUALIZER, VU METER & AUDIO SYNTH ---
+        function initVisualizerAndVU() {
             elVisualizer.innerHTML = '';
             visualizerBars = [];
-            for (let i = 0; i < 18; i++) {
+            for (let i = 0; i < 20; i++) {
                 const bar = document.createElement('div');
                 bar.className = 'w-1 bg-emerald-500/30 rounded-full transition-all duration-75';
                 bar.style.height = '3px';
                 elVisualizer.appendChild(bar);
                 visualizerBars.push(bar);
+            }
+
+            elLcdVuMeter.innerHTML = '';
+            vuSegments = [];
+            for (let i = 0; i < 12; i++) {
+                const seg = document.createElement('div');
+                seg.className = 'flex-1 h-full bg-[#162211]/15 rounded-[1px] transition-colors duration-75';
+                elLcdVuMeter.appendChild(seg);
+                vuSegments.push(seg);
             }
         }
 
@@ -517,13 +641,16 @@
             if (audioCtx.state === 'suspended') {
                 audioCtx.resume();
             }
+            if (elDiagAudioCtx) {
+                elDiagAudioCtx.textContent = audioCtx.state.toUpperCase();
+            }
         }
 
         // Efek Suara Squelch (Desis khas radio HT saat PTT ditekan/dilepas)
         function playSquelchSound(type = 'start') {
             try {
                 ensureAudioContext();
-                const duration = type === 'start' ? 0.09 : 0.12;
+                const duration = type === 'start' ? 0.08 : 0.11;
                 const bufferSize = audioCtx.sampleRate * duration;
                 const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
                 const data = buffer.getChannelData(0);
@@ -535,10 +662,9 @@
                 const noise = audioCtx.createBufferSource();
                 noise.buffer = buffer;
 
-                // Bandpass filter agar terdengar seperti radio VHF/UHF
                 const filter = audioCtx.createBiquadFilter();
                 filter.type = 'bandpass';
-                filter.frequency.value = 1800;
+                filter.frequency.value = 1850;
                 filter.Q.value = 1.2;
 
                 const gain = audioCtx.createGain();
@@ -548,9 +674,7 @@
                 filter.connect(gain);
                 gain.connect(audioCtx.destination);
                 noise.start();
-            } catch (e) {
-                console.warn('Audio synth error:', e);
-            }
+            } catch (e) {}
         }
 
         // Efek Suara Roger Beep (Nada "Kwik-Kwik" khas akhir bicara HT)
@@ -574,9 +698,7 @@
 
                 osc.start(now);
                 osc.stop(now + 0.17);
-            } catch (e) {
-                console.warn('Roger beep error:', e);
-            }
+            } catch (e) {}
         }
 
         // Nada Panggil (Call Tone)
@@ -605,7 +727,6 @@
             try {
                 ensureAudioContext();
                 const now = audioCtx.currentTime;
-                // Pola durasi: 3 pendek, 3 panjang, 3 pendek
                 const pattern = [0.1, 0.1, 0.1, 0.28, 0.28, 0.28, 0.1, 0.1, 0.1];
                 let offset = 0;
 
@@ -628,7 +749,7 @@
             } catch (e) {}
         }
 
-        // --- 5. AKSES MIKROFON & VISUALIZER REAL-TIME ---
+        // --- 5. AKSES MIKROFON & VISUALIZER / VU METER REAL-TIME ---
         async function initMicrophone() {
             try {
                 localStream = await navigator.mediaDevices.getUserMedia({
@@ -640,13 +761,15 @@
                     video: false
                 });
 
-                // Matikan track audio secara default (aktif hanya saat PTT ditekan)
+                // Matikan track audio saat standby (nyala hanya ketika PTT ditekan)
                 localStream.getAudioTracks().forEach(track => track.enabled = false);
                 micAvailable = true;
-                elAudioModeBadge.textContent = 'MIC SIAP';
-                elAudioModeBadge.className = 'text-emerald-400';
 
-                // Hubungkan ke Analyser untuk Visualizer
+                elAudioModeBadge.textContent = 'MIC & SPEAKER AKTIF';
+                elAudioModeBadge.className = 'text-emerald-400';
+                elDiagMicStatus.textContent = 'DIIZINKAN (SIAP)';
+                elDiagMicStatus.className = 'text-emerald-400 font-bold';
+
                 ensureAudioContext();
                 const source = audioCtx.createMediaStreamSource(localStream);
                 analyser = audioCtx.createAnalyser();
@@ -654,10 +777,12 @@
                 source.connect(analyser);
                 startVisualizerLoop();
             } catch (err) {
-                console.warn('Mikrofon tidak diizinkan/tersedia, beralih ke mode simulasi PTT:', err);
+                console.warn('Mikrofon tidak diizinkan/tersedia:', err);
                 micAvailable = false;
-                elAudioModeBadge.textContent = 'MODE SIMULASI';
-                elAudioModeBadge.className = 'text-amber-400';
+                elAudioModeBadge.textContent = 'MIC DIBLOKIR (MODE SIMULASI)';
+                elAudioModeBadge.className = 'text-red-400';
+                elDiagMicStatus.textContent = 'DIBLOKIR / TIDAK ADA';
+                elDiagMicStatus.className = 'text-red-400 font-bold';
                 startVisualizerLoop();
             }
         }
@@ -666,42 +791,112 @@
             const dataArray = analyser ? new Uint8Array(analyser.frequencyBinCount) : null;
 
             function render() {
-                if (isTransmitting || isReceiving) {
-                    if (isTransmitting && analyser && dataArray) {
-                        analyser.getByteFrequencyData(dataArray);
-                        visualizerBars.forEach((bar, idx) => {
-                            const val = dataArray[idx % dataArray.length] || 0;
-                            const height = Math.max(3, Math.min(18, (val / 255) * 18));
-                            bar.style.height = `${height}px`;
-                            bar.className = 'w-1 bg-red-500 rounded-full transition-all duration-75';
-                        });
-                    } else {
-                        // Animasi gelombang suara saat menerima (RX) atau mode simulasi
-                        visualizerBars.forEach((bar) => {
-                            const randHeight = Math.floor(4 + Math.random() * 14);
-                            bar.style.height = `${randHeight}px`;
-                            bar.className = isTransmitting
-                                ? 'w-1 bg-red-500 rounded-full transition-all duration-75'
-                                : 'w-1 bg-emerald-400 rounded-full transition-all duration-75';
-                        });
-                    }
+                let levelPercent = 0;
+
+                if (isTransmitting && analyser && dataArray) {
+                    analyser.getByteFrequencyData(dataArray);
+                    let sum = 0;
+                    visualizerBars.forEach((bar, idx) => {
+                        const val = dataArray[idx % dataArray.length] || 0;
+                        sum += val;
+                        const height = Math.max(3, Math.min(15, (val / 255) * 15));
+                        bar.style.height = `${height}px`;
+                        bar.className = 'w-1 bg-red-500 rounded-full transition-all duration-75';
+                    });
+                    const avg = sum / visualizerBars.length;
+                    levelPercent = Math.min(100, Math.round((avg / 140) * 100));
+                } else if (isTransmitting || isReceiving) {
+                    // Animasi gelombang saat menerima RX atau mode simulasi
+                    visualizerBars.forEach((bar) => {
+                        const randHeight = Math.floor(4 + Math.random() * 11);
+                        bar.style.height = `${randHeight}px`;
+                        bar.className = isTransmitting
+                            ? 'w-1 bg-red-500 rounded-full transition-all duration-75'
+                            : 'w-1 bg-emerald-400 rounded-full transition-all duration-75';
+                    });
+                    levelPercent = isTransmitting ? 55 : Math.floor(35 + Math.random() * 45);
                 } else {
                     visualizerBars.forEach((bar) => {
                         bar.style.height = '3px';
                         bar.className = 'w-1 bg-emerald-500/25 rounded-full transition-all duration-150';
                     });
+                    levelPercent = 0;
                 }
+
+                // Update segmen VU Meter di dalam layar LCD
+                const activeCount = Math.round((levelPercent / 100) * vuSegments.length);
+                vuSegments.forEach((seg, idx) => {
+                    if (idx < activeCount) {
+                        if (idx >= 9) {
+                            seg.className = 'flex-1 h-full bg-red-700 rounded-[1px]';
+                        } else {
+                            seg.className = 'flex-1 h-full bg-[#162211] rounded-[1px]';
+                        }
+                    } else {
+                        seg.className = 'flex-1 h-full bg-[#162211]/15 rounded-[1px]';
+                    }
+                });
+
                 requestAnimationFrame(render);
             }
             render();
         }
 
-        // --- 6. LOGIKA PUSH-TO-TALK (PTT) ---
+        // --- 6. FALLBACK AUDIO CHUNK STREAMING (JIKA JARINGAN KETAT MEMBLOKIR WEBRTC UDP) ---
+        function startFallbackAudioStreaming() {
+            if (!localStream || typeof MediaRecorder === 'undefined') return;
+            try {
+                const mimeType = MediaRecorder.isTypeSupported('audio/webm;codecs=opus')
+                    ? 'audio/webm;codecs=opus'
+                    : (MediaRecorder.isTypeSupported('audio/mp4') ? 'audio/mp4' : '');
+
+                const options = mimeType ? { mimeType, audioBitsPerSecond: 16000 } : { audioBitsPerSecond: 16000 };
+
+                const recordSlice = () => {
+                    if (!isTransmitting || !localStream) return;
+                    const rec = new MediaRecorder(localStream, options);
+                    const chunks = [];
+                    rec.ondataavailable = (e) => {
+                        if (e.data && e.data.size > 0) chunks.push(e.data);
+                    };
+                    rec.onstop = () => {
+                        if (chunks.length > 0 && activeDataConns.size > 0) {
+                            const blob = new Blob(chunks, { type: rec.mimeType || 'audio/webm' });
+                            blob.arrayBuffer().then((buf) => {
+                                broadcastData({
+                                    type: 'audio-chunk',
+                                    callsign: myCallsign,
+                                    mime: blob.type,
+                                    buffer: buf
+                                });
+                            }).catch(() => {});
+                        }
+                    };
+                    rec.start();
+                    setTimeout(() => {
+                        if (rec.state === 'recording') rec.stop();
+                    }, 480);
+                };
+
+                recordSlice();
+                chunkInterval = setInterval(recordSlice, 500);
+            } catch (e) {
+                console.warn('Fallback recorder tidak aktif:', e);
+            }
+        }
+
+        function stopFallbackAudioStreaming() {
+            if (chunkInterval) {
+                clearInterval(chunkInterval);
+                chunkInterval = null;
+            }
+        }
+
+        // --- 7. LOGIKA PUSH-TO-TALK (PTT) ---
         function startTransmit(e) {
             if (e) e.preventDefault();
             if (isTransmitting) return;
 
-            // Jika sedang menerima siaran teman, tahan dulu (half-duplex seperti HT asli)
             if (isReceiving) {
                 showToast('Saluran sedang dipakai! Tunggu rekan selesai bicara.');
                 return;
@@ -710,10 +905,7 @@
             ensureAudioContext();
             isTransmitting = true;
 
-            // Getaran Haptic pada HP
             if (navigator.vibrate) navigator.vibrate(45);
-
-            // Efek Suara Squelch Pembuka
             playSquelchSound('start');
 
             // Aktifkan Mikrofon
@@ -721,16 +913,18 @@
                 localStream.getAudioTracks().forEach(track => track.enabled = true);
             }
 
-            // Update Tampilan HT (LED TX Merah, Layar Oranye)
+            // Mulai fallback audio chunk streaming untuk rekan yang WebRTC-nya terblokir firewall
+            startFallbackAudioStreaming();
+
+            // Update Tampilan HT
             elBtnPtt.classList.add('transmitting');
-            elPttMainLabel.textContent = 'SEDANG MENGUDARA (TX)...';
+            elPttMainLabel.textContent = 'MENGUDARA (TX)...';
             elLedTx.classList.remove('led-off');
             elLedTx.classList.add('led-tx-on');
             elLcdDisplay.classList.add('backlight-tx');
             elLcdTxRxBadge.textContent = 'TX ON AIR';
             elLcdActiveSpeaker.textContent = `ANDA (${myCallsign})`;
 
-            // Kirim sinyal status TX ke semua rekan di saluran yang sama
             broadcastData({
                 type: 'tx-start',
                 callsign: myCallsign,
@@ -743,23 +937,20 @@
             if (!isTransmitting) return;
 
             isTransmitting = false;
-
-            // Getaran singkat saat melepas PTT
             if (navigator.vibrate) navigator.vibrate(25);
 
-            // Matikan Mikrofon
+            stopFallbackAudioStreaming();
+
             if (localStream) {
                 localStream.getAudioTracks().forEach(track => track.enabled = false);
             }
 
-            // Bunyi Roger Beep & Squelch Penutup
             if (rogerBeepEnabled) {
                 playRogerBeep();
             } else {
                 playSquelchSound('end');
             }
 
-            // Kembalikan Tampilan Standby
             elBtnPtt.classList.remove('transmitting');
             elPttMainLabel.textContent = 'TEKAN & TAHAN UNTUK BICARA';
             elLedTx.classList.remove('led-tx-on');
@@ -768,10 +959,8 @@
             elLcdTxRxBadge.textContent = 'STANDBY';
             elLcdActiveSpeaker.textContent = 'SIAP MENERIMA';
 
-            // Catat di Log Lokal
             addLogEntry(myCallsign, 'Mengirim transmisi suara', 'TX');
 
-            // Beri tahu rekan bahwa transmisi selesai
             broadcastData({
                 type: 'tx-end',
                 callsign: myCallsign,
@@ -780,7 +969,7 @@
             });
         }
 
-        // --- 7. KONEKSI P2P REAL-TIME BERBASIS SALURAN (PeerJS) ---
+        // --- 8. KONEKSI P2P REAL-TIME BERBASIS SALURAN (PeerJS + STUN) ---
         function getSlotPeerId(channelId, slotIndex) {
             return `${ROOM_PREFIX}-ch${channelId}-slot${slotIndex}`;
         }
@@ -808,7 +997,6 @@
             updatePeerCountUI();
         }
 
-        // Mencoba mendaftar ke slot saluran (slot 0 s/d 5) agar teman bisa saling menemukan otomatis
         function connectToChannel(slotAttempt = 0) {
             cleanupConnections();
 
@@ -822,7 +1010,6 @@
             }
 
             if (slotAttempt >= MAX_SLOTS_PER_CHANNEL) {
-                // Jika semua slot tetap penuh, buat ID acak
                 initPeerInstance(`${ROOM_PREFIX}-ch${ch.id}-guest-${Math.floor(Math.random() * 9999)}`, -1);
                 return;
             }
@@ -832,28 +1019,27 @@
         }
 
         function initPeerInstance(peerId, slotIndex) {
-            const ch = CHANNELS[currentChannelIdx];
-            peer = new Peer(peerId, { debug: 0 });
+            peer = new Peer(peerId, {
+                debug: 0,
+                config: ICE_SERVERS
+            });
 
             peer.on('open', (id) => {
                 mySlot = slotIndex;
                 elLcdNetStatus.textContent = 'TERHUBUNG KE JARINGAN';
+                elDiagPeerId.textContent = id.replace(ROOM_PREFIX + '-', '');
                 document.getElementById('sig-bar-4').classList.remove('bg-[#162211]/30');
                 document.getElementById('sig-bar-4').classList.add('bg-[#162211]');
 
-                // Hubungi slot lain yang mungkin sudah aktif di saluran ini
                 discoverPeersInChannel();
-                discoveryInterval = setInterval(discoverPeersInChannel, 6000);
+                discoveryInterval = setInterval(discoverPeersInChannel, 5000);
             });
 
-            // Menerima koneksi data dari rekan
             peer.on('connection', (conn) => {
                 setupDataConnection(conn);
             });
 
-            // Menerima panggilan audio real-time dari rekan
             peer.on('call', (call) => {
-                // Jawab panggilan dengan stream lokal (jika ada) agar dua arah
                 if (localStream) {
                     call.answer(localStream);
                 } else {
@@ -864,7 +1050,6 @@
 
             peer.on('error', (err) => {
                 if (err.type === 'unavailable-id') {
-                    // Slot sudah dipakai anggota lain, coba slot berikutnya
                     try { peer.destroy(); } catch (e) {}
                     connectToChannel(slotIndex + 1);
                 } else if (err.type === 'peer-unavailable') {
@@ -884,6 +1069,7 @@
                 const targetId = getSlotPeerId(ch.id, i);
                 if (!activeDataConns.has(targetId)) {
                     const conn = peer.connect(targetId, {
+                        reliable: true,
                         metadata: { callsign: myCallsign, channel: ch.id }
                     });
                     if (conn) setupDataConnection(conn);
@@ -895,17 +1081,15 @@
             conn.on('open', () => {
                 activeDataConns.set(conn.peer, conn);
                 const peerCallsign = conn.metadata?.callsign || 'REKAN-HT';
-                connectedPeersInfo.set(conn.peer, { callsign: peerCallsign });
+                connectedPeersInfo.set(conn.peer, { callsign: peerCallsign, hasWebRTC: false });
                 updatePeerCountUI();
 
-                // Kirim identitas kita
                 conn.send({
                     type: 'hello',
                     callsign: myCallsign,
                     channel: CHANNELS[currentChannelIdx].id
                 });
 
-                // Buka jalur audio P2P jika kita punya stream mikrofon
                 if (localStream && !activeMediaCalls.has(conn.peer)) {
                     const call = peer.call(conn.peer, localStream, {
                         metadata: { callsign: myCallsign }
@@ -935,6 +1119,11 @@
             activeMediaCalls.set(call.peer, call);
 
             call.on('stream', (remoteStream) => {
+                // Tandai rekan ini berhasil terhubung lewat jalur WebRTC langsung
+                const info = connectedPeersInfo.get(call.peer) || { callsign: 'REKAN-HT' };
+                info.hasWebRTC = true;
+                connectedPeersInfo.set(call.peer, info);
+
                 let audioEl = document.getElementById(`audio-${call.peer}`);
                 if (!audioEl) {
                     audioEl = document.createElement('audio');
@@ -945,6 +1134,7 @@
                 }
                 audioEl.srcObject = remoteStream;
                 audioEl.volume = masterVolume;
+                audioEl.play().catch(() => {});
             });
 
             call.on('close', () => {
@@ -962,12 +1152,13 @@
             });
         }
 
-        // Menangani pesan kontrol dari rekan (Mulai bicara, selesai bicara, nada panggil, SOS)
+        // Menangani pesan kontrol & fallback audio chunk dari rekan
         function handleIncomingData(peerId, data) {
             if (!data || !data.type) return;
 
             if (data.type === 'hello') {
-                connectedPeersInfo.set(peerId, { callsign: data.callsign || 'REKAN-HT' });
+                const existing = connectedPeersInfo.get(peerId) || {};
+                connectedPeersInfo.set(peerId, { ...existing, callsign: data.callsign || 'REKAN-HT' });
                 updatePeerCountUI();
             } 
             else if (data.type === 'tx-start') {
@@ -980,6 +1171,20 @@
                 elLcdActiveSpeaker.textContent = data.callsign || 'REKAN';
                 if (navigator.vibrate) navigator.vibrate([30, 30, 30]);
             } 
+            else if (data.type === 'audio-chunk') {
+                // Jalur cadangan (fallback): putar potongan audio jika WebRTC stream belum tersambung
+                const peerInfo = connectedPeersInfo.get(peerId);
+                if (!peerInfo || !peerInfo.hasWebRTC) {
+                    try {
+                        const blob = new Blob([data.buffer], { type: data.mime || 'audio/webm' });
+                        const url = URL.createObjectURL(blob);
+                        const chunkAudio = new Audio(url);
+                        chunkAudio.volume = masterVolume;
+                        chunkAudio.play().catch(() => {});
+                        chunkAudio.onended = () => URL.revokeObjectURL(url);
+                    } catch (e) {}
+                }
+            }
             else if (data.type === 'tx-end') {
                 isReceiving = false;
                 if (data.roger) {
@@ -1004,7 +1209,7 @@
                 if (navigator.vibrate) navigator.vibrate([100, 50, 100, 50, 300]);
                 flashLcdActive(data.callsign, 'SINYAL SOS DARURAT!');
                 addLogEntry(data.callsign, 'MENGIRIM SINYAL DARURAT SOS!', 'SOS');
-                showToast(`🚨 DARURAT SOS DARI ${data.callsign}!`);
+                showToast(`DARURAT SOS DARI ${data.callsign}!`);
             }
         }
 
@@ -1024,25 +1229,33 @@
             }, 2500);
         }
 
-        // --- 8. UPDATE UI & KONTROL SALURAN ---
+        // --- 9. UPDATE UI, MODAL & DIAGNOSTIK ---
         function updateChannelDisplay() {
             const ch = CHANNELS[currentChannelIdx];
             elLcdChannelNum.textContent = `CH ${ch.id}`;
             elLcdFreq.textContent = ch.freq;
             elLcdChannelName.textContent = ch.name;
+            elLcdMyCallsign.textContent = myCallsign;
 
-            // Nyalakan lampu latar sebentar saat pindah saluran
             elLcdDisplay.classList.add('backlight-active');
             setTimeout(() => {
                 if (!isTransmitting && !isReceiving) {
                     elLcdDisplay.classList.remove('backlight-active');
                 }
-            }, 900);
+            }, 800);
         }
 
         function updatePeerCountUI() {
             const count = connectedPeersInfo.size;
             elLcdPeerCount.textContent = `${count} REKAN`;
+            if (elDiagPeerList) {
+                if (count === 0) {
+                    elDiagPeerList.textContent = '0 Orang';
+                } else {
+                    const names = Array.from(connectedPeersInfo.values()).map(p => p.callsign).join(', ');
+                    elDiagPeerList.textContent = `${count} (${names})`;
+                }
+            }
         }
 
         function changeChannel(delta) {
@@ -1060,15 +1273,15 @@
             const now = new Date();
             const timeStr = now.toTimeString().slice(0, 8);
             logs.unshift({ time: timeStr, sender, message, tag });
-            if (logs.length > 30) logs.pop();
+            if (logs.length > 35) logs.pop();
 
-            elLogBadgeCount.textContent = `${logs.length} LOG`;
+            elLogBadgeCount.textContent = `${logs.length}`;
             renderLogs();
         }
 
         function renderLogs() {
             if (logs.length === 0) {
-                elLogList.innerHTML = `<div class="text-gray-500 text-center py-2 text-[11px]">Belum ada aktivitas transmisi.</div>`;
+                elLogList.innerHTML = `<div class="text-gray-500 text-center py-6 text-[11px]">Belum ada aktivitas transmisi.</div>`;
                 return;
             }
 
@@ -1079,7 +1292,7 @@
                 if (item.tag === 'SOS') badgeColor = 'text-red-500 font-extrabold';
 
                 return `
-                    <div class="bg-black/50 px-2 py-1 rounded border border-gray-800/80 flex items-start justify-between gap-2">
+                    <div class="bg-black/50 px-2.5 py-1.5 rounded-lg border border-gray-800/80 flex items-start justify-between gap-2">
                         <div>
                             <span class="${badgeColor}">[${item.tag}] ${item.sender}:</span>
                             <span class="text-gray-300">${item.message}</span>
@@ -1097,10 +1310,91 @@
             box.classList.remove('opacity-0');
             setTimeout(() => {
                 box.classList.add('opacity-0');
-            }, 2600);
+            }, 2500);
         }
 
-        // --- 9. EVENT LISTENERS ---
+        // Kontrol Buka/Tutup Modal Overlay
+        function openModal(id) {
+            document.getElementById(id).classList.remove('hidden');
+        }
+        function closeModal(id) {
+            document.getElementById(id).classList.add('hidden');
+        }
+
+        document.querySelectorAll('[data-close-modal]').forEach(btn => {
+            btn.addEventListener('click', () => {
+                closeModal(btn.getAttribute('data-close-modal'));
+            });
+        });
+
+        // Tes Loopback Audio 3 Detik (Rekam suara sendiri & putar ulang)
+        elBtnLoopbackTest.addEventListener('click', () => {
+            if (!localStream || !micAvailable) {
+                elLoopbackStatus.textContent = 'Mikrofon tidak tersedia/diblokir browser!';
+                elLoopbackStatus.className = 'text-[11px] font-mono text-center text-red-400';
+                return;
+            }
+
+            ensureAudioContext();
+            elBtnLoopbackTest.disabled = true;
+            elLoopbackStatus.textContent = 'Merekam suara Anda (3 detik)... Bicara sekarang!';
+            elLoopbackStatus.className = 'text-[11px] font-mono text-center text-orange-400 font-bold';
+
+            // Aktifkan track mic sementara untuk tes
+            localStream.getAudioTracks().forEach(t => t.enabled = true);
+            const recorder = new MediaRecorder(localStream);
+            const chunks = [];
+
+            recorder.ondataavailable = (e) => {
+                if (e.data.size > 0) chunks.push(e.data);
+            };
+
+            recorder.onstop = () => {
+                if (!isTransmitting) {
+                    localStream.getAudioTracks().forEach(t => t.enabled = false);
+                }
+                const blob = new Blob(chunks, { type: recorder.mimeType || 'audio/webm' });
+                const audioUrl = URL.createObjectURL(blob);
+                const testAudio = new Audio(audioUrl);
+                testAudio.volume = masterVolume;
+
+                elLoopbackStatus.textContent = 'Memutar ulang rekaman suara Anda...';
+                elLoopbackStatus.className = 'text-[11px] font-mono text-center text-emerald-400 font-bold';
+
+                testAudio.play().then(() => {
+                    testAudio.onended = () => {
+                        URL.revokeObjectURL(audioUrl);
+                        elLoopbackStatus.textContent = 'Tes selesai! Jika terdengar, mic & speaker normal.';
+                        elLoopbackStatus.className = 'text-[11px] font-mono text-center text-gray-300';
+                        elBtnLoopbackTest.disabled = false;
+                    };
+                }).catch(() => {
+                    elLoopbackStatus.textContent = 'Gagal memutar audio. Cek volume media HP.';
+                    elBtnLoopbackTest.disabled = false;
+                });
+            };
+
+            recorder.start();
+            setTimeout(() => {
+                if (recorder.state === 'recording') recorder.stop();
+            }, 3000);
+        });
+
+        // --- 10. EVENT LISTENERS ---
+        // Tombol Layar Pembuka: Aktifkan Radio & Audio
+        elBtnActivateRadio.addEventListener('click', async () => {
+            ensureAudioContext();
+            playSquelchSound('start');
+            if (navigator.vibrate) navigator.vibrate(40);
+
+            elBtnActivateRadio.textContent = 'MEMBUKA MIKROFON & JARINGAN...';
+            await initMicrophone();
+            connectToChannel(0);
+
+            elUnlockOverlay.classList.add('hidden');
+            showToast('Radio Aktif! Tekan & tahan PTT untuk bicara.');
+        });
+
         // Tombol PTT (Sentuh & Mouse)
         elBtnPtt.addEventListener('touchstart', startTransmit, { passive: false });
         elBtnPtt.addEventListener('touchend', stopTransmit, { passive: false });
@@ -1110,21 +1404,27 @@
             if (isTransmitting) stopTransmit();
         });
 
-        // Tombol Saluran Naik/Turun
+        // Tombol Saluran
         elBtnChUp.addEventListener('click', () => changeChannel(1));
         elBtnChDown.addEventListener('click', () => changeChannel(-1));
 
-        // Simpan Callsign
+        // Modal Callsign
+        document.getElementById('btn-open-callsign').addEventListener('click', () => {
+            elInputCallsign.value = myCallsign;
+            openModal('modal-callsign');
+        });
+
         elBtnSaveCallsign.addEventListener('click', () => {
             const val = elInputCallsign.value.trim().toUpperCase();
             if (val.length >= 2) {
                 myCallsign = val;
-                elInputCallsign.value = myCallsign;
+                elLcdMyCallsign.textContent = myCallsign;
                 broadcastData({ type: 'hello', callsign: myCallsign });
-                showToast(`Callsign diatur ke: ${myCallsign}`);
+                closeModal('modal-callsign');
+                showToast(`Callsign diatur: ${myCallsign}`);
                 if (navigator.vibrate) navigator.vibrate(25);
             } else {
-                showToast('Masukkan minimal 2 karakter untuk Callsign.');
+                showToast('Masukkan minimal 2 karakter.');
             }
         });
 
@@ -1133,10 +1433,10 @@
             rogerBeepEnabled = !rogerBeepEnabled;
             elRogerStatusText.textContent = rogerBeepEnabled ? 'ON' : 'OFF';
             elRogerStatusText.className = rogerBeepEnabled
-                ? 'text-[9px] font-mono text-emerald-400'
-                : 'text-[9px] font-mono text-gray-500';
+                ? 'text-[8px] font-mono text-emerald-400'
+                : 'text-[8px] font-mono text-gray-500';
             if (rogerBeepEnabled) playRogerBeep();
-            showToast(`Roger Beep: ${rogerBeepEnabled ? 'AKTIF' : 'NONAKTIF'}`);
+            showToast(`Roger Beep: ${rogerBeepEnabled ? 'ON' : 'OFF'}`);
         });
 
         // Tombol Nada Panggil (Call Tone)
@@ -1145,7 +1445,7 @@
             playCallTone();
             if (navigator.vibrate) navigator.vibrate([40, 40, 40]);
             broadcastData({ type: 'call-tone', callsign: myCallsign });
-            addLogEntry(myCallsign, 'Mengirim Nada Panggil ke saluran', 'TX');
+            addLogEntry(myCallsign, 'Mengirim Nada Panggil', 'TX');
             showToast('Nada Panggil dikirim ke saluran!');
         });
 
@@ -1156,18 +1456,24 @@
             if (navigator.vibrate) navigator.vibrate([100, 50, 100, 50, 300]);
             broadcastData({ type: 'sos-alert', callsign: myCallsign });
             addLogEntry(myCallsign, 'MENGIRIM SINYAL DARURAT SOS!', 'SOS');
-            showToast('🚨 SINYAL DARURAT SOS DIKIRIM!');
+            showToast('SINYAL DARURAT SOS DIKIRIM!');
         });
 
-        // Toggle Drawer Riwayat Log
-        elBtnToggleLog.addEventListener('click', () => {
-            elLogDrawer.classList.toggle('hidden');
+        // Modal Riwayat Log
+        document.getElementById('btn-open-log').addEventListener('click', () => {
+            openModal('modal-log');
         });
 
         elBtnClearLog.addEventListener('click', () => {
             logs = [];
-            elLogBadgeCount.textContent = '0 LOG';
+            elLogBadgeCount.textContent = '0';
             renderLogs();
+        });
+
+        // Modal Diagnostik
+        document.getElementById('btn-open-diag').addEventListener('click', () => {
+            updatePeerCountUI();
+            openModal('modal-diag');
         });
 
         // Pengatur Volume
@@ -1175,13 +1481,12 @@
             const val = parseInt(e.target.value, 10);
             masterVolume = val / 100;
             elVolumeVal.textContent = `${val}%`;
-            // Terapkan ke semua elemen audio rekan
             remoteAudioContainer.querySelectorAll('audio').forEach(aud => {
                 aud.volume = masterVolume;
             });
         });
 
-        // Tombol Refresh / Reset Koneksi Jaringan
+        // Tombol Refresh Koneksi
         elBtnPower.addEventListener('click', () => {
             ensureAudioContext();
             playSquelchSound('start');
@@ -1189,13 +1494,12 @@
             connectToChannel(0);
         });
 
-        // --- 10. MULAI APLIKASI SAAT HALAMAN DIMUAT ---
-        window.addEventListener('load', async () => {
+        // --- 11. INISIALISASI AWAL ---
+        window.addEventListener('load', () => {
             elInputCallsign.value = myCallsign;
-            initVisualizer();
+            elLcdMyCallsign.textContent = myCallsign;
+            initVisualizerAndVU();
             updateChannelDisplay();
-            await initMicrophone();
-            connectToChannel(0);
         });
     </script>
 </body>
