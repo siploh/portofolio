@@ -27,7 +27,7 @@
             user-select: none;
         }
 
-        input, select {
+        input, select, textarea {
             user-select: text;
         }
 
@@ -227,7 +227,7 @@
 
             <div class="bg-black/40 rounded-xl p-2.5 border border-gray-800/80 text-[10px] text-gray-400 font-mono flex flex-col gap-0.5">
                 <div class="text-gray-300 font-bold">Hubungi Pengnas Untuk Info :</div>
-                <div>• Div. IT: <span class="text-amber-400">-</span> / <span class="text-amber-400">Wanda</span></div>
+                <div>• Admin: <span class="text-amber-400">Div. IT</span> / <span class="text-amber-400">Wanda</span></div>
                 <div>• WA: <span class="text-emerald-400">-</span> / <span class="text-emerald-400">08116709989</span></div>
             </div>
         </div>
@@ -443,64 +443,137 @@
     </div>
 
     <!-- ========================================================================
-         MODAL 1: PANEL MANAJEMEN USER (KHUSUS ADMIN: TAMBAH, UBAH, HAPUS USER)
+         MODAL 1: PANEL MANAJEMEN USER & SYNC GITHUB (KHUSUS ADMIN)
          ======================================================================== -->
     <div id="modal-admin" class="hidden fixed inset-0 z-40 bg-black/85 backdrop-blur-sm flex items-center justify-center p-3">
-        <div class="w-full max-w-[380px] ht-chassis rounded-2xl p-4 flex flex-col gap-3 border border-amber-500/40 max-h-[88dvh]">
+        <div class="w-full max-w-[390px] ht-chassis rounded-2xl p-4 flex flex-col gap-2.5 border border-amber-500/40 max-h-[92dvh]">
             <div class="flex items-center justify-between border-b border-gray-800 pb-2 shrink-0">
                 <div>
                     <h2 class="text-sm font-extrabold text-amber-400 uppercase tracking-wider">Manajemen Anggota (Admin)</h2>
-                    <p class="text-[10px] text-gray-400">Tambah, edit, atau hapus akses login member</p>
+                    <p class="text-[10px] text-gray-400">Tambah, edit, hapus & sinkronkan ke skrip GitHub</p>
                 </div>
                 <button data-close-modal="modal-admin" class="text-gray-400 hover:text-white text-xl font-bold px-2">&times;</button>
             </div>
 
-            <!-- Form Tambah / Edit User -->
-            <form id="admin-user-form" class="bg-[#0d0f12] p-3 rounded-xl border border-gray-800 flex flex-col gap-2 shrink-0">
-                <input type="hidden" id="edit-user-original-username" value="">
-                <div class="flex items-center justify-between">
-                    <span id="admin-form-title" class="text-[11px] font-bold text-white uppercase">Tambah Anggota Baru</span>
-                    <button type="button" id="btn-cancel-edit" class="hidden text-[10px] text-amber-400 underline">Batal Edit</button>
-                </div>
-
-                <div class="grid grid-cols-2 gap-2">
-                    <div>
-                        <label class="block text-[9px] text-gray-400 uppercase mb-0.5">Username Login</label>
-                        <input type="text" id="admin-input-username" required placeholder="cth: garuda02" class="w-full bg-[#16191f] border border-gray-700 rounded-lg px-2.5 py-1.5 text-white text-xs focus:outline-none focus:border-amber-500">
-                    </div>
-                    <div>
-                        <label class="block text-[9px] text-gray-400 uppercase mb-0.5">Password</label>
-                        <input type="text" id="admin-input-password" required placeholder="Password..." class="w-full bg-[#16191f] border border-gray-700 rounded-lg px-2.5 py-1.5 text-white text-xs focus:outline-none focus:border-amber-500">
-                    </div>
-                </div>
-
-                <div class="grid grid-cols-2 gap-2">
-                    <div>
-                        <label class="block text-[9px] text-gray-400 uppercase mb-0.5">Callsign LCD</label>
-                        <input type="text" id="admin-input-callsign" required maxlength="14" placeholder="cth: GARUDA-02" class="w-full bg-[#16191f] border border-gray-700 rounded-lg px-2.5 py-1.5 text-white font-lcd text-xs uppercase focus:outline-none focus:border-amber-500">
-                    </div>
-                    <div>
-                        <label class="block text-[9px] text-gray-400 uppercase mb-0.5">Role / Hak Akses</label>
-                        <select id="admin-input-role" class="w-full bg-[#16191f] border border-gray-700 rounded-lg px-2 py-1.5 text-white text-xs focus:outline-none focus:border-amber-500">
-                            <option value="member">Member</option>
-                            <option value="admin">Admin</option>
-                        </select>
-                    </div>
-                </div>
-
-                <button type="submit" id="btn-save-user" class="w-full mt-1 py-2 rounded-xl bg-amber-600 hover:bg-amber-500 text-white text-xs font-extrabold tracking-wide">
-                    + SIMPAN ANGGOTA
+            <!-- Tab Navigasi Admin -->
+            <div class="grid grid-cols-2 gap-1.5 bg-[#0b0d10] p-1 rounded-xl border border-gray-800 shrink-0">
+                <button type="button" id="tab-btn-users" class="py-1.5 rounded-lg bg-amber-600 text-white text-[11px] font-extrabold">
+                    1. Kelola User
                 </button>
-            </form>
+                <button type="button" id="tab-btn-github" class="py-1.5 rounded-lg text-gray-400 hover:text-white text-[11px] font-bold">
+                    2. Update ke GitHub
+                </button>
+            </div>
 
-            <!-- Daftar User Terdaftar -->
-            <div class="flex flex-col gap-1.5 flex-1 min-h-[120px] overflow-hidden">
-                <div class="flex items-center justify-between text-[10px] font-bold text-gray-400 uppercase px-1">
-                    <span>Daftar Akun Terdaftar</span>
-                    <span id="admin-user-count" class="text-amber-400">0 User</span>
+            <!-- TAB 1: KELOLA USER -->
+            <div id="admin-tab-users" class="flex flex-col gap-2.5 flex-1 min-h-0 overflow-hidden">
+                <!-- Form Tambah / Edit User -->
+                <form id="admin-user-form" class="bg-[#0d0f12] p-3 rounded-xl border border-gray-800 flex flex-col gap-2 shrink-0">
+                    <input type="hidden" id="edit-user-original-username" value="">
+                    <div class="flex items-center justify-between">
+                        <span id="admin-form-title" class="text-[11px] font-bold text-white uppercase">Tambah Anggota Baru</span>
+                        <button type="button" id="btn-cancel-edit" class="hidden text-[10px] text-amber-400 underline">Batal Edit</button>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-2">
+                        <div>
+                            <label class="block text-[9px] text-gray-400 uppercase mb-0.5">Username Login</label>
+                            <input type="text" id="admin-input-username" required placeholder="cth: garuda02" class="w-full bg-[#16191f] border border-gray-700 rounded-lg px-2.5 py-1.5 text-white text-xs focus:outline-none focus:border-amber-500">
+                        </div>
+                        <div>
+                            <label class="block text-[9px] text-gray-400 uppercase mb-0.5">Password</label>
+                            <input type="text" id="admin-input-password" required placeholder="Password..." class="w-full bg-[#16191f] border border-gray-700 rounded-lg px-2.5 py-1.5 text-white text-xs focus:outline-none focus:border-amber-500">
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-2">
+                        <div>
+                            <label class="block text-[9px] text-gray-400 uppercase mb-0.5">Callsign LCD</label>
+                            <input type="text" id="admin-input-callsign" required maxlength="14" placeholder="cth: GARUDA-02" class="w-full bg-[#16191f] border border-gray-700 rounded-lg px-2.5 py-1.5 text-white font-lcd text-xs uppercase focus:outline-none focus:border-amber-500">
+                        </div>
+                        <div>
+                            <label class="block text-[9px] text-gray-400 uppercase mb-0.5">Role / Hak Akses</label>
+                            <select id="admin-input-role" class="w-full bg-[#16191f] border border-gray-700 rounded-lg px-2 py-1.5 text-white text-xs focus:outline-none focus:border-amber-500">
+                                <option value="member">Member</option>
+                                <option value="admin">Admin</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <button type="submit" id="btn-save-user" class="w-full mt-1 py-2 rounded-xl bg-amber-600 hover:bg-amber-500 text-white text-xs font-extrabold tracking-wide">
+                        + SIMPAN ANGGOTA
+                    </button>
+                </form>
+
+                <!-- Daftar User Terdaftar -->
+                <div class="flex flex-col gap-1.5 flex-1 min-h-[110px] overflow-hidden">
+                    <div class="flex items-center justify-between text-[10px] font-bold text-gray-400 uppercase px-1">
+                        <span>Daftar Akun Terdaftar</span>
+                        <span id="admin-user-count" class="text-amber-400">0 User</span>
+                    </div>
+                    <div id="admin-user-list" class="flex-1 overflow-y-auto modal-scroll flex flex-col gap-1.5 pr-0.5">
+                        <!-- Item user dirender via JS -->
+                    </div>
                 </div>
-                <div id="admin-user-list" class="flex-1 overflow-y-auto modal-scroll flex flex-col gap-1.5 pr-0.5">
-                    <!-- Item user dirender via JS -->
+            </div>
+
+            <!-- TAB 2: UPDATE KE SKRIP GITHUB -->
+            <div id="admin-tab-github" class="hidden flex-col gap-2.5 flex-1 min-h-0 overflow-y-auto modal-scroll pr-0.5">
+                <div class="bg-[#0d0f12] p-3 rounded-xl border border-gray-800 flex flex-col gap-2">
+                    <div class="text-[11px] font-bold text-emerald-400 uppercase">A. Push Langsung ke File GitHub (Otomatis)</div>
+                    <p class="text-[10px] text-gray-400 leading-snug">
+                        Isi detail repositori GitHub Anda sekali saja. Setiap kali Anda menambah, mengubah, atau menghapus user, file <code class="text-amber-300">YBCI.html</code> di GitHub akan otomatis ter-update!
+                    </p>
+                    <div class="grid grid-cols-2 gap-2">
+                        <div>
+                            <label class="block text-[9px] text-gray-400 uppercase mb-0.5">Owner / Username GitHub</label>
+                            <input type="text" id="gh-owner" placeholder="cth: siploh" class="w-full bg-[#16191f] border border-gray-700 rounded-lg px-2 py-1.5 text-white text-xs focus:outline-none focus:border-emerald-500">
+                        </div>
+                        <div>
+                            <label class="block text-[9px] text-gray-400 uppercase mb-0.5">Nama Repository</label>
+                            <input type="text" id="gh-repo" placeholder="cth: ht-ybci" class="w-full bg-[#16191f] border border-gray-700 rounded-lg px-2 py-1.5 text-white text-xs focus:outline-none focus:border-emerald-500">
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-2 gap-2">
+                        <div>
+                            <label class="block text-[9px] text-gray-400 uppercase mb-0.5">Path File HTML</label>
+                            <input type="text" id="gh-path" value="YBCI.html" placeholder="YBCI.html" class="w-full bg-[#16191f] border border-gray-700 rounded-lg px-2 py-1.5 text-white text-xs focus:outline-none focus:border-emerald-500">
+                        </div>
+                        <div>
+                            <label class="block text-[9px] text-gray-400 uppercase mb-0.5">Branch</label>
+                            <input type="text" id="gh-branch" value="main" placeholder="main" class="w-full bg-[#16191f] border border-gray-700 rounded-lg px-2 py-1.5 text-white text-xs focus:outline-none focus:border-emerald-500">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-[9px] text-gray-400 uppercase mb-0.5">GitHub Personal Access Token (PAT)</label>
+                        <input type="password" id="gh-token" placeholder="ghp_xxxxxxxxxxxx (izin Contents: Read & Write)" class="w-full bg-[#16191f] border border-gray-700 rounded-lg px-2 py-1.5 text-white text-xs focus:outline-none focus:border-emerald-500">
+                    </div>
+                    <div class="flex gap-2 mt-1">
+                        <button type="button" id="btn-save-gh-config" class="flex-1 py-2 rounded-xl bg-gray-700 hover:bg-gray-600 text-white text-[11px] font-bold">
+                            Simpan Pengaturan
+                        </button>
+                        <button type="button" id="btn-push-github-now" class="flex-1 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-[11px] font-extrabold">
+                            Sync ke GitHub Sekarang
+                        </button>
+                    </div>
+                    <div id="gh-sync-status" class="text-[10px] font-mono text-gray-400 text-center">
+                        Status: Belum dikonfigurasi
+                    </div>
+                </div>
+
+                <div class="bg-[#0d0f12] p-3 rounded-xl border border-gray-800 flex flex-col gap-2">
+                    <div class="text-[11px] font-bold text-sky-400 uppercase">B. Unduh / Salin File HTML Terbaru (Manual)</div>
+                    <p class="text-[10px] text-gray-400 leading-snug">
+                        Jika tidak memakai Token GitHub, klik tombol di bawah untuk mengunduh file <code class="text-amber-300">YBCI.html</code> baru yang sudah berisi daftar user terbaru, lalu upload ke GitHub.
+                    </p>
+                    <div class="flex gap-2">
+                        <button type="button" id="btn-download-updated-html" class="flex-1 py-2 rounded-xl bg-sky-600 hover:bg-sky-500 text-white text-[11px] font-extrabold">
+                            Unduh YBCI.html Baru
+                        </button>
+                        <button type="button" id="btn-copy-users-snippet" class="flex-1 py-2 rounded-xl bg-gray-800 hover:bg-gray-700 border border-gray-600 text-gray-200 text-[11px] font-bold">
+                            Salin Kode User
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -609,49 +682,203 @@
     <script>
         /**
          * ============================================================================
-         * SISTEM OTENTIKASI & MANAJEMEN USER (ADMIN & MEMBER) + HT P2P REAL-TIME
+         * SISTEM OTENTIKASI & MANAJEMEN USER (ADMIN & MEMBER) + SINKRONISASI GITHUB
          * ============================================================================
          */
 
-        const USERS_STORAGE_KEY = 'ybci_ht_users_db_v1';
-        const SESSION_STORAGE_KEY = 'ybci_ht_active_session_v1';
+        const DB_REVISION_KEY = 'ybci_ht_db_rev_v2';
+        const USERS_STORAGE_KEY = 'ybci_ht_users_db_v2';
+        const SESSION_STORAGE_KEY = 'ybci_ht_active_session_v2';
+        const GITHUB_CFG_KEY = 'ybci_ht_github_cfg_v1';
 
-        // Akun bawaan jika penyimpanan lokal masih kosong
+        /* === YBCI_USERS_START === */
+        const SCRIPT_DB_REV = 1;
         const DEFAULT_USERS = [
-            { username: 'admin', password: '123', callsign: 'ADMIN-PUSAT', role: 'admin' },
-            { username: 'elang01', password: '123', callsign: 'ELANG-01', role: 'member' },
-            { username: 'rajawali02', password: '123', callsign: 'RAJAWALI-02', role: 'member' }
+            {
+                "username": "admin",
+                "password": "PengnasYBCI",
+                "callsign": "ADMIN-PUSAT",
+                "role": "admin"
+            },
+            {
+                "username": "elang01",
+                "password": "123",
+                "callsign": "ELANG-01",
+                "role": "member"
+            },
+            {
+                "username": "rajawali02",
+                "password": "123",
+                "callsign": "RAJAWALI-02",
+                "role": "member"
+            }
         ];
-        // Perbarui password default sesuai petunjuk di layar login
-        DEFAULT_USERS[0].password = 'PengnasYBCI';
-        
+        /* === YBCI_USERS_END === */
+
+        let currentDbRev = SCRIPT_DB_REV;
         let usersDB = [];
-        let currentUser = null; // { username, password, callsign, role }
+        let currentUser = null;
 
         function loadUsersDB() {
             try {
+                const savedRev = parseInt(localStorage.getItem(DB_REVISION_KEY) || '0', 10);
                 const raw = localStorage.getItem(USERS_STORAGE_KEY);
-                if (raw) {
+                // Jika versi skrip di GitHub lebih baru daripada penyimpanan lokal browser, gunakan data terbaru dari skrip!
+                if (raw && savedRev >= SCRIPT_DB_REV) {
                     const parsed = JSON.parse(raw);
                     if (Array.isArray(parsed) && parsed.length > 0) {
                         usersDB = parsed;
+                        currentDbRev = savedRev;
                         return;
                     }
                 }
             } catch (e) {}
+
             usersDB = JSON.parse(JSON.stringify(DEFAULT_USERS));
-            saveUsersDB();
+            currentDbRev = SCRIPT_DB_REV;
+            saveUsersDB(false, false);
         }
 
-        function saveUsersDB(broadcastSync = false) {
+        function saveUsersDB(broadcastSync = false, incrementRev = true) {
+            if (incrementRev) {
+                currentDbRev = Math.max(currentDbRev, SCRIPT_DB_REV) + 1;
+            }
             try {
+                localStorage.setItem(DB_REVISION_KEY, String(currentDbRev));
                 localStorage.setItem(USERS_STORAGE_KEY, JSON.stringify(usersDB));
             } catch (e) {}
+
             if (broadcastSync) {
                 broadcastData({
                     type: 'sync-users',
+                    rev: currentDbRev,
                     users: usersDB
                 });
+            }
+        }
+
+        // --- GENERATOR & AUTO-COMMIT KE GITHUB REPOSITORY ---
+        function buildUpdatedHtmlSource() {
+            const fullHtml = '<!DOCTYPE html>\n' + document.documentElement.outerHTML;
+            const nextRev = Math.max(currentDbRev, SCRIPT_DB_REV) + 1;
+            const formattedUsers = JSON.stringify(usersDB, null, 12).replace(/\]$/, '        ]');
+            const replacementBlock =
+`/* === YBCI_USERS_START === */
+        const SCRIPT_DB_REV = ${nextRev};
+        const DEFAULT_USERS = ${formattedUsers};
+        /* === YBCI_USERS_END === */`;
+
+            const regex = /\/\* === YBCI_USERS_START === \*\/[\s\S]*?\/\* === YBCI_USERS_END === \*\//;
+            if (!regex.test(fullHtml)) {
+                return null;
+            }
+            return fullHtml.replace(regex, replacementBlock);
+        }
+
+        function getGitHubConfig() {
+            try {
+                return JSON.parse(localStorage.getItem(GITHUB_CFG_KEY) || 'null');
+            } catch (e) {
+                return null;
+            }
+        }
+
+        async function pushUsersToGitHub(silentIfUnconfigured = true) {
+            const cfg = getGitHubConfig();
+            const statusEl = document.getElementById('gh-sync-status');
+
+            if (!cfg || !cfg.owner || !cfg.repo || !cfg.path || !cfg.token) {
+                if (!silentIfUnconfigured && statusEl) {
+                    statusEl.textContent = 'Status: Lengkapi Owner, Repo, Path & Token dulu!';
+                    statusEl.className = 'text-[10px] font-mono text-red-400 text-center';
+                }
+                return false;
+            }
+
+            const branch = cfg.branch || 'main';
+            const apiUrl = `https://api.github.com/repos/${encodeURIComponent(cfg.owner)}/${encodeURIComponent(cfg.repo)}/contents/${cfg.path.replace(/^\/+/, '')}`;
+
+            if (statusEl) {
+                statusEl.textContent = 'Status: Menyinkronkan ke GitHub...';
+                statusEl.className = 'text-[10px] font-mono text-amber-400 text-center';
+            }
+
+            try {
+                // 1. Ambil SHA file saat ini di GitHub
+                const getRes = await fetch(`${apiUrl}?ref=${encodeURIComponent(branch)}`, {
+                    headers: {
+                        'Authorization': `Bearer ${cfg.token}`,
+                        'Accept': 'application/vnd.github+json'
+                    }
+                });
+
+                if (!getRes.ok) {
+                    throw new Error(`Gagal baca file GitHub (${getRes.status})`);
+                }
+                const fileData = await getRes.json();
+                const currentSha = fileData.sha;
+
+                // 2. Decode isi file asli di GitHub lalu ganti blok DEFAULT_USERS saja (agar DOM dinamis tidak ikut tersimpan)
+                const binaryStr = atob(fileData.content.replace(/\n/g, ''));
+                const bytes = Uint8Array.from(binaryStr, c => c.charCodeAt(0));
+                const originalSource = new TextDecoder('utf-8').decode(bytes);
+
+                const nextRev = Math.max(currentDbRev, SCRIPT_DB_REV) + 1;
+                const formattedUsers = JSON.stringify(usersDB, null, 12).replace(/\]$/, '        ]');
+                const replacementBlock =
+`/* === YBCI_USERS_START === */
+        const SCRIPT_DB_REV = ${nextRev};
+        const DEFAULT_USERS = ${formattedUsers};
+        /* === YBCI_USERS_END === */`;
+
+                const regex = /\/\* === YBCI_USERS_START === \*\/[\s\S]*?\/\* === YBCI_USERS_END === \*\//;
+                if (!regex.test(originalSource)) {
+                    throw new Error('Marker YBCI_USERS_START tidak ditemukan di file GitHub');
+                }
+                const updatedSource = originalSource.replace(regex, replacementBlock);
+
+                // Encode UTF-8 ke Base64
+                const encodedBytes = new TextEncoder().encode(updatedSource);
+                let binOut = '';
+                encodedBytes.forEach(b => binOut += String.fromCharCode(b));
+                const base64Content = btoa(binOut);
+
+                // 3. Commit perubahan ke GitHub
+                const putRes = await fetch(apiUrl, {
+                    method: 'PUT',
+                    headers: {
+                        'Authorization': `Bearer ${cfg.token}`,
+                        'Accept': 'application/vnd.github+json',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        message: `Update data user HT oleh ${currentUser ? currentUser.username : 'admin'}`,
+                        content: base64Content,
+                        sha: currentSha,
+                        branch: branch
+                    })
+                });
+
+                if (!putRes.ok) {
+                    throw new Error(`Gagal commit ke GitHub (${putRes.status})`);
+                }
+
+                currentDbRev = nextRev;
+                localStorage.setItem(DB_REVISION_KEY, String(currentDbRev));
+
+                if (statusEl) {
+                    statusEl.textContent = `Status: Berhasil tersimpan di GitHub (${new Date().toLocaleTimeString()})`;
+                    statusEl.className = 'text-[10px] font-mono text-emerald-400 text-center';
+                }
+                showToast('Skrip YBCI.html di GitHub berhasil diperbarui!');
+                return true;
+            } catch (err) {
+                if (statusEl) {
+                    statusEl.textContent = `Error: ${err.message}`;
+                    statusEl.className = 'text-[10px] font-mono text-red-400 text-center';
+                }
+                showToast(`Gagal update GitHub: ${err.message}`);
+                return false;
             }
         }
 
@@ -860,18 +1087,103 @@
 
         elBtnLogout.addEventListener('click', handleLogout);
 
-        // --- 5. MANAJEMEN USER OLEH ADMIN (TAMBAH, UBAH, HAPUS) ---
+        // --- 5. MANAJEMEN USER OLEH ADMIN (TAMBAH, UBAH, HAPUS + SYNC GITHUB) ---
         elBtnOpenAdmin.addEventListener('click', () => {
             if (!currentUser) return;
             if (currentUser.role === 'admin') {
                 resetAdminForm();
                 renderAdminUserList();
+                loadGitHubForm();
+                switchAdminTab('users');
                 openModal('modal-admin');
             } else {
                 document.getElementById('prof-username').textContent = currentUser.username;
                 document.getElementById('prof-callsign').textContent = currentUser.callsign;
                 document.getElementById('prof-role').textContent = currentUser.role.toUpperCase();
                 openModal('modal-profile');
+            }
+        });
+
+        function switchAdminTab(tabName) {
+            const tabUsers = document.getElementById('admin-tab-users');
+            const tabGithub = document.getElementById('admin-tab-github');
+            const btnUsers = document.getElementById('tab-btn-users');
+            const btnGithub = document.getElementById('tab-btn-github');
+
+            if (tabName === 'users') {
+                tabUsers.classList.remove('hidden');
+                tabGithub.classList.add('hidden');
+                tabGithub.classList.remove('flex');
+                btnUsers.className = 'py-1.5 rounded-lg bg-amber-600 text-white text-[11px] font-extrabold';
+                btnGithub.className = 'py-1.5 rounded-lg text-gray-400 hover:text-white text-[11px] font-bold';
+            } else {
+                tabUsers.classList.add('hidden');
+                tabGithub.classList.remove('hidden');
+                tabGithub.classList.add('flex');
+                btnGithub.className = 'py-1.5 rounded-lg bg-emerald-600 text-white text-[11px] font-extrabold';
+                btnUsers.className = 'py-1.5 rounded-lg text-gray-400 hover:text-white text-[11px] font-bold';
+            }
+        }
+
+        document.getElementById('tab-btn-users').addEventListener('click', () => switchAdminTab('users'));
+        document.getElementById('tab-btn-github').addEventListener('click', () => switchAdminTab('github'));
+
+        function loadGitHubForm() {
+            const cfg = getGitHubConfig();
+            if (!cfg) return;
+            document.getElementById('gh-owner').value = cfg.owner || '';
+            document.getElementById('gh-repo').value = cfg.repo || '';
+            document.getElementById('gh-path').value = cfg.path || 'YBCI.html';
+            document.getElementById('gh-branch').value = cfg.branch || 'main';
+            document.getElementById('gh-token').value = cfg.token || '';
+            document.getElementById('gh-sync-status').textContent = 'Status: Konfigurasi tersimpan (Auto-Sync Aktif)';
+            document.getElementById('gh-sync-status').className = 'text-[10px] font-mono text-emerald-400 text-center';
+        }
+
+        document.getElementById('btn-save-gh-config').addEventListener('click', () => {
+            const cfg = {
+                owner: document.getElementById('gh-owner').value.trim(),
+                repo: document.getElementById('gh-repo').value.trim(),
+                path: document.getElementById('gh-path').value.trim() || 'YBCI.html',
+                branch: document.getElementById('gh-branch').value.trim() || 'main',
+                token: document.getElementById('gh-token').value.trim()
+            };
+            localStorage.setItem(GITHUB_CFG_KEY, JSON.stringify(cfg));
+            document.getElementById('gh-sync-status').textContent = 'Status: Pengaturan GitHub disimpan!';
+            document.getElementById('gh-sync-status').className = 'text-[10px] font-mono text-emerald-400 text-center';
+            showToast('Pengaturan GitHub tersimpan!');
+        });
+
+        document.getElementById('btn-push-github-now').addEventListener('click', () => {
+            pushUsersToGitHub(false);
+        });
+
+        document.getElementById('btn-download-updated-html').addEventListener('click', () => {
+            const updatedHtml = buildUpdatedHtmlSource();
+            if (!updatedHtml) {
+                showToast('Gagal membuat file HTML.');
+                return;
+            }
+            const blob = new Blob([updatedHtml], { type: 'text/html;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'YBCI.html';
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+            URL.revokeObjectURL(url);
+            showToast('File YBCI.html terbaru diunduh!');
+        });
+
+        document.getElementById('btn-copy-users-snippet').addEventListener('click', async () => {
+            const nextRev = Math.max(currentDbRev, SCRIPT_DB_REV) + 1;
+            const snippet = `/* === YBCI_USERS_START === */\n        const SCRIPT_DB_REV = ${nextRev};\n        const DEFAULT_USERS = ${JSON.stringify(usersDB, null, 12)};\n        /* === YBCI_USERS_END === */`;
+            try {
+                await navigator.clipboard.writeText(snippet);
+                showToast('Kode daftar user disalin ke clipboard!');
+            } catch (e) {
+                showToast('Gagal menyalin ke clipboard.');
             }
         });
 
@@ -889,7 +1201,7 @@
 
         elBtnCancelEdit.addEventListener('click', resetAdminForm);
 
-        elAdminUserForm.addEventListener('submit', (e) => {
+        elAdminUserForm.addEventListener('submit', async (e) => {
             e.preventDefault();
             if (!currentUser || currentUser.role !== 'admin') return;
 
@@ -905,10 +1217,8 @@
             }
 
             if (origUname) {
-                // Mode Edit User
                 const idx = usersDB.findIndex(u => u.username.toLowerCase() === origUname);
                 if (idx !== -1) {
-                    // Cegah admin menurunkan role dirinya sendiri jika dia satu-satunya admin
                     if (origUname === currentUser.username.toLowerCase() && role !== 'admin') {
                         const adminCount = usersDB.filter(u => u.role === 'admin').length;
                         if (adminCount <= 1) {
@@ -921,25 +1231,27 @@
                         currentUser = { ...usersDB[idx] };
                         myCallsign = currentUser.callsign;
                         applyAuthenticatedUI();
-                        broadcastData({ type: 'hello', callsign: myCallsign });
+                        broadcastData({ type: 'hello', callsign: myCallsign, rev: currentDbRev, users: usersDB });
                     }
-                    saveUsersDB(true);
+                    saveUsersDB(true, true);
                     showToast(`Akun ${origUname} berhasil diperbarui!`);
                 }
             } else {
-                // Mode Tambah User Baru
                 const exists = usersDB.some(u => u.username.toLowerCase() === username);
                 if (exists) {
                     showToast(`Username "${username}" sudah terdaftar!`);
                     return;
                 }
                 usersDB.push({ username, password, callsign, role });
-                saveUsersDB(true);
+                saveUsersDB(true, true);
                 showToast(`Anggota ${callsign} berhasil ditambahkan!`);
             }
 
             resetAdminForm();
             renderAdminUserList();
+
+            // Otomatis push ke GitHub jika konfigurasi sudah diisi
+            await pushUsersToGitHub(true);
         });
 
         function renderAdminUserList() {
@@ -949,6 +1261,7 @@
                 const badgeClass = u.role === 'admin'
                     ? 'bg-amber-500/20 text-amber-400 border-amber-500/40'
                     : 'bg-emerald-500/15 text-emerald-400 border-emerald-500/30';
+                const safeUname = encodeURIComponent(u.username);
 
                 return `
                     <div class="bg-[#0d0f12] border border-gray-800 rounded-xl p-2.5 flex items-center justify-between gap-2">
@@ -963,11 +1276,11 @@
                             </div>
                         </div>
                         <div class="flex items-center gap-1.5 shrink-0">
-                            <button type="button" onclick="startEditUser('${u.username}')" class="px-2 py-1 rounded-lg bg-sky-600/20 hover:bg-sky-600/40 border border-sky-500/40 text-sky-300 text-[10px] font-bold">
+                            <button type="button" data-action="edit" data-username="${safeUname}" class="px-2 py-1 rounded-lg bg-sky-600/20 hover:bg-sky-600/40 border border-sky-500/40 text-sky-300 text-[10px] font-bold">
                                 Ubah
                             </button>
                             ${!isSelf ? `
-                                <button type="button" onclick="deleteUserAccount('${u.username}')" class="px-2 py-1 rounded-lg bg-red-600/20 hover:bg-red-600/40 border border-red-500/40 text-red-400 text-[10px] font-bold">
+                                <button type="button" data-action="delete" data-username="${safeUname}" class="px-2 py-1 rounded-lg bg-red-600/20 hover:bg-red-600/40 border border-red-500/40 text-red-400 text-[10px] font-bold">
                                     Hapus
                                 </button>
                             ` : ''}
@@ -977,7 +1290,16 @@
             }).join('');
         }
 
-        window.startEditUser = function(username) {
+        elAdminUserList.addEventListener('click', (e) => {
+            const btn = e.target.closest('button[data-action]');
+            if (!btn) return;
+            const action = btn.getAttribute('data-action');
+            const uname = decodeURIComponent(btn.getAttribute('data-username') || '');
+            if (action === 'edit') startEditUser(uname);
+            if (action === 'delete') deleteUserAccount(uname);
+        });
+
+        function startEditUser(username) {
             const target = usersDB.find(u => u.username.toLowerCase() === username.toLowerCase());
             if (!target) return;
 
@@ -991,25 +1313,27 @@
             elAdminFormTitle.textContent = `Edit Akun: ${target.username}`;
             elBtnSaveUser.textContent = 'SIMPAN PERUBAHAN';
             elBtnCancelEdit.classList.remove('hidden');
-        };
+        }
 
-        window.deleteUserAccount = function(username) {
+        async function deleteUserAccount(username) {
             if (!currentUser || currentUser.role !== 'admin') return;
             if (username.toLowerCase() === currentUser.username.toLowerCase()) {
                 showToast('Tidak dapat menghapus akun sendiri!');
                 return;
             }
             usersDB = usersDB.filter(u => u.username.toLowerCase() !== username.toLowerCase());
-            saveUsersDB(true);
+            saveUsersDB(true, true);
             renderAdminUserList();
             showToast(`User "${username}" telah dihapus.`);
 
-            // Kirim perintah kick jika user yang dihapus sedang online di saluran
             broadcastData({
                 type: 'force-logout',
                 targetUsername: username.toLowerCase()
             });
-        };
+
+            // Otomatis push ke GitHub jika konfigurasi sudah diisi
+            await pushUsersToGitHub(true);
+        }
 
         // --- 6. INISIALISASI VISUALIZER, VU METER & AUDIO SYNTH ---
         function initVisualizerAndVU() {
@@ -1358,7 +1682,7 @@
             });
         }
 
-        // --- 10. KONEKSI P2P REAL-TIME BERBASIS SALURAN (HANYA SETELAH LOGIN) ---
+        // --- 10. KONEKSI P2P REAL-TIME BERBASIS SALURAN ---
         function getSlotPeerId(channelId, slotIndex) {
             return `${ROOM_PREFIX}-ch${channelId}-slot${slotIndex}`;
         }
@@ -1476,7 +1800,8 @@
                     type: 'hello',
                     callsign: myCallsign,
                     channel: CHANNELS[currentChannelIdx].id,
-                    users: currentUser && currentUser.role === 'admin' ? usersDB : null
+                    rev: currentDbRev,
+                    users: usersDB
                 });
 
                 if (localStream && !activeMediaCalls.has(conn.peer)) {
@@ -1548,16 +1873,17 @@
                 connectedPeersInfo.set(peerId, { ...existing, callsign: data.callsign || 'REKAN-HT' });
                 updatePeerCountUI();
 
-                // Sinkronkan database user jika peer tersebut adalah Admin
-                if (Array.isArray(data.users) && data.users.length > 0) {
+                if (Array.isArray(data.users) && data.users.length > 0 && (data.rev || 0) > currentDbRev) {
                     usersDB = data.users;
-                    saveUsersDB(false);
+                    currentDbRev = data.rev;
+                    saveUsersDB(false, false);
                 }
             }
             else if (data.type === 'sync-users') {
                 if (Array.isArray(data.users) && data.users.length > 0) {
                     usersDB = data.users;
-                    saveUsersDB(false);
+                    if (data.rev) currentDbRev = data.rev;
+                    saveUsersDB(false, false);
                     if (currentUser && currentUser.role === 'admin') {
                         renderAdminUserList();
                     }
